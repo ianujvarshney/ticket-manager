@@ -31,6 +31,12 @@ const saveTicketHandler = async (event, data) => {
   }
 };
 
+const listTicketHandler = async () => {
+  const tickets = await prisma.ticket.findMany();
+  return tickets;
+};
+
 module.exports = {
   saveTicketHandler,
+  listTicketHandler,
 };

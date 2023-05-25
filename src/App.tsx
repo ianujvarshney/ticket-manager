@@ -1,4 +1,5 @@
 import { FormNewTicket } from "./components/FormNewTicket";
+import { TicketList } from "./components/TicketList";
 
 function App() {
   return (
@@ -6,7 +7,7 @@ function App() {
       <main className="">
         <h1>Hello, World!</h1>
 
-        <FormNewTicket />
+        <TicketList />
       </main>
     </div>
   );

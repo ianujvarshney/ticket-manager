@@ -2,7 +2,10 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const { prisma } = require("./src/lib/prisma.cjs");
 const path = require("path");
 
-const { saveTicketHandler } = require("./src/electron/handlers/ticket.cjs");
+const {
+  saveTicketHandler,
+  listTicketHandler,
+} = require("./src/electron/handlers/ticket.cjs");
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -28,3 +31,4 @@ app.whenReady().then(() => {
 });
 
 ipcMain.handle("saveTicket", (event, data) => saveTicketHandler(event, data));
+ipcMain.handle("listTicket", listTicketHandler);

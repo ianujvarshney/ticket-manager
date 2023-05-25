@@ -5,4 +5,9 @@ contextBridge.exposeInMainWorld("ticket", {
     const res = await ipcRenderer.invoke("saveTicket", data);
     return res;
   },
+
+  listTicket: async () => {
+    const res = await ipcRenderer.invoke("listTicket");
+    return res;
+  },
 });
