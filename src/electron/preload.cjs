@@ -1,8 +1,8 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("ticket", {
-  saveTicket: async () => {
-    const res = await ipcRenderer.invoke("saveTicket");
+  saveTicket: async (data) => {
+    const res = await ipcRenderer.invoke("saveTicket", data);
     return res;
   },
 });

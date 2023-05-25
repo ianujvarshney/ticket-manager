@@ -1,7 +1,7 @@
 const { prisma } = require("../../lib/prisma.cjs");
 
-const saveTicketHandler = async (event, data, data2) => {
-  console.log(data, data2);
+const saveTicketHandler = async (event, data) => {
+  console.log(data);
 
   try {
     const users = await prisma.user.findMany();
