@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { Input } from "../Input";
 
 export function FormNewTicket() {
   const userId = "3469ca96-4517-474c-8001-8363da836c5e";
@@ -30,15 +31,16 @@ export function FormNewTicket() {
 
   return (
     <form onSubmit={(e) => handleSaveTicket(e)}>
-      <input
+      <Input
         type="text"
         placeholder="Beneficiário"
         value={recipient}
         onChange={(e) => setRecipient(e.target.value)}
         name="recipient"
+        id="recipient"
       />
 
-      <input
+      <Input
         type="date"
         name="expiry_date"
         id="expiry_date"
@@ -46,32 +48,36 @@ export function FormNewTicket() {
         onChange={(e) => setExpiryDate(e.target.value)}
       />
 
-      <input
+      <Input
         type="text"
         placeholder="Número do documento"
         name="ticket_number"
+        id="ticket_number"
         value={ticketNumber}
         onChange={(e) => setTicketNumber(e.target.value)}
       />
 
-      <input
+      <Input
         type="number"
         placeholder="Valor"
         name="ticket_value"
+        id="ticket_value"
         value={ticketValue}
         onChange={(e) => setTicketValue(Number(e.target.value))}
       />
 
-      <input
+      <Input
         type="text"
         placeholder="Local do pagamento"
+        name="payment_place"
+        id="payment_place"
         value={paymentPlace}
         onChange={(e) => setPaymentPlace(e.target.value)}
       />
 
       <div className="">
         <label htmlFor="is-paid">Pago</label>
-        <input
+        <Input
           type="checkbox"
           name="is-paid"
           id="is-paid"
