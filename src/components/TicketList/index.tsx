@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import { Plus } from "phosphor-react";
+import { Modal } from "../Modal";
+import * as Dialog from "@radix-ui/react-dialog";
+import { FormNewTicket } from "../FormNewTicket";
 
 type TicketProps = {
   id: string;
@@ -16,6 +20,11 @@ const dateFormat = new Intl.DateTimeFormat("pt-BR", {
   year: "numeric",
 });
 
+const priceFormatter = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL",
+});
+
 export function TicketList() {
   const [tickets, setTickets] = useState<TicketProps[]>([]);
 
@@ -30,7 +39,26 @@ export function TicketList() {
 
   return (
     <div>
-      <h1>TicketList</h1>
+      <div className="flex items-center justify-between px-4 mb-4">
+        <h1 className="text-lg font-bold">TicketList</h1>
+
+        <Dialog.Root modal>
+          <div>
+            <Dialog.Trigger
+              className="
+              flex gap-2 border border-purple-400 px-4 py-1 items-center rounded-sm 
+              hover:bg-purple-500 transition-colors"
+            >
+              <Plus />
+              Cria Novo
+            </Dialog.Trigger>
+          </div>
+
+          <Modal title="Adicionar novo boleto">
+            <FormNewTicket />
+          </Modal>
+        </Dialog.Root>
+      </div>
 
       <table border={1} className="border-gray-50">
         <thead>
@@ -55,8 +83,13 @@ export function TicketList() {
                 <td className="px-4">
                   <time>{date}</time>
                 </td>
-                <td className="px-4">{ticket.value}</td>
+
+                <td className="px-4">
+                  {priceFormatter.format(ticket.value / 100)}
+                </td>
+
                 <td className="px-4">{ticket.payment_place}</td>
+
                 <td className="px-4">
                   <input
                     type="checkbox"
