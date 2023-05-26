@@ -1,15 +1,20 @@
 import { FormEvent, useState } from "react";
 import { Input } from "../Input";
+import { TicketProps } from "../TicketList";
 
-export function FormNewTicket() {
+type Props = {
+  ticket: TicketProps;
+};
+
+export function FormEditTicket({ ticket }: Props) {
   const userId = "3469ca96-4517-474c-8001-8363da836c5e";
-  const [recipient, setRecipient] = useState("");
-  const [ticketNumber, setTicketNumber] = useState("");
-  const [ticketValue, setTicketValue] = useState(0);
-  const [paymentPlace, setPaymentPlace] = useState("");
-  const [isPaid, setIsPaid] = useState(false);
+  const [recipient, setRecipient] = useState(ticket.recipient);
+  const [ticketNumber, setTicketNumber] = useState(ticket.document_number);
+  const [ticketValue, setTicketValue] = useState(ticket.value);
+  const [paymentPlace, setPaymentPlace] = useState(ticket.payment_place);
+  const [isPaid, setIsPaid] = useState(ticket.is_paid);
   const [expiryDate, setExpiryDate] = useState(
-    new Date().toISOString().slice(0, 10)
+    ticket.expiry_date.toISOString().slice(0, 10)
   );
 
   async function handleSaveTicket(e: FormEvent<HTMLFormElement>) {
@@ -17,6 +22,7 @@ export function FormNewTicket() {
     const value = ticketValue * 100;
 
     const data = {
+      id: ticket.id,
       recipient,
       ticketNumber,
       ticketValue: value,
@@ -26,7 +32,7 @@ export function FormNewTicket() {
       userId,
     };
 
-    const res = await (window as any).ticket.saveTicket(data);
+    const res = await (window as any).ticket.editTicket(data);
     console.log(res);
 
     document.location.reload();

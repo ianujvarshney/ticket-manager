@@ -3,30 +3,79 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "main.cjs",
+  "main": "electron/main.cjs",
+  "homepage": "./",
+  "author": {
+    "name": "Hemerson Oliveira Silva",
+    "email": "hemersondev@gmail.com",
+    "url": "https://hemerson-dev.vercel.app/pt-BR"
+  },
+  "description": "A simple application to manage tickets",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "pack:win": "vite build && electron-builder -w -c.extraMetadata.main=dist/electron.cjs"
+  },
+  "build": {
+    "appId": "com.hemerson.ticket-manager",
+    "productName": "Ticket Manager",
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      "prisma/**/*",
+      "node_modules/.prisma/**/*",
+      "node_modules/@prisma/client/**/*",
+      ".env"
+    ],
+    "nsis": {
+      "uninstallDisplayName": "Uninstall this app",
+      "license": "license.txt",
+      "oneClick": "false",
+      "allowToChangeInstallationDirectory": "true"
+    },
+    "directories": {
+      "output": "releases",
+      "buildResources": "public"
+    }
   },
   "dependencies": {
     "@prisma/client": "^4.14.1",
     "@radix-ui/react-dialog": "^1.0.3",
+    "electron-is-dev": "^2.0.0",
+    "electron-squirrel-startup": "^1.0.0",
     "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.1.1",
+    "electron": "^24.4.0",
+    "@electron-forge/maker-deb": "^6.1.1",
+    "@electron-forge/maker-rpm": "^6.1.1",
+    "@electron-forge/maker-squirrel": "^6.1.1",
+    "@electron-forge/maker-zip": "^6.1.1",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
-    "electron": "^24.4.0",
+    "electron-builder": "^23.6.0",
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",

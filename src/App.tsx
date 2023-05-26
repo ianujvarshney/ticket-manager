@@ -1,10 +1,9 @@
-import { FormNewTicket } from "./components/FormNewTicket";
 import { TicketList } from "./components/TicketList";
 
 function App() {
   return (
     <div>
-      <main className="">
+      <main className="pt-8 px-4">
         <TicketList />
       </main>
     </div>

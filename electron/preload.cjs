@@ -10,4 +10,15 @@ contextBridge.exposeInMainWorld("ticket", {
     const res = await ipcRenderer.invoke("listTicket");
     return res;
   },
+
+  editTicket: async (data) => {
+    const res = await ipcRenderer.invoke("editTicket", data);
+    return res;
+  },
+});
+
+contextBridge.exposeInMainWorld("page", {
+  reloadWindow: async () => {
+    await ipcRenderer.invoke("reloadWindow");
+  },
 });
