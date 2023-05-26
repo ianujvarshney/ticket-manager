@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash } from "phosphor-react";
 import { Modal } from "../Modal";
 import * as Dialog from "@radix-ui/react-dialog";
+import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { FormNewTicket } from "../FormNewTicket";
 import { FormEditTicket } from "../FormEditTicket";
+import { AlertModal } from "../AlertModal";
 
 export type TicketProps = {
   id: string;
@@ -30,6 +32,9 @@ export function TicketList() {
   const [tickets, setTickets] = useState<TicketProps[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState<TicketProps | null>(null);
+  const [deleteModalData, setDeleteModalData] = useState<TicketProps | null>(
+    null
+  );
 
   async function getTickets() {
     const res = await (window as any).ticket.listTicket();
@@ -39,6 +44,35 @@ export function TicketList() {
   function handleEditTicket(ticket: TicketProps) {
     setIsEditModalOpen(true);
     setEditModalData(ticket);
+  }
+
+  async function handleDeleteTicket(ticket: TicketProps) {
+    setDeleteModalData(ticket);
+  }
+
+  async function confirmTicketDelete() {
+    await (window as any).ticket.deleteTicket(deleteModalData);
+    location.reload();
+  }
+
+  async function handleTogglePayment(ticket: TicketProps) {
+    const userId = "3469ca96-4517-474c-8001-8363da836c5e";
+    const isPaid = !ticket.is_paid;
+
+    const newTicket = {
+      id: ticket.id,
+      recipient: ticket.recipient,
+      ticketNumber: ticket.document_number,
+      ticketValue: ticket.value,
+      paymentPlace: ticket.payment_place,
+      isPaid,
+      expiryDate: ticket.expiry_date.toISOString().slice(0, 10),
+      userId,
+    };
+
+    await (window as any).ticket.editTicket(newTicket);
+
+    location.reload();
   }
 
   useEffect(() => {
@@ -90,53 +124,72 @@ export function TicketList() {
           </tr>
         </thead>
         <Dialog.Root>
-          <tbody>
-            {tickets.map((ticket) => {
-              const date = dateFormat.format(new Date(ticket.expiry_date));
+          <AlertDialog.Root>
+            <tbody>
+              {tickets.map((ticket) => {
+                const date = dateFormat.format(new Date(ticket.expiry_date));
 
-              return (
-                <tr key={ticket.id}>
-                  <td className="flex items-center justify-center">
-                    <Dialog.Trigger onClick={() => handleEditTicket(ticket)}>
-                      <Pencil />
-                    </Dialog.Trigger>
-                  </td>
+                return (
+                  <tr key={ticket.id}>
+                    <td className="flex items-center justify-center">
+                      <Dialog.Trigger onClick={() => handleEditTicket(ticket)}>
+                        <Pencil />
+                      </Dialog.Trigger>
+                    </td>
 
-                  <td align="center">
-                    <button>
-                      <Trash />
-                    </button>
-                  </td>
+                    <td align="center">
+                      <AlertDialog.Trigger
+                        onClick={() => handleDeleteTicket(ticket)}
+                      >
+                        <Trash />
+                      </AlertDialog.Trigger>
+                    </td>
 
-                  <td className="px-4">{ticket.recipient}</td>
-                  <td className="px-4">{ticket.document_number}</td>
-                  <td className="px-4">
-                    <time>{date}</time>
-                  </td>
+                    <td className="px-4">{ticket.recipient}</td>
+                    <td className="px-4">{ticket.document_number}</td>
+                    <td className="px-4">
+                      <time>{date}</time>
+                    </td>
 
-                  <td className="px-4">
-                    {priceFormatter.format(ticket.value / 100)}
-                  </td>
+                    <td className="px-4">
+                      {priceFormatter.format(ticket.value / 100)}
+                    </td>
 
-                  <td className="px-4">{ticket.payment_place}</td>
+                    <td className="px-4">{ticket.payment_place}</td>
 
-                  <td className="px-4 py-2 flex justify-center items-center">
-                    <input
-                      type="checkbox"
-                      name="is_paid"
-                      id="is_paid"
-                      checked={ticket.is_paid}
-                      readOnly
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
+                    <td className="px-4 py-2 flex justify-center items-center">
+                      <input
+                        type="checkbox"
+                        name="is_paid"
+                        id="is_paid"
+                        checked={ticket.is_paid}
+                        onChange={(e) => handleTogglePayment(ticket)}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
 
-          <Modal title="Editar Boleto">
-            {editModalData && <FormEditTicket ticket={editModalData} />}
-          </Modal>
+            <Modal title="Editar Boleto">
+              {editModalData && <FormEditTicket ticket={editModalData} />}
+            </Modal>
+
+            {deleteModalData && (
+              <AlertModal
+                title="Deletar boleto?"
+                onConfirm={confirmTicketDelete}
+              >
+                O Boleto de nº{" "}
+                <span className="font-bold">
+                  {deleteModalData.document_number}
+                </span>
+                , do beneficiário{" "}
+                <span className="font-bold">{deleteModalData.recipient}</span>{" "}
+                será apagado de forma permanente, você deseja continuar?
+              </AlertModal>
+            )}
+          </AlertDialog.Root>
         </Dialog.Root>
       </table>
     </div>

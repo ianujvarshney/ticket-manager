@@ -67,7 +67,7 @@ export function FormNewTicket() {
           name="ticket_value"
           id="ticket_value"
           value={ticketValue}
-          onChange={(e) => setTicketValue(Number(e.target.value))}
+          onChange={(e) => setTicketValue(Number(e.target.value) / 100)}
         />
 
         <Input

@@ -10,7 +10,7 @@ export function FormEditTicket({ ticket }: Props) {
   const userId = "3469ca96-4517-474c-8001-8363da836c5e";
   const [recipient, setRecipient] = useState(ticket.recipient);
   const [ticketNumber, setTicketNumber] = useState(ticket.document_number);
-  const [ticketValue, setTicketValue] = useState(ticket.value);
+  const [ticketValue, setTicketValue] = useState(ticket.value / 100);
   const [paymentPlace, setPaymentPlace] = useState(ticket.payment_place);
   const [isPaid, setIsPaid] = useState(ticket.is_paid);
   const [expiryDate, setExpiryDate] = useState(

@@ -108,7 +108,13 @@ const deleteTicketHandler = async (event, data) => {
 };
 
 const listTicketHandler = async () => {
-  const tickets = await prisma.ticket.findMany();
+  const tickets = await prisma.ticket.findMany({
+    orderBy: [
+      {
+        expiry_date: "asc",
+      },
+    ],
+  });
   return tickets;
 };
 

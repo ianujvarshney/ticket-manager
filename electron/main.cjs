@@ -6,6 +6,7 @@ const {
   saveTicketHandler,
   listTicketHandler,
   editTicketHandler,
+  deleteTicketHandler,
 } = require("./handlers/ticket.cjs");
 const { reloadWindowHandler } = require("./handlers/reload.cjs");
 
@@ -55,4 +56,7 @@ app.on("activate", () => {
 ipcMain.handle("saveTicket", (event, data) => saveTicketHandler(event, data));
 ipcMain.handle("listTicket", listTicketHandler);
 ipcMain.handle("editTicket", (event, data) => editTicketHandler(event, data));
+ipcMain.handle("deleteTicket", (event, data) =>
+  deleteTicketHandler(event, data)
+);
 ipcMain.handle("reloadWindow", reloadWindowHandler);
