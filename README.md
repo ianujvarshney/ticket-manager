@@ -8,5 +8,9 @@ Um aplicação que está sendo construída para organização de boletos
 - Prisma
 - SQLite
 - React
+  - TailwindCSS
+  - RadixUI
+  - React Hook Form
 - Electron
 - NodeJS
+- Zod
