@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash } from "phosphor-react";
+import {
+  Plus,
+  Pencil,
+  Trash,
+  Clipboard,
+  Copy,
+  CopySimple,
+} from "phosphor-react";
 import { Modal } from "../Modal";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
@@ -144,7 +151,27 @@ export function TicketList() {
                     </td>
 
                     <td className="px-4">{ticket.recipient}</td>
-                    <td className="px-4">{ticket.document_number}</td>
+
+                    <td className="px-4">
+                      <div className="w-[240px] flex items-center gap-2 overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            navigator.clipboard.writeText(
+                              ticket.document_number
+                            )
+                          }
+                        >
+                          <CopySimple />
+                        </button>
+
+                        <p className="line-clamp-1">
+                          {ticket.document_number.slice(0, 24)}
+                          {ticket.document_number.length > 24 && "..."}
+                        </p>
+                      </div>
+                    </td>
+
                     <td className="px-4">
                       <time>{date}</time>
                     </td>
@@ -162,6 +189,7 @@ export function TicketList() {
                         id="is_paid"
                         checked={ticket.is_paid}
                         onChange={(e) => handleTogglePayment(ticket)}
+                        className="text-purple-500 rounded-sm"
                       />
                     </td>
                   </tr>
