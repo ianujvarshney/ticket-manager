@@ -8,22 +8,9 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
   mask?: string;
   error?: string;
-  register: (rules?: RegisterOptions) => void;
 };
 
-export function Input({
-  label,
-  register,
-  id,
-  name,
-  error,
-  mask,
-  ...rest
-}: Props) {
-  useEffect(() => {
-    register();
-  }, [register]);
-
+export function Input({ label, id, name, error, mask, ...rest }: Props) {
   return (
     <div className="flex items-start gap-2 flex-1 ">
       {label && (
@@ -40,18 +27,15 @@ export function Input({
         {mask ? (
           <InputMask
             mask={mask}
-            {...rest}
             id={id}
-            name={name}
             className={`text-zinc-900 rounded-sm focus:ring-purple-400 focus:outline-purple-400 ${
               !label ? "px-2 py-1 flex-1" : ""
             } ${error ? "ring-red-300" : ""} `}
+            {...rest}
           />
         ) : (
           <input
-            {...rest}
             id={id}
-            name={name}
             className={`text-zinc-900 rounded-sm  focus:ring-purple-400 focus:outline-purple-400 ${
               !label ? "px-2 py-1 flex-1" : ""
             } ${
@@ -59,6 +43,7 @@ export function Input({
                 ? "rounded-md focus:outline-0 checked:text-purple-500"
                 : ""
             } ${error ? "ring-2 ring-red-300" : ""} `}
+            {...rest}
           />
         )}
 
