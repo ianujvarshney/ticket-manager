@@ -58,6 +58,7 @@ export function FormNewTicket() {
           name="ticket_number"
           id="ticket_number"
           value={ticketNumber}
+          mask="99999.99999 99999.999999 99999.999999 9 99999999999999"
           onChange={(e) => setTicketNumber(e.target.value)}
         />
 

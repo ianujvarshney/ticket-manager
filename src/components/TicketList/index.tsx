@@ -30,7 +30,6 @@ const priceFormatter = new Intl.NumberFormat("pt-BR", {
 
 export function TicketList() {
   const [tickets, setTickets] = useState<TicketProps[]>([]);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState<TicketProps | null>(null);
   const [deleteModalData, setDeleteModalData] = useState<TicketProps | null>(
     null
@@ -42,7 +41,6 @@ export function TicketList() {
   }
 
   function handleEditTicket(ticket: TicketProps) {
-    setIsEditModalOpen(true);
     setEditModalData(ticket);
   }
 

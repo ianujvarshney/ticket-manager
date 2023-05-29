@@ -15,14 +15,17 @@ let win;
 const createWindow = async () => {
   await app.whenReady();
   win = new BrowserWindow({
-    width: 800,
+    width: 1200,
     height: 600,
-    minWidth: 800,
+    minWidth: 900,
     minHeight: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
       nodeIntegration: true,
     },
+    backgroundMaterial: "acrylic",
+    opacity: 0.9,
+    autoHideMenuBar: true,
   });
 
   // win.loadURL("http://localhost:5173");
