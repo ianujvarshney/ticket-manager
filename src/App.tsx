@@ -1,9 +1,11 @@
+import { Menu } from "./components/Menu";
 import { TicketList } from "./components/TicketList";
 
 function App() {
   return (
     <div>
-      <main className="pt-8 px-4">
+      <main className="pt-4 px-4">
+        <Menu />
         <TicketList />
       </main>
     </div>

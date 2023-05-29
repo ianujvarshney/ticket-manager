@@ -36,6 +36,10 @@ export function TicketList() {
     null
   );
   const [isToastOpen, setIsToastOpen] = useState(false);
+  const TOTALPRICE = tickets.reduce(
+    (buffer, ticket) => (buffer += ticket.value / 100),
+    0
+  );
   const timerRef = useRef<any>(0);
 
   async function getTickets() {
@@ -224,6 +228,10 @@ export function TicketList() {
           </AlertDialog.Root>
         </Dialog.Root>
       </table>
+
+      <footer className="fixed bottom-0 left-0 w-full p-4 flex flex-1 justify-end">
+        <span>Total: {priceFormatter.format(TOTALPRICE)}</span>
+      </footer>
 
       <Toast
         title="Copiado!"
