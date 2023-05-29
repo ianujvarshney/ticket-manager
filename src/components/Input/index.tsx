@@ -1,5 +1,4 @@
-import { RegisterOptions } from "react-hook-form";
-import { InputHTMLAttributes, useEffect } from "react";
+import { InputHTMLAttributes } from "react";
 import InputMask from "react-input-mask";
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {

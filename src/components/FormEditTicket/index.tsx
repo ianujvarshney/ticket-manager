@@ -1,4 +1,3 @@
-import { FormEvent, useState } from "react";
 import { Input } from "../Input";
 import { TicketProps } from "../TicketList";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +11,7 @@ type Props = {
 type FormData = {
   recipient: string;
   ticket_number: string;
-  ticket_value: number;
+  ticket_value: string;
   payment_place: string;
   is_paid: boolean;
   expiry_date: string;
@@ -29,10 +28,10 @@ const schema = z.object({
   expiry_date: z.string(),
 });
 
-const priceFormatter = new Intl.NumberFormat("pt-BR", {
-  style: "currency",
-  currency: "BRL",
-});
+// const priceFormatter = new Intl.NumberFormat("pt-BR", {
+//   style: "currency",
+//   currency: "BRL",
+// });
 
 export function FormEditTicket({ ticket }: Props) {
   const userId = "3469ca96-4517-474c-8001-8363da836c5e";
@@ -46,22 +45,23 @@ export function FormEditTicket({ ticket }: Props) {
     resolver: zodResolver(schema),
     defaultValues: {
       recipient: ticket.recipient,
-      ticket_value: ticket.value / 100,
+      ticket_value: String(ticket.value / 100),
       payment_place: ticket.payment_place,
       expiry_date: ticket.expiry_date.toISOString().slice(0, 10),
       is_paid: ticket.is_paid,
-      ticket_number: ticket.document_number
-        .replaceAll(".", "")
-        .replaceAll(" ", ""),
+      ticket_number: ticket.document_number,
     },
   });
+  console.log(errors);
 
   async function onSubmit(formValues: FormData) {
+    console.log(formValues);
+
     const data = {
       id: ticket.id,
       recipient: formValues.recipient,
       ticketNumber: formValues.ticket_number,
-      ticketValue: formValues.ticket_value * 100,
+      ticketValue: Number(formValues.ticket_value) * 100,
       paymentPlace: formValues.payment_place,
       isPaid: formValues.is_paid,
       expiryDate: formValues.expiry_date,
