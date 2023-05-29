@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus, Pencil, Trash, CopySimple } from "phosphor-react";
 import { Modal } from "../Modal";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { FormNewTicket } from "../FormNewTicket";
 import { FormEditTicket } from "../FormEditTicket";
+import * as ToastPrimitive from "@radix-ui/react-toast";
 import { AlertModal } from "../AlertModal";
+import { Toast } from "../Toast";
 
 export type TicketProps = {
   id: string;
@@ -34,6 +36,8 @@ export function TicketList() {
   const [deleteModalData, setDeleteModalData] = useState<TicketProps | null>(
     null
   );
+  const [isToastOpen, setIsToastOpen] = useState(false);
+  const timerRef = useRef<any>(0);
 
   async function getTickets() {
     const res = await (window as any).ticket.listTicket();
@@ -75,6 +79,10 @@ export function TicketList() {
 
   useEffect(() => {
     getTickets();
+  }, []);
+
+  useEffect(() => {
+    return () => clearTimeout(timerRef.current);
   }, []);
 
   return (
@@ -150,11 +158,16 @@ export function TicketList() {
                         <button
                           type="button"
                           title="Copiar para o Clipboard"
-                          onClick={() =>
+                          onClick={() => {
                             navigator.clipboard.writeText(
                               ticket.document_number
-                            )
-                          }
+                            );
+
+                            clearTimeout(timerRef.current);
+                            timerRef.current = setTimeout(() => {
+                              setIsToastOpen(true);
+                            }, 2000);
+                          }}
                         >
                           <CopySimple />
                         </button>
@@ -212,6 +225,13 @@ export function TicketList() {
           </AlertDialog.Root>
         </Dialog.Root>
       </table>
+
+      <Toast
+        title="Copiado!"
+        description="Texto Copiado para a área de transferência"
+        isOpen={isToastOpen}
+        onOpenChange={setIsToastOpen}
+      />
     </div>
   );
 }
