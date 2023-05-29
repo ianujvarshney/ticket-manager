@@ -5,7 +5,6 @@ import * as Dialog from "@radix-ui/react-dialog";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { FormNewTicket } from "../FormNewTicket";
 import { FormEditTicket } from "../FormEditTicket";
-import * as ToastPrimitive from "@radix-ui/react-toast";
 import { AlertModal } from "../AlertModal";
 import { Toast } from "../Toast";
 
