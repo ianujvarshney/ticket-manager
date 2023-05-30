@@ -7,6 +7,7 @@ import { FormNewTicket } from "../FormNewTicket";
 import { FormEditTicket } from "../FormEditTicket";
 import { AlertModal } from "../AlertModal";
 import { Toast } from "../Toast";
+import { ReactToPrint } from "../ReactToPrint";
 
 export type TicketProps = {
   id: string;
@@ -36,10 +37,11 @@ export function TicketList() {
     null
   );
   const [isToastOpen, setIsToastOpen] = useState(false);
-  const TOTALPRICE = tickets.reduce(
+  const TOTAL_PRICE = tickets.reduce(
     (buffer, ticket) => (buffer += ticket.value / 100),
     0
   );
+
   const timerRef = useRef<any>(0);
 
   async function getTickets() {
@@ -91,7 +93,10 @@ export function TicketList() {
   return (
     <div>
       <div className="flex items-center justify-between px-4 mb-4">
-        <h1 className="text-lg font-bold">TicketList</h1>
+        <div className="flex flex-1 justify-between pr-4">
+          <h1 className="text-lg font-bold ">TicketList</h1>
+          <ReactToPrint tickets={tickets} />
+        </div>
 
         <Dialog.Root modal>
           <div>
@@ -230,7 +235,7 @@ export function TicketList() {
       </table>
 
       <footer className="fixed bottom-0 left-0 w-full p-4 flex flex-1 justify-end">
-        <span>Total: {priceFormatter.format(TOTALPRICE)}</span>
+        <span>Total: {priceFormatter.format(TOTAL_PRICE)}</span>
       </footer>
 
       <Toast

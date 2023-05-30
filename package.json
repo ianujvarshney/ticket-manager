@@ -65,6 +65,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.2",
     "react-input-mask": "^2.0.4",
+    "react-to-print": "^2.14.12",
     "zod": "^3.21.4"
   },
   "devDependencies": {
