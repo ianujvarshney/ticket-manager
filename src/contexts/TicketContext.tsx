@@ -20,13 +20,18 @@ export const TicketContext = createContext({} as TicketContextProps);
 
 export function TicketProvider({ children }: TicketProviderProps) {
   const [tickets, setTickets] = useState<TicketProps[]>([]);
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function getTickets() {
-    await (window as any).ticket.getTickets();
+    setIsLoading(true);
+    const dbTickets = await (window as any).ticket.listTicket();
+    console.log(dbTickets);
+    setTickets(tickets);
   }
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getTickets();
+  }, []);
 
   return (
     <TicketContext.Provider value={{ tickets, isLoading }}>

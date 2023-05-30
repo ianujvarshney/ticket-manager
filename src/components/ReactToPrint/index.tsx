@@ -36,9 +36,9 @@ export function ReactToPrint({ tickets }: Props) {
               className={`flex flex-col items-center p-4 w-full min-h-[calc(100vh_-_200px)]`}
               ref={contentRef}
             >
-              <table className="w-[85%]">
+              <table className="w-[85%] border">
                 <thead>
-                  <tr>
+                  <tr className="border-b border-zinc-900 mb-1 pb-1">
                     <td className="font-bold">Beneficiário</td>
                     <td className="font-bold">Local de Pagamento</td>
                     <td className="font-bold">Valor</td>

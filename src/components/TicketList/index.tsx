@@ -8,6 +8,7 @@ import { FormEditTicket } from "../FormEditTicket";
 import { AlertModal } from "../AlertModal";
 import { Toast } from "../Toast";
 import { ReactToPrint } from "../ReactToPrint";
+import { useTickets } from "../../hooks/TicketContext";
 
 export type TicketProps = {
   id: string;
@@ -31,7 +32,9 @@ const priceFormatter = new Intl.NumberFormat("pt-BR", {
 });
 
 export function TicketList() {
-  const [tickets, setTickets] = useState<TicketProps[]>([]);
+  // const [tickets, setTickets] = useState<TicketProps[]>([]);
+  const { tickets } = useTickets();
+
   const [editModalData, setEditModalData] = useState<TicketProps | null>(null);
   const [deleteModalData, setDeleteModalData] = useState<TicketProps | null>(
     null
@@ -82,9 +85,9 @@ export function TicketList() {
     location.reload();
   }
 
-  useEffect(() => {
-    getTickets();
-  }, []);
+  // useEffect(() => {
+  //   getTickets();
+  // }, []);
 
   useEffect(() => {
     return () => clearTimeout(timerRef.current);
