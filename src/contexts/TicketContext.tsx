@@ -26,7 +26,7 @@ export function TicketProvider({ children }: TicketProviderProps) {
     setIsLoading(true);
     const dbTickets = await (window as any).ticket.listTicket();
     console.log(dbTickets);
-    setTickets(tickets);
+    setTickets(dbTickets);
   }
 
   useEffect(() => {

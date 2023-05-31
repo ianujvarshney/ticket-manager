@@ -2,11 +2,13 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const isDev = require(`electron-is-dev`);
 
+// Handlers
 const {
   saveTicketHandler,
   listTicketHandler,
   editTicketHandler,
   deleteTicketHandler,
+  filterTicketHandler,
 } = require("./handlers/ticket.cjs");
 const { reloadWindowHandler } = require("./handlers/reload.cjs");
 
@@ -59,6 +61,10 @@ app.on("activate", () => {
 ipcMain.handle("saveTicket", (event, data) => saveTicketHandler(event, data));
 ipcMain.handle("listTicket", listTicketHandler);
 ipcMain.handle("editTicket", (event, data) => editTicketHandler(event, data));
+ipcMain.handle("filterTicket", (event, data) =>
+  filterTicketHandler(event, data)
+);
+
 ipcMain.handle("deleteTicket", (event, data) =>
   deleteTicketHandler(event, data)
 );

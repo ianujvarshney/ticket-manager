@@ -118,9 +118,14 @@ const listTicketHandler = async () => {
   return tickets;
 };
 
+const filterTicketHandler = async (event, data) => {
+  console.log(data);
+};
+
 module.exports = {
   saveTicketHandler,
   listTicketHandler,
   editTicketHandler,
   deleteTicketHandler,
+  filterTicketHandler,
 };

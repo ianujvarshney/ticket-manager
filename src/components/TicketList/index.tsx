@@ -49,7 +49,7 @@ export function TicketList() {
 
   async function getTickets() {
     const res = await (window as any).ticket.listTicket();
-    setTickets(res);
+    // setTickets(res);
   }
 
   function handleEditTicket(ticket: TicketProps) {
