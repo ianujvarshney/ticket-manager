@@ -21,7 +21,8 @@ contextBridge.exposeInMainWorld("ticket", {
   },
 
   filterTicket: async (data) => {
-    await ipcRenderer.invoke("filterTicket", data);
+    const res = await ipcRenderer.invoke("filterTicket", data);
+    return res;
   },
 });
 

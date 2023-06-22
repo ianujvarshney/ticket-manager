@@ -119,7 +119,19 @@ const listTicketHandler = async () => {
 };
 
 const filterTicketHandler = async (event, data) => {
-  console.log(data);
+  const tickets = await prisma.ticket.findMany({
+    orderBy: [
+      {
+        expiry_date: "asc",
+      },
+    ],
+
+    where: {
+      is_paid: data.showingType === "paid" ? true : false,
+    },
+  });
+
+  return tickets;
 };
 
 module.exports = {

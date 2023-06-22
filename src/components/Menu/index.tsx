@@ -1,10 +1,19 @@
 import { useState } from "react";
 import { List, X } from "phosphor-react";
+import { useTickets } from "../../hooks/TicketContext";
 
 export function Menu() {
+  const { handleChangeShowingType } = useTickets();
+
   const [isOpen, setIsOpen] = useState(false);
-  const [finalDate, setFinalDate] = useState<Date | null>(null);
-  const [initialDate, setInitialDate] = useState<Date | null>(null);
+
+  function handleChangeType(type: string) {
+    const validValues = ["all", "paid", "unpaid"];
+
+    if (!validValues.includes(type)) return;
+
+    handleChangeShowingType(type as "all" | "paid" | "unpaid");
+  }
 
   function handleToggleMenu() {
     setIsOpen((prevState) => !prevState);
@@ -41,13 +50,16 @@ export function Menu() {
           </div>
 
           <div className="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              name="only-open"
-              id="only-open"
-              className="text-purple-500"
-            />
-            <label htmlFor="only-open">Apenas não pagos</label>
+            <select
+              name="type-filter"
+              id="type-filter"
+              className="text-black"
+              onChange={(e) => handleChangeType(e.target.value)}
+            >
+              <option value="all">Todos</option>
+              <option value="paid">Pagos</option>
+              <option value="unpaid">Não pagos</option>
+            </select>
           </div>
         </div>
       )}
