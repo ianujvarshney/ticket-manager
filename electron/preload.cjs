@@ -31,3 +31,9 @@ contextBridge.exposeInMainWorld("page", {
     await ipcRenderer.invoke("reloadWindow");
   },
 });
+
+contextBridge.exposeInMainWorld("database", {
+  exportDatabase: async () => {
+    await ipcRenderer.invoke("exportDatabase");
+  },
+});

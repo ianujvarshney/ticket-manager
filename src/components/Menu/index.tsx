@@ -24,6 +24,10 @@ export function Menu() {
     setIsOpen((prevState) => !prevState);
   }
 
+  async function handleExportDatabase() {
+    await (window as any).database.exportDatabase();
+  }
+
   return (
     <div className="flex flex-1 justify-between items-center h-10 mb-4 px-3">
       <button onClick={handleToggleMenu} className="">
@@ -53,6 +57,10 @@ export function Menu() {
               className="text-purple-500"
             />
           </div> */}
+
+          <div className="flex">
+            <button onClick={handleExportDatabase}>Exportar</button>
+          </div>
 
           <div className="flex gap-2 items-center">
             <Input

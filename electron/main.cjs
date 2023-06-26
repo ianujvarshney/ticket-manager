@@ -11,6 +11,7 @@ const {
   filterTicketHandler,
 } = require("./handlers/ticket.cjs");
 const { reloadWindowHandler } = require("./handlers/reload.cjs");
+const { exportDatabase } = require("./handlers/database.cjs");
 
 let win;
 
@@ -69,3 +70,4 @@ ipcMain.handle("deleteTicket", (event, data) =>
   deleteTicketHandler(event, data)
 );
 ipcMain.handle("reloadWindow", reloadWindowHandler);
+ipcMain.handle("exportDatabase", exportDatabase);
