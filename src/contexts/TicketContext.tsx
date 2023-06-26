@@ -6,6 +6,8 @@ type TicketContextProps = {
   tickets: TicketProps[];
   handleChangeShowingType: (type: "all" | "paid" | "unpaid") => void;
   filterShowingType: "all" | "paid" | "unpaid";
+  handleSearchByBeneficent: (name: string) => void;
+  filterBeneficent: string;
 };
 
 type TicketProviderProps = {
@@ -20,6 +22,11 @@ export function TicketProvider({ children }: TicketProviderProps) {
   const [filterShowingType, setFilterShowingType] = useState<
     "all" | "paid" | "unpaid"
   >("all");
+  const [filterBeneficent, setFilterBeneficent] = useState("");
+
+  useEffect(() => {
+    filter();
+  }, [filterShowingType, filterBeneficent]);
 
   async function getTickets() {
     setIsLoading(true);
@@ -28,20 +35,43 @@ export function TicketProvider({ children }: TicketProviderProps) {
     setTickets(dbTickets);
   }
 
-  async function handleChangeShowingType(type: "all" | "paid" | "unpaid") {
-    setFilterShowingType(type);
+  async function handleSearchByBeneficent(name: string) {
+    resetFilters();
+    setFilterBeneficent(() => name);
+  }
 
-    if (type === "all") {
+  async function handleChangeShowingType(type: "all" | "paid" | "unpaid") {
+    setFilterShowingType(() => type);
+  }
+
+  async function filter() {
+    if (filterShowingType === "all" && !filterBeneficent) {
       const dbTickets = await (window as any).ticket.listTicket();
       setTickets(dbTickets);
       return;
     }
 
+    if (filterShowingType === "all") {
+      const dbTickets = await (window as any).ticket.filterTicket({
+        recipient: filterBeneficent,
+      });
+
+      setTickets(dbTickets);
+
+      return dbTickets;
+    }
+
     const dbTickets = await (window as any).ticket.filterTicket({
-      showingType: type,
+      is_paid: filterShowingType === "paid",
+      recipient: filterBeneficent,
     });
 
     setTickets(dbTickets);
+  }
+
+  function resetFilters() {
+    setFilterShowingType("all");
+    setFilterBeneficent("");
   }
 
   useEffect(() => {
@@ -50,7 +80,14 @@ export function TicketProvider({ children }: TicketProviderProps) {
 
   return (
     <TicketContext.Provider
-      value={{ tickets, isLoading, handleChangeShowingType, filterShowingType }}
+      value={{
+        tickets,
+        isLoading,
+        handleChangeShowingType,
+        filterShowingType,
+        handleSearchByBeneficent,
+        filterBeneficent,
+      }}
     >
       {children}
     </TicketContext.Provider>

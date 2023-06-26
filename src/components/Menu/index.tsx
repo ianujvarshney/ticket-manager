@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { List, X } from "phosphor-react";
 import { useTickets } from "../../hooks/TicketContext";
+import { Input } from "../Input";
 
 export function Menu() {
-  const { handleChangeShowingType } = useTickets();
+  const {
+    handleChangeShowingType,
+    handleSearchByBeneficent,
+    filterBeneficent,
+  } = useTickets();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,7 +32,7 @@ export function Menu() {
 
       {isOpen && (
         <div className="flex justify-end gap-3">
-          <div className="flex gap-2 items-center">
+          {/* <div className="flex gap-2 items-center">
             <label htmlFor="initial-data">Data Inicial</label>
 
             <input
@@ -46,6 +51,16 @@ export function Menu() {
               name="final-data"
               id="final-data"
               className="text-purple-500"
+            />
+          </div> */}
+
+          <div className="flex gap-2 items-center">
+            <Input
+              id="beneficent-filter"
+              name="beneficent-filter"
+              placeholder="Nome do beneficiário"
+              value={filterBeneficent}
+              onChange={(e) => handleSearchByBeneficent(e.target.value)}
             />
           </div>
 
