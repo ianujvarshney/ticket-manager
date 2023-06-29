@@ -9,6 +9,7 @@ import { AlertModal } from "../AlertModal";
 import { Toast } from "../Toast";
 import { ReactToPrint } from "../ReactToPrint";
 import { useTickets } from "../../hooks/TicketContext";
+import { Button } from "../Button";
 
 export type TicketProps = {
   id: string;
@@ -103,13 +104,11 @@ export function TicketList() {
 
         <Dialog.Root modal>
           <div>
-            <Dialog.Trigger
-              className="
-              flex gap-2 border border-purple-400 px-4 py-1 items-center rounded-sm 
-              hover:bg-purple-500 transition-colors"
-            >
-              <Plus />
-              Cria Novo
+            <Dialog.Trigger asChild>
+              <Button>
+                <Plus />
+                Cria Novo
+              </Button>
             </Dialog.Trigger>
           </div>
 
