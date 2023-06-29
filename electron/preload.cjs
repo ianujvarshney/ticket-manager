@@ -36,4 +36,9 @@ contextBridge.exposeInMainWorld("database", {
   exportDatabase: async () => {
     await ipcRenderer.invoke("exportDatabase");
   },
+
+  importDatabase: async () => {
+    const resp = await ipcRenderer.invoke("importDatabase");
+    return resp;
+  },
 });

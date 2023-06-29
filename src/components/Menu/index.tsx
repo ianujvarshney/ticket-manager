@@ -28,6 +28,14 @@ export function Menu() {
     await (window as any).database.exportDatabase();
   }
 
+  async function handleImportDatabase() {
+    const resp = await (window as any).database.importDatabase();
+
+    if (resp) {
+      location.reload();
+    }
+  }
+
   return (
     <div className="flex flex-1 justify-between items-center h-10 mb-4 px-3">
       <button onClick={handleToggleMenu} className="">
@@ -60,6 +68,10 @@ export function Menu() {
 
           <div className="flex">
             <button onClick={handleExportDatabase}>Exportar</button>
+          </div>
+
+          <div className="flex">
+            <button onClick={handleImportDatabase}>Importar</button>
           </div>
 
           <div className="flex gap-2 items-center">
