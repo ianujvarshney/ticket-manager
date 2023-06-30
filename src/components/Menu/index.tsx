@@ -5,20 +5,17 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 
 export function Menu() {
-  const {
-    handleChangeShowingType,
-    handleSearchByBeneficent,
-    filterBeneficent,
-  } = useTickets();
-
+  const { state, actions } = useTickets();
   const [isOpen, setIsOpen] = useState(false);
+  const [name, setName] = useState(state.filter.name);
 
-  function handleChangeType(type: string) {
-    const validValues = ["all", "paid", "unpaid"];
+  function handleChangeType(type: "all" | "paid" | "unpaid") {
+    actions.setFilter({ name, type });
+  }
 
-    if (!validValues.includes(type)) return;
-
-    handleChangeShowingType(type as "all" | "paid" | "unpaid");
+  function handleChangeName(name: string) {
+    setName(name);
+    actions.setFilter({ type: state.filter.type, name });
   }
 
   function handleToggleMenu() {
@@ -85,8 +82,8 @@ export function Menu() {
                 id="beneficent-filter"
                 name="beneficent-filter"
                 placeholder="Nome do beneficiário"
-                value={filterBeneficent}
-                onChange={(e) => handleSearchByBeneficent(e.target.value)}
+                value={name}
+                onChange={(e) => handleChangeName(e.target.value)}
               />
             </div>
 
@@ -94,7 +91,9 @@ export function Menu() {
               name="type-filter"
               id="type-filter"
               className="text-black"
-              onChange={(e) => handleChangeType(e.target.value)}
+              onChange={(e) =>
+                handleChangeType(e.target.value as "all" | "paid" | "unpaid")
+              }
             >
               <option value="all">Todos</option>
               <option value="paid">Pagos</option>

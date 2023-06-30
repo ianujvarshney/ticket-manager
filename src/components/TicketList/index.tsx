@@ -33,25 +33,21 @@ const priceFormatter = new Intl.NumberFormat("pt-BR", {
 });
 
 export function TicketList() {
-  // const [tickets, setTickets] = useState<TicketProps[]>([]);
-  const { tickets } = useTickets();
+  const { state } = useTickets();
+
+  console.log("STATE ", state);
 
   const [editModalData, setEditModalData] = useState<TicketProps | null>(null);
   const [deleteModalData, setDeleteModalData] = useState<TicketProps | null>(
     null
   );
   const [isToastOpen, setIsToastOpen] = useState(false);
-  const TOTAL_PRICE = tickets.reduce(
+  const TOTAL_PRICE = state.tickets.reduce(
     (buffer, ticket) => (buffer += ticket.value / 100),
     0
   );
 
   const timerRef = useRef<any>(0);
-
-  async function getTickets() {
-    const res = await (window as any).ticket.listTicket();
-    // setTickets(res);
-  }
 
   function handleEditTicket(ticket: TicketProps) {
     setEditModalData(ticket);
@@ -86,10 +82,6 @@ export function TicketList() {
     location.reload();
   }
 
-  // useEffect(() => {
-  //   getTickets();
-  // }, []);
-
   useEffect(() => {
     return () => clearTimeout(timerRef.current);
   }, []);
@@ -99,7 +91,7 @@ export function TicketList() {
       <div className="flex items-center justify-between px-4 mb-4">
         <div className="flex flex-1 justify-between pr-4">
           <h1 className="text-lg font-bold ">TicketList</h1>
-          <ReactToPrint tickets={tickets} />
+          <ReactToPrint tickets={state.tickets} />
         </div>
 
         <Dialog.Root modal>
@@ -142,7 +134,7 @@ export function TicketList() {
         <Dialog.Root>
           <AlertDialog.Root>
             <tbody>
-              {tickets.map((ticket) => {
+              {state.tickets.map((ticket) => {
                 const date = dateFormat.format(new Date(ticket.expiry_date));
 
                 return (
