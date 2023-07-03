@@ -4,8 +4,6 @@ import { actions } from "./actions";
 export const reducers = (state: StateProps, action: any) => {
   switch (action.type) {
     case actions.SET_FILTER: {
-      console.log(action.payload);
-
       return {
         ...state,
         tickets: action.payload.tickets,

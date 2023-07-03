@@ -1,7 +1,10 @@
 export function SignIn() {
   return (
-    <div>
-      <h1>SignIn</h1>
+    <div className="flex h-screen w-screen flex-col items-center justify-center p-4">
+      <div className="flex flex-col items-center rounded-md bg-zinc-400 p-10">
+        <h1 className="mb-4 text-lg font-bold text-white">Fazer Login</h1>
+        <div id="signInDiv"></div>
+      </div>
     </div>
   );
 }

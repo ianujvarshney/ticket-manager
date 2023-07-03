@@ -1,17 +1,13 @@
-import { Menu } from "./components/Menu";
-import { TicketList } from "./components/TicketList";
-import { TicketProvider } from "./contexts/TicketContext";
+import { UserContextProvider } from "./contexts/UserContext";
+import { Routes } from "./routes";
 
 function App() {
   return (
-    <div>
-      <main className="pt-4 px-4">
-        <TicketProvider>
-          <Menu />
-          <TicketList />
-        </TicketProvider>
-      </main>
-    </div>
+    <UserContextProvider>
+      {/* <main className="pt-4 px-4"> */}
+      <Routes />
+      {/* </main> */}
+    </UserContextProvider>
   );
 }
 
