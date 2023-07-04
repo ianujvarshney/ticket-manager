@@ -7,6 +7,7 @@ type UserContextProps = {
   state: StateProps;
   action: {
     signIn: () => void;
+    signOut: () => void;
   };
 };
 
@@ -16,7 +17,7 @@ type UserProviderProps = {
 
 export type StateProps = typeof globalState;
 
-const globalState = {
+export const globalState = {
   user: {
     name: "",
     avatarUrl: "",

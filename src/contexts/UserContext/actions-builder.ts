@@ -29,6 +29,11 @@ export const buildActions = (dispatch: any) => {
         dispatch({ type: actions.SIGN_IN, payload: user });
       });
     },
+
+    signOut: () => {
+      localStorage.removeItem("@ticket_manager_user");
+      dispatch({ type: actions.SIGN_OUT });
+    },
   };
 };
 
@@ -52,7 +57,7 @@ function handleCallbackResponse(
 
 async function handleGoogleSignIn(cb: () => void) {
   /* global google */
-  await (window as any).google.accounts.id.initialize({
+  await (window as any).google?.accounts.id.initialize({
     client_id: import.meta.env.VITE_GOOGLE_ID_CLIENT,
     callback: (response: any) => handleCallbackResponse(response, cb),
   });

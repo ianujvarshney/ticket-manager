@@ -1,4 +1,4 @@
-import { StateProps } from ".";
+import { StateProps, globalState } from ".";
 import { actions } from "./actions";
 
 export const reducer = (state: StateProps, action: any) => {
@@ -14,6 +14,13 @@ export const reducer = (state: StateProps, action: any) => {
       return {
         ...state,
         user: action.payload,
+      };
+    }
+
+    case actions.SIGN_OUT: {
+      return {
+        ...state,
+        user: globalState.user,
       };
     }
 
