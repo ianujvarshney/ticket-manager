@@ -11,9 +11,11 @@ datasource db {
 }
 
 model User {
-  id     String   @id @default(uuid())
-  name   String
-  Ticket Ticket[]
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  avatarUrl String   @default("https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png")
+  Ticket    Ticket[]
 }
 
 model Ticket {

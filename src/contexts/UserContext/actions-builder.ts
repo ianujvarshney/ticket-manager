@@ -1,4 +1,5 @@
 import jwtDecode from "jwt-decode";
+import { actions } from "./actions";
 
 export type GoogleResponseProps = {
   clientId: string;
@@ -7,31 +8,60 @@ export type GoogleResponseProps = {
   select_by: string;
 };
 
+type GoogleUserProps = {
+  email: string;
+  name: string;
+  picture: string;
+};
+
+export type UserProps = {
+  email: string;
+  name: string;
+  avatarUrl: string;
+};
+
+let user: UserProps;
+
 export const buildActions = (dispatch: any) => {
   return {
     signIn: () => {
-      handleGoogleSignIn();
+      handleGoogleSignIn(() => {
+        dispatch({ type: actions.SIGN_IN, payload: user });
+      });
     },
-
-    setUser: () => {},
   };
 };
 
-function handleCallbackResponse(response: GoogleResponseProps) {
+function handleCallbackResponse(
+  response: GoogleResponseProps,
+  callback: () => void
+) {
   const token = response.credential;
   const decodedToken = jwtDecode(token);
-  console.log(decodedToken);
+  const { email, name, picture } = decodedToken as GoogleUserProps;
+  user = {
+    email,
+    name,
+    avatarUrl: picture,
+  };
+
+  localStorage.setItem("@ticket_manager_user", JSON.stringify(user));
+
+  callback();
 }
 
-function handleGoogleSignIn() {
+async function handleGoogleSignIn(cb: () => void) {
   /* global google */
-  (window as any).google.accounts.id.initialize({
+  await (window as any).google.accounts.id.initialize({
     client_id: import.meta.env.VITE_GOOGLE_ID_CLIENT,
-    callback: handleCallbackResponse,
+    callback: (response: any) => handleCallbackResponse(response, cb),
   });
 
   (window as any).google.accounts.id.renderButton(
     document.getElementById("signInDiv"),
-    { theme: "outline", size: "large" }
+    {
+      theme: "outline",
+      size: "large",
+    }
   );
 }

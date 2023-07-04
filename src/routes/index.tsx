@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Home } from "../pages/Home";
 import { SignIn } from "../pages/SignIn";
-import { useState } from "react";
+import { useUserContext } from "../hooks/UserContext";
 
 export const routes = createBrowserRouter([
   {
@@ -18,11 +18,11 @@ const signInRoutes = createBrowserRouter([
 ]);
 
 export function Routes() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const { state } = useUserContext();
 
   return (
     <div>
-      <RouterProvider router={isSignedIn ? routes : signInRoutes} />
+      <RouterProvider router={state?.user?.email ? routes : signInRoutes} />
     </div>
   );
 }

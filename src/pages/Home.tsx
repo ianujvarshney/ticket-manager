@@ -5,8 +5,10 @@ import { TicketProvider } from "../contexts/TicketContext";
 export function Home() {
   return (
     <TicketProvider>
-      <Menu />
-      <TicketList />
+      <div className="p-4">
+        <Menu />
+        <TicketList />
+      </div>
     </TicketProvider>
   );
 }

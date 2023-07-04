@@ -6,10 +6,19 @@ export const reducer = (state: StateProps, action: any) => {
     case actions.SIGN_IN: {
       return {
         ...state,
+        user: action.payload,
+      };
+    }
+
+    case actions.SET_USER: {
+      return {
+        ...state,
+        user: action.payload,
       };
     }
 
     default: {
+      console.log(action.type);
       return { ...state };
     }
   }

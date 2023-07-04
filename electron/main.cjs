@@ -12,6 +12,7 @@ const {
 } = require("./handlers/ticket.cjs");
 const { reloadWindowHandler } = require("./handlers/reload.cjs");
 const { exportDatabase, importDatabase } = require("./handlers/database.cjs");
+const { signIn } = require("./handlers/user.cjs");
 
 let win;
 
@@ -59,6 +60,7 @@ app.on("activate", () => {
   }
 });
 
+// Ticket
 ipcMain.handle("saveTicket", (event, data) => saveTicketHandler(event, data));
 ipcMain.handle("listTicket", listTicketHandler);
 ipcMain.handle("editTicket", (event, data) => editTicketHandler(event, data));
@@ -69,6 +71,13 @@ ipcMain.handle("filterTicket", (event, data) =>
 ipcMain.handle("deleteTicket", (event, data) =>
   deleteTicketHandler(event, data)
 );
+
+// Window
 ipcMain.handle("reloadWindow", reloadWindowHandler);
+
+// Database
 ipcMain.handle("exportDatabase", exportDatabase);
 ipcMain.handle("importDatabase", importDatabase);
+
+// User
+ipcMain.handle("signIn", (event, data) => signIn(event, data));

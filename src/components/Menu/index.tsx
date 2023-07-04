@@ -3,9 +3,12 @@ import { List, X, DownloadSimple, Export } from "phosphor-react";
 import { useTickets } from "../../hooks/TicketContext";
 import { Input } from "../Input";
 import { Button } from "../Button";
+import { UserProfile } from "../Profile";
+import { useUserContext } from "../../hooks/UserContext";
 
 export function Menu() {
   const { state, actions } = useTickets();
+  const { state: userState } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState(state.filter.name);
 
@@ -35,13 +38,17 @@ export function Menu() {
   }
 
   return (
-    <div className="flex justify-between items-center h-10 mb-4 px-3">
-      <button onClick={handleToggleMenu} className="">
-        {isOpen ? <X /> : <List />}
-      </button>
+    <div className="mb-4 flex h-10 items-center justify-between px-3">
+      <div className="flex flex-1 justify-between">
+        <button onClick={handleToggleMenu} className="">
+          {isOpen ? <X /> : <List />}
+        </button>
+
+        <UserProfile user={userState.user} />
+      </div>
 
       {isOpen && (
-        <div className="flex flex-1 items-center ml-10 justify-between gap-3">
+        <div className="ml-10 flex flex-1 items-center justify-between gap-3">
           {/* <div className="flex gap-2 items-center">
             <label htmlFor="initial-data">Data Inicial</label>
 
@@ -64,7 +71,7 @@ export function Menu() {
             />
           </div> */}
 
-          <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-4">
             <Button onClick={handleExportDatabase}>
               Exportar
               <Export />
@@ -76,7 +83,7 @@ export function Menu() {
             </Button>
           </div>
 
-          <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-4">
             <div className="flex">
               <Input
                 id="beneficent-filter"
