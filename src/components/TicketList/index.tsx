@@ -10,6 +10,7 @@ import { Toast } from "../Toast";
 import { ReactToPrint } from "../ReactToPrint";
 import { useTickets } from "../../hooks/TicketContext";
 import { Button } from "../Button";
+import { useUserContext } from "../../hooks/UserContext";
 
 export type TicketProps = {
   id: string;
@@ -37,8 +38,7 @@ const priceFormatter = new Intl.NumberFormat("pt-BR", {
 
 export function TicketList() {
   const { state } = useTickets();
-
-  console.log("STATE ", state);
+  const { state: userState } = useUserContext();
 
   const [editModalData, setEditModalData] = useState<TicketProps | null>(null);
   const [deleteModalData, setDeleteModalData] = useState<TicketProps | null>(
@@ -66,7 +66,7 @@ export function TicketList() {
   }
 
   async function handleTogglePayment(ticket: TicketProps) {
-    const userId = "3469ca96-4517-474c-8001-8363da836c5e";
+    const userId = userState.user.id;
     const isPaid = !ticket.is_paid;
 
     const newTicket = {
@@ -85,6 +85,7 @@ export function TicketList() {
     location.reload();
   }
 
+  console.log(state.tickets);
   useEffect(() => {
     return () => clearTimeout(timerRef.current);
   }, []);
@@ -113,20 +114,18 @@ export function TicketList() {
         </Dialog.Root>
       </div>
 
-      <table border={1} className="border-gray-50">
+      <table border={1} className="border-gray-50 text-sm">
         <thead>
           <tr className="">
-            <td className="whitespace-nowrap px-4 font-bold">Editar</td>
+            <td className="whitespace-nowrap px-3 font-bold">Editar</td>
 
-            <td className="whitespace-nowrap px-4 font-bold">Excluir</td>
+            <td className="whitespace-nowrap px-3 font-bold">Excluir</td>
 
             <td className="whitespace-nowrap px-4 font-bold">Beneficiário</td>
             <td className="whitespace-nowrap px-4 font-bold">
               Número do documento
             </td>
-            <td className="whitespace-nowrap px-4 font-bold">
-              Data de vencimento
-            </td>
+            <td className="whitespace-nowrap px-4 font-bold">Vencimento</td>
             <td className="whitespace-nowrap px-4 font-bold">Valor</td>
             <td className="whitespace-nowrap px-4 font-bold">
               Local de pagamento
@@ -160,7 +159,7 @@ export function TicketList() {
                     <td className="px-4">{ticket.recipient}</td>
 
                     <td className="px-4">
-                      <div className="flex w-[240px] items-center gap-2 overflow-hidden">
+                      <div className="flex w-[200px] items-center gap-2 overflow-hidden">
                         <button
                           type="button"
                           title="Copiar para o Clipboard"
@@ -179,8 +178,8 @@ export function TicketList() {
                         </button>
 
                         <p className="line-clamp-1">
-                          {ticket.document_number.slice(0, 24)}
-                          {ticket.document_number.length > 24 && "..."}
+                          {ticket.document_number.slice(0, 20)}
+                          {ticket.document_number.length > 20 && "..."}
                         </p>
                       </div>
                     </td>

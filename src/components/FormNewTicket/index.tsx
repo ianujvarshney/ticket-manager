@@ -5,7 +5,7 @@ import { useUserContext } from "../../hooks/UserContext";
 export function FormNewTicket() {
   const { state } = useUserContext();
 
-  const userId = state.user.userId;
+  const userId = state.user.id;
   const [recipient, setRecipient] = useState("");
   const [ticketNumber, setTicketNumber] = useState("");
   const [ticketValue, setTicketValue] = useState(0);

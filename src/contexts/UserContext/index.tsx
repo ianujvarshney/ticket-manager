@@ -22,7 +22,7 @@ export const globalState = {
     name: "",
     avatarUrl: "",
     email: "",
-    userId: "",
+    id: "",
   },
 };
 
