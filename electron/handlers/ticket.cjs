@@ -114,6 +114,13 @@ const listTicketHandler = async () => {
         expiry_date: "asc",
       },
     ],
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
   return tickets;
 };

@@ -22,6 +22,7 @@ export const globalState = {
     name: "",
     avatarUrl: "",
     email: "",
+    userId: "",
   },
 };
 
@@ -41,10 +42,6 @@ export function UserContextProvider({ children }: UserProviderProps) {
   }, []);
 
   const action = useRef(buildActions(dispatch));
-
-  // useEffect(() => {
-  //   action.current.signIn();
-  // }, []);
 
   return (
     <UserContext.Provider value={{ state, action: action.current }}>

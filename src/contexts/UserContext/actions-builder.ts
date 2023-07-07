@@ -8,9 +8,9 @@ export type UserProps = {
 
 export const buildActions = (dispatch: any) => {
   return {
-    signIn: (user: UserProps) => {
-      handleSignIn(user);
-      // dispatch({ type: actions.SIGN_IN, payload: user });
+    signIn: async (user: UserProps) => {
+      const dbUser = await handleSignIn(user);
+      dispatch({ type: actions.SIGN_IN, payload: dbUser });
     },
 
     signOut: () => {
@@ -21,7 +21,7 @@ export const buildActions = (dispatch: any) => {
 };
 
 async function handleSignIn(user: UserProps) {
-  console.log(user);
   const dbUser = await (window as any).user.signIn(user);
-  console.log("DB_USER", dbUser);
+  localStorage.setItem("@ticket_manager_user", JSON.stringify(user));
+  return dbUser;
 }

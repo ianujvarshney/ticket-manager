@@ -1,8 +1,11 @@
 import { FormEvent, useState } from "react";
 import { Input } from "../Input";
+import { useUserContext } from "../../hooks/UserContext";
 
 export function FormNewTicket() {
-  const userId = "3469ca96-4517-474c-8001-8363da836c5e";
+  const { state } = useUserContext();
+
+  const userId = state.user.userId;
   const [recipient, setRecipient] = useState("");
   const [ticketNumber, setTicketNumber] = useState("");
   const [ticketValue, setTicketValue] = useState(0);
@@ -92,11 +95,11 @@ export function FormNewTicket() {
         </div>
       </div>
 
-      <footer className="flex items-center justify-center mt-10">
+      <footer className="mt-10 flex items-center justify-center">
         <button
           type="submit"
-          className="flex gap-2 border border-purple-400 px-4 py-1 items-center rounded-sm 
-              hover:bg-purple-500 transition-colors"
+          className="flex items-center gap-2 rounded-sm border border-purple-400 px-4 py-1 
+              transition-colors hover:bg-purple-500"
         >
           Salvar Boleto
         </button>

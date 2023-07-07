@@ -19,6 +19,9 @@ export type TicketProps = {
   payment_place: string;
   recipient: string;
   value: number;
+  user: {
+    name: string;
+  };
 };
 
 const dateFormat = new Intl.DateTimeFormat("pt-BR", {
@@ -88,7 +91,7 @@ export function TicketList() {
 
   return (
     <div>
-      <div className="flex items-center justify-between px-4 mb-4">
+      <div className="mb-4 flex items-center justify-between px-4">
         <div className="flex flex-1 justify-between pr-4">
           <h1 className="text-lg font-bold ">TicketList</h1>
           <ReactToPrint tickets={state.tickets} />
@@ -113,22 +116,23 @@ export function TicketList() {
       <table border={1} className="border-gray-50">
         <thead>
           <tr className="">
-            <td className="whitespace-nowrap font-bold px-4">Editar</td>
+            <td className="whitespace-nowrap px-4 font-bold">Editar</td>
 
-            <td className="whitespace-nowrap font-bold px-4">Excluir</td>
+            <td className="whitespace-nowrap px-4 font-bold">Excluir</td>
 
-            <td className="whitespace-nowrap font-bold px-4">Beneficiário</td>
-            <td className="whitespace-nowrap font-bold px-4">
+            <td className="whitespace-nowrap px-4 font-bold">Beneficiário</td>
+            <td className="whitespace-nowrap px-4 font-bold">
               Número do documento
             </td>
-            <td className="whitespace-nowrap font-bold px-4">
+            <td className="whitespace-nowrap px-4 font-bold">
               Data de vencimento
             </td>
-            <td className="whitespace-nowrap font-bold px-4">Valor</td>
-            <td className="whitespace-nowrap font-bold px-4">
+            <td className="whitespace-nowrap px-4 font-bold">Valor</td>
+            <td className="whitespace-nowrap px-4 font-bold">
               Local de pagamento
             </td>
-            <td className="whitespace-nowrap font-bold px-4">Pago</td>
+            <td className="whitespace-nowrap px-4 font-bold">Pago</td>
+            <td className="whitespace-nowrap px-4 font-bold">Autor</td>
           </tr>
         </thead>
         <Dialog.Root>
@@ -156,7 +160,7 @@ export function TicketList() {
                     <td className="px-4">{ticket.recipient}</td>
 
                     <td className="px-4">
-                      <div className="w-[240px] flex items-center gap-2 overflow-hidden">
+                      <div className="flex w-[240px] items-center gap-2 overflow-hidden">
                         <button
                           type="button"
                           title="Copiar para o Clipboard"
@@ -191,16 +195,18 @@ export function TicketList() {
 
                     <td className="px-4">{ticket.payment_place}</td>
 
-                    <td className="px-4 py-2 flex justify-center items-center">
+                    <td className="flex items-center justify-center px-4 py-2">
                       <input
                         type="checkbox"
                         name="is_paid"
                         id="is_paid"
                         checked={ticket.is_paid}
                         onChange={() => handleTogglePayment(ticket)}
-                        className="text-purple-500 rounded-sm"
+                        className="rounded-sm text-purple-500"
                       />
                     </td>
+
+                    <td className="px-4">{ticket.user.name}</td>
                   </tr>
                 );
               })}
@@ -228,7 +234,7 @@ export function TicketList() {
         </Dialog.Root>
       </table>
 
-      <footer className="fixed bottom-0 left-0 w-full p-4 flex flex-1 justify-end">
+      <footer className="fixed bottom-0 left-0 flex w-full flex-1 justify-end p-4">
         <span>Total: {priceFormatter.format(TOTAL_PRICE)}</span>
       </footer>
 
