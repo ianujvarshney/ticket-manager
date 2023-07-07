@@ -85,7 +85,6 @@ export function TicketList() {
     location.reload();
   }
 
-  console.log(state.tickets);
   useEffect(() => {
     return () => clearTimeout(timerRef.current);
   }, []);
@@ -113,125 +112,136 @@ export function TicketList() {
           </Modal>
         </Dialog.Root>
       </div>
+      {state.tickets.length ? (
+        <table border={1} className="border-gray-50 text-sm">
+          <thead>
+            <tr className="">
+              <td className="whitespace-nowrap px-3 font-bold">Editar</td>
 
-      <table border={1} className="border-gray-50 text-sm">
-        <thead>
-          <tr className="">
-            <td className="whitespace-nowrap px-3 font-bold">Editar</td>
+              <td className="whitespace-nowrap px-3 font-bold">Excluir</td>
 
-            <td className="whitespace-nowrap px-3 font-bold">Excluir</td>
+              <td className="whitespace-nowrap px-4 font-bold">Beneficiário</td>
+              <td className="whitespace-nowrap px-4 font-bold">
+                Número do documento
+              </td>
+              <td className="whitespace-nowrap px-4 font-bold">Vencimento</td>
+              <td className="whitespace-nowrap px-4 font-bold">Valor</td>
+              <td className="whitespace-nowrap px-4 font-bold">
+                Local de pagamento
+              </td>
+              <td className="whitespace-nowrap px-4 font-bold">Pago</td>
+              <td className="whitespace-nowrap px-4 font-bold">Autor</td>
+            </tr>
+          </thead>
 
-            <td className="whitespace-nowrap px-4 font-bold">Beneficiário</td>
-            <td className="whitespace-nowrap px-4 font-bold">
-              Número do documento
-            </td>
-            <td className="whitespace-nowrap px-4 font-bold">Vencimento</td>
-            <td className="whitespace-nowrap px-4 font-bold">Valor</td>
-            <td className="whitespace-nowrap px-4 font-bold">
-              Local de pagamento
-            </td>
-            <td className="whitespace-nowrap px-4 font-bold">Pago</td>
-            <td className="whitespace-nowrap px-4 font-bold">Autor</td>
-          </tr>
-        </thead>
-        <Dialog.Root>
-          <AlertDialog.Root>
-            <tbody>
-              {state.tickets.map((ticket) => {
-                const date = dateFormat.format(new Date(ticket.expiry_date));
+          <Dialog.Root>
+            <AlertDialog.Root>
+              <tbody>
+                {state.tickets.map((ticket) => {
+                  const date = dateFormat.format(new Date(ticket.expiry_date));
 
-                return (
-                  <tr key={ticket.id}>
-                    <td className="flex items-center justify-center">
-                      <Dialog.Trigger onClick={() => handleEditTicket(ticket)}>
-                        <Pencil />
-                      </Dialog.Trigger>
-                    </td>
-
-                    <td align="center">
-                      <AlertDialog.Trigger
-                        onClick={() => handleDeleteTicket(ticket)}
-                      >
-                        <Trash />
-                      </AlertDialog.Trigger>
-                    </td>
-
-                    <td className="px-4">{ticket.recipient}</td>
-
-                    <td className="px-4">
-                      <div className="flex w-[200px] items-center gap-2 overflow-hidden">
-                        <button
-                          type="button"
-                          title="Copiar para o Clipboard"
-                          onClick={() => {
-                            navigator.clipboard.writeText(
-                              ticket.document_number
-                            );
-
-                            clearTimeout(timerRef.current);
-                            timerRef.current = setTimeout(() => {
-                              setIsToastOpen(true);
-                            }, 2000);
-                          }}
+                  return (
+                    <tr key={ticket.id}>
+                      <td className="flex items-center justify-center">
+                        <Dialog.Trigger
+                          onClick={() => handleEditTicket(ticket)}
                         >
-                          <CopySimple />
-                        </button>
+                          <Pencil />
+                        </Dialog.Trigger>
+                      </td>
 
-                        <p className="line-clamp-1">
-                          {ticket.document_number.slice(0, 20)}
-                          {ticket.document_number.length > 20 && "..."}
-                        </p>
-                      </div>
-                    </td>
+                      <td align="center">
+                        <AlertDialog.Trigger
+                          onClick={() => handleDeleteTicket(ticket)}
+                        >
+                          <Trash />
+                        </AlertDialog.Trigger>
+                      </td>
 
-                    <td className="px-4">
-                      <time>{date}</time>
-                    </td>
+                      <td className="px-4">{ticket.recipient}</td>
 
-                    <td className="px-4">
-                      {priceFormatter.format(ticket.value / 100)}
-                    </td>
+                      <td className="px-4">
+                        <div className="flex w-[200px] items-center gap-2 overflow-hidden">
+                          <button
+                            type="button"
+                            title="Copiar para o Clipboard"
+                            onClick={() => {
+                              navigator.clipboard.writeText(
+                                ticket.document_number
+                              );
 
-                    <td className="px-4">{ticket.payment_place}</td>
+                              clearTimeout(timerRef.current);
+                              timerRef.current = setTimeout(() => {
+                                setIsToastOpen(true);
+                              }, 2000);
+                            }}
+                          >
+                            <CopySimple />
+                          </button>
 
-                    <td className="flex items-center justify-center px-4 py-2">
-                      <input
-                        type="checkbox"
-                        name="is_paid"
-                        id="is_paid"
-                        checked={ticket.is_paid}
-                        onChange={() => handleTogglePayment(ticket)}
-                        className="rounded-sm text-purple-500"
-                      />
-                    </td>
+                          <p className="line-clamp-1">
+                            {ticket.document_number.slice(0, 20)}
+                            {ticket.document_number.length > 20 && "..."}
+                          </p>
+                        </div>
+                      </td>
 
-                    <td className="px-4">{ticket.user.name}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
+                      <td className="px-4">
+                        <time>{date}</time>
+                      </td>
 
-            <Modal title="Editar Boleto">
-              {editModalData && <FormEditTicket ticket={editModalData} />}
-            </Modal>
+                      <td className="px-4">
+                        {priceFormatter.format(ticket.value / 100)}
+                      </td>
 
-            {deleteModalData && (
-              <AlertModal
-                title="Deletar boleto?"
-                onConfirm={confirmTicketDelete}
-              >
-                O Boleto de nº{" "}
-                <span className="font-bold">
-                  {deleteModalData.document_number}
-                </span>
-                , do beneficiário{" "}
-                <span className="font-bold">{deleteModalData.recipient}</span>{" "}
-                será apagado de forma permanente, você deseja continuar?
-              </AlertModal>
-            )}
-          </AlertDialog.Root>
-        </Dialog.Root>
-      </table>
+                      <td className="px-4">{ticket.payment_place}</td>
+
+                      <td className="flex items-center justify-center px-4 py-2">
+                        <input
+                          type="checkbox"
+                          name="is_paid"
+                          id="is_paid"
+                          checked={ticket.is_paid}
+                          onChange={() => handleTogglePayment(ticket)}
+                          className="rounded-sm text-purple-500"
+                        />
+                      </td>
+
+                      <td className="px-4">{ticket.user.name}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+
+              <Modal title="Editar Boleto">
+                {editModalData && <FormEditTicket ticket={editModalData} />}
+              </Modal>
+
+              {deleteModalData && (
+                <AlertModal
+                  title="Deletar boleto?"
+                  onConfirm={confirmTicketDelete}
+                >
+                  O Boleto de nº{" "}
+                  <span className="font-bold">
+                    {deleteModalData.document_number}
+                  </span>
+                  , do beneficiário{" "}
+                  <span className="font-bold">{deleteModalData.recipient}</span>{" "}
+                  será apagado de forma permanente, você deseja continuar?
+                </AlertModal>
+              )}
+            </AlertDialog.Root>
+          </Dialog.Root>
+        </table>
+      ) : (
+        <div className="flex w-full items-center justify-center rounded-md bg-zinc-700 py-10">
+          <h3>
+            Nenhum boleto encontrado, verifique os filtros, ou comece a
+            cadastrar!
+          </h3>
+        </div>
+      )}
 
       <footer className="fixed bottom-0 left-0 flex w-full flex-1 justify-end p-4">
         <span>Total: {priceFormatter.format(TOTAL_PRICE)}</span>

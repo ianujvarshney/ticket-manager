@@ -38,8 +38,8 @@ export function Menu() {
   }
 
   return (
-    <div className="mb-4 flex h-10 items-center justify-between px-3">
-      <div className="flex flex-1 justify-between">
+    <div className="mb-4 flex h-10 flex-col  px-3">
+      <div className="mb-4 flex flex-1 justify-between">
         <button onClick={handleToggleMenu} className="">
           {isOpen ? <X /> : <List />}
         </button>
@@ -48,7 +48,7 @@ export function Menu() {
       </div>
 
       {isOpen && (
-        <div className="ml-10 flex flex-1 items-center justify-between gap-3">
+        <div className="absolute -left-8 top-14 ml-10 flex w-[calc(100%_-_20px)] flex-1 items-center justify-between gap-3 rounded-md bg-zinc-700 px-4 py-2">
           {/* <div className="flex gap-2 items-center">
             <label htmlFor="initial-data">Data Inicial</label>
 
