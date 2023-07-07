@@ -2,11 +2,13 @@ const { prisma } = require("../lib/prisma.cjs");
 const z = require("zod");
 
 const signIn = async (event, data) => {
-  const user = prisma.user.findFirstOrThrow({
+  const user = await prisma.user.findFirst({
     where: {
       email: data.email,
     },
   });
+
+  console.log(data);
 
   if (user) {
     return user;
@@ -14,8 +16,8 @@ const signIn = async (event, data) => {
 
   try {
     const dataSchema = z.object({
-      name: z.string().require(),
-      email: z.email().require(),
+      name: z.string(),
+      email: z.string().email(),
       avatarUrl: z.string().url(),
     });
 
@@ -31,7 +33,7 @@ const signIn = async (event, data) => {
 
     return newUser;
   } catch (e) {
-    throw new Error("Could not create the new User!");
+    console.log(e);
   }
 };
 

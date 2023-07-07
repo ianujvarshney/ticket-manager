@@ -49,7 +49,7 @@ contextBridge.exposeInMainWorld("database", {
 // User
 contextBridge.exposeInMainWorld("user", {
   signIn: async (data) => {
-    await ipcRenderer.invoke("signIn", data);
+    const resp = await ipcRenderer.invoke("signIn", data);
     return resp;
   },
 });

@@ -1,12 +1,12 @@
 import { ReactNode, createContext, useEffect, useReducer, useRef } from "react";
-import { buildActions } from "./actions-builder";
+import { UserProps, buildActions } from "./actions-builder";
 import { reducer } from "./reducers";
 import { actions } from "./actions";
 
 type UserContextProps = {
   state: StateProps;
   action: {
-    signIn: () => void;
+    signIn: (user: UserProps) => void;
     signOut: () => void;
   };
 };
@@ -42,9 +42,9 @@ export function UserContextProvider({ children }: UserProviderProps) {
 
   const action = useRef(buildActions(dispatch));
 
-  useEffect(() => {
-    action.current.signIn();
-  }, []);
+  // useEffect(() => {
+  //   action.current.signIn();
+  // }, []);
 
   return (
     <UserContext.Provider value={{ state, action: action.current }}>
