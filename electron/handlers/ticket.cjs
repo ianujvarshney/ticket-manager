@@ -142,7 +142,9 @@ const filterTicketHandler = async (event, data) => {
 
     include: {
       user: {
-        name: true,
+        select: {
+          name: true,
+        },
       },
     },
   });
