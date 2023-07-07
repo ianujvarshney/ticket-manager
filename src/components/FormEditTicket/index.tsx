@@ -3,6 +3,7 @@ import { TicketProps } from "../TicketList";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useForm, Controller } from "react-hook-form";
+import { useUserContext } from "../../hooks/UserContext";
 
 type Props = {
   ticket: TicketProps;
@@ -34,8 +35,7 @@ const schema = z.object({
 // });
 
 export function FormEditTicket({ ticket }: Props) {
-  const userId = "3469ca96-4517-474c-8001-8363da836c5e";
-
+  const { state } = useUserContext();
   const {
     register,
     handleSubmit,
@@ -55,8 +55,6 @@ export function FormEditTicket({ ticket }: Props) {
   console.log(errors);
 
   async function onSubmit(formValues: FormData) {
-    console.log(formValues);
-
     const data = {
       id: ticket.id,
       recipient: formValues.recipient,
@@ -65,7 +63,7 @@ export function FormEditTicket({ ticket }: Props) {
       paymentPlace: formValues.payment_place,
       isPaid: formValues.is_paid,
       expiryDate: formValues.expiry_date,
-      userId,
+      userId: state.user.id,
     };
 
     const res = await (window as any).ticket.editTicket(data);
@@ -136,7 +134,7 @@ export function FormEditTicket({ ticket }: Props) {
           )}
         />
 
-        <div className="flex gap-2 items-center justify-start">
+        <div className="flex items-center justify-start gap-2">
           <label htmlFor="is_paid">Pago</label>
           <input
             type="checkbox"
@@ -171,11 +169,11 @@ export function FormEditTicket({ ticket }: Props) {
         </div> */}
       </div>
 
-      <footer className="flex items-center justify-center mt-10">
+      <footer className="mt-10 flex items-center justify-center">
         <button
           type="submit"
-          className="flex gap-2 border border-purple-400 px-4 py-1 items-center rounded-sm 
-              hover:bg-purple-500 hover:text-white transition-colors"
+          className="flex items-center gap-2 rounded-sm border border-purple-400 px-4 py-1 
+              transition-colors hover:bg-purple-500 hover:text-white"
         >
           Salvar Boleto
         </button>

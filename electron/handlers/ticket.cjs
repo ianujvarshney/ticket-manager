@@ -126,7 +126,6 @@ const listTicketHandler = async () => {
 };
 
 const filterTicketHandler = async (event, data) => {
-  console.log(data);
   const tickets = await prisma.ticket.findMany({
     orderBy: [
       {
@@ -138,6 +137,12 @@ const filterTicketHandler = async (event, data) => {
       is_paid: data.is_paid,
       recipient: {
         contains: data.recipient,
+      },
+    },
+
+    include: {
+      user: {
+        name: true,
       },
     },
   });

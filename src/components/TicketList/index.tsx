@@ -10,7 +10,6 @@ import { Toast } from "../Toast";
 import { ReactToPrint } from "../ReactToPrint";
 import { useTickets } from "../../hooks/TicketContext";
 import { Button } from "../Button";
-import { useUserContext } from "../../hooks/UserContext";
 
 export type TicketProps = {
   id: string;
@@ -38,7 +37,6 @@ const priceFormatter = new Intl.NumberFormat("pt-BR", {
 
 export function TicketList() {
   const { state } = useTickets();
-  const { state: userState } = useUserContext();
 
   const [editModalData, setEditModalData] = useState<TicketProps | null>(null);
   const [deleteModalData, setDeleteModalData] = useState<TicketProps | null>(
@@ -65,8 +63,7 @@ export function TicketList() {
     location.reload();
   }
 
-  async function handleTogglePayment(ticket: TicketProps) {
-    const userId = userState.user.id;
+  async function handleTogglePayment(ticket: TicketProps & { userId: string }) {
     const isPaid = !ticket.is_paid;
 
     const newTicket = {
@@ -77,7 +74,7 @@ export function TicketList() {
       paymentPlace: ticket.payment_place,
       isPaid,
       expiryDate: ticket.expiry_date.toISOString().slice(0, 10),
-      userId,
+      userId: ticket.userId,
     };
 
     await (window as any).ticket.editTicket(newTicket);
@@ -202,7 +199,11 @@ export function TicketList() {
                           name="is_paid"
                           id="is_paid"
                           checked={ticket.is_paid}
-                          onChange={() => handleTogglePayment(ticket)}
+                          onChange={() =>
+                            handleTogglePayment(
+                              ticket as TicketProps & { userId: string }
+                            )
+                          }
                           className="rounded-sm text-purple-500"
                         />
                       </td>

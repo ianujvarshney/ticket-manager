@@ -32,8 +32,6 @@ export function UserContextProvider({ children }: UserProviderProps) {
   const [state, dispatch] = useReducer(reducer, globalState);
 
   useEffect(() => {
-    if (state.user.email) return;
-
     const user = localStorage.getItem("@ticket_manager_user");
 
     if (user) {

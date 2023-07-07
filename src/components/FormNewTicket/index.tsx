@@ -29,8 +29,7 @@ export function FormNewTicket() {
       userId,
     };
 
-    const res = await (window as any).ticket.saveTicket(data);
-    console.log(res);
+    await (window as any).ticket.saveTicket(data);
 
     document.location.reload();
   }
