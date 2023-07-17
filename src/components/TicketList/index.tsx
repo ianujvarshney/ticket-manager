@@ -116,7 +116,12 @@ export function TicketList() {
           <ReactToPrint tickets={state.tickets} />
         </div>
 
-        <Dialog.Root modal>
+        <Dialog.Root
+          modal
+          onOpenChange={(isOpen) => {
+            if (!isOpen) location.reload();
+          }}
+        >
           <div>
             <Dialog.Trigger asChild>
               <Button>

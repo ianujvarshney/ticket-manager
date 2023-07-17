@@ -11,43 +11,43 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 
 export function Input({ label, id, name, error, mask, ...rest }: Props) {
   return (
-    <div className="flex items-start gap-2 flex-1 ">
+    <div className="flex flex-1 items-start gap-2 ">
       {label && (
-        <label htmlFor={id} className="select-none inline-flex font-semibold">
+        <label htmlFor={id} className="inline-flex select-none font-semibold">
           {label}
         </label>
       )}
 
       <div
         className={`flex flex-col ${
-          rest.type !== "checkbox" ? "flex-1" : "self-center"
-        } relative bg-red-500`}
+          rest.type !== "checkbox" ? "flex-1" : "h-4 w-4 self-center p-0"
+        } relative `}
       >
         {mask ? (
           <InputMask
             mask={mask}
             id={id}
-            className={`text-zinc-900 rounded-sm focus:ring-purple-400 focus:outline-purple-400 ${
-              !label ? "px-2 py-1 flex-1" : ""
-            } ${error ? "ring-red-300" : ""} `}
             {...rest}
+            className={`rounded-sm text-zinc-900 focus:outline-purple-400 focus:ring-purple-400 ${
+              !label ? "flex-1 px-2 py-1" : ""
+            } ${error ? "ring-red-300" : ""} ${rest.className}`}
           />
         ) : (
           <input
             id={id}
-            className={`text-zinc-900 rounded-sm  focus:ring-purple-400 focus:outline-purple-400 ${
-              !label ? "px-2 py-1 flex-1" : ""
+            {...rest}
+            className={`rounded-sm text-zinc-900  focus:outline-purple-400 focus:ring-purple-400 ${
+              !label ? "flex-1 px-2 py-1" : ""
             } ${
               rest.type === "checkbox"
-                ? "rounded-md focus:outline-0 checked:text-purple-500"
+                ? "rounded-md checked:text-purple-500 focus:outline-0"
                 : ""
-            } ${error ? "ring-2 ring-red-300" : ""} `}
-            {...rest}
+            } ${error ? "ring-2 ring-red-300" : ""} ${rest.className}`}
           />
         )}
 
         {error && (
-          <span className="text-red-500 absolute right-2 top-1/2 -translate-y-1/2">
+          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-red-500">
             {error}!
           </span>
         )}

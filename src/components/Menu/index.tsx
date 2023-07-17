@@ -10,15 +10,23 @@ export function Menu() {
   const { state, actions } = useTickets();
   const { state: userState } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState(state.filter.name);
+  const [recipient, setRecipient] = useState(state.filter.recipient);
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [useFilterDate, setUseFilterDate] = useState(false);
 
   function handleChangeType(type: "all" | "paid" | "unpaid") {
-    actions.setFilter({ name, type });
+    actions.setFilter({ recipient, type });
   }
 
-  function handleChangeName(name: string) {
-    setName(name);
-    actions.setFilter({ type: state.filter.type, name });
+  function handleChangeName(recipient: string) {
+    setRecipient(recipient);
+    actions.setFilter({ type: state.filter.type, recipient });
+  }
+
+  function handleChangeDate(date: string) {
+    const parsedDate = new Date(date);
+    // actions.setFilter({ type: state.filter.date, date });
+    console.log(parsedDate);
   }
 
   function handleToggleMenu() {
@@ -40,7 +48,10 @@ export function Menu() {
   return (
     <div className="mb-4 flex h-10 flex-col  px-3">
       <div className="mb-4 flex flex-1 justify-between">
-        <button onClick={handleToggleMenu} className="">
+        <button
+          onClick={handleToggleMenu}
+          className="rounded-sm border border-zinc-400 px-2"
+        >
           {isOpen ? <X /> : <List />}
         </button>
 
@@ -48,29 +59,11 @@ export function Menu() {
       </div>
 
       {isOpen && (
-        <div className="absolute -left-8 top-14 ml-10 flex w-[calc(100%_-_20px)] flex-1 items-center justify-between gap-3 rounded-md bg-zinc-700 px-4 py-2">
-          {/* <div className="flex gap-2 items-center">
-            <label htmlFor="initial-data">Data Inicial</label>
-
-            <input
-              type="date"
-              name="initial-data"
-              id="initial-data"
-              className="text-purple-500"
-            />
-          </div>
-
-          <div className="flex gap-2 items-center">
-            <label htmlFor="final-data">Data Final</label>
-
-            <input
-              type="date"
-              name="final-data"
-              id="final-data"
-              className="text-purple-500"
-            />
-          </div> */}
-
+        <div
+          className="
+            absolute -left-8 top-14 ml-10 flex w-[calc(100%_-_20px)] flex-1 
+            items-center justify-between gap-3 rounded-md bg-zinc-700 px-4 py-2"
+        >
           <div className="flex items-center gap-4">
             <Button onClick={handleExportDatabase}>
               Exportar
@@ -84,12 +77,32 @@ export function Menu() {
           </div>
 
           <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Input
+                name="use-filter-date"
+                id="use-filter-date"
+                type="checkbox"
+                checked={useFilterDate}
+                onChange={(e) => setUseFilterDate(e.target.checked)}
+              />
+
+              <Input
+                type="date"
+                name="date"
+                id="date-filter"
+                value={date}
+                onChange={(e) => handleChangeDate(e.target.value)}
+                className={!useFilterDate ? "opacity-20" : ""}
+                disabled={!useFilterDate}
+              />
+            </div>
+
             <div className="flex">
               <Input
                 id="beneficent-filter"
                 name="beneficent-filter"
                 placeholder="Nome do beneficiário"
-                value={name}
+                value={recipient}
                 onChange={(e) => handleChangeName(e.target.value)}
               />
             </div>

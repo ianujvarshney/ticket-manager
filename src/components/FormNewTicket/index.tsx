@@ -29,9 +29,17 @@ export function FormNewTicket() {
       userId,
     };
 
-    await (window as any).ticket.saveTicket(data);
-
-    document.location.reload();
+    try {
+      await (window as any).ticket.saveTicket(data);
+      setRecipient("");
+      setTicketNumber("");
+      setTicketValue(0);
+      setPaymentPlace("");
+      setIsPaid(false);
+      setExpiryDate(new Date().toISOString().slice(0, 10));
+    } catch (err) {
+      alert("Aconteceu algum erro ao salvar, tente novamente!");
+    }
   }
 
   return (

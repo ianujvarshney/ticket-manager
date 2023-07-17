@@ -12,12 +12,12 @@ export function Modal({ children, title }: Props) {
     <Dialog.Portal>
       <Dialog.Overlay
         className="
-            bg-zinc-300/30 fixed w-screen h-screen top-0 left-0 
-            backdrop-blur-md flex items-center justify-center
+            fixed left-0 top-0 flex h-screen w-screen 
+            items-center justify-center bg-zinc-300/30 backdrop-blur-md
           "
       >
-        <Dialog.Content className="bg-zinc-200 text-zinc-900 w-[80%] p-4 pb-2 rounded-md">
-          <header className="flex justify-between mb-8">
+        <Dialog.Content className="w-[80%] rounded-md bg-zinc-200 p-4 pb-2 text-zinc-900">
+          <header className="mb-8 flex justify-between">
             <Dialog.Title className="font-bold">{title}</Dialog.Title>
 
             <Dialog.Close>
