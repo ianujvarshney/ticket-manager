@@ -10,7 +10,6 @@ import { Toast } from "../Toast";
 import { ReactToPrint } from "../ReactToPrint";
 import { useTickets } from "../../hooks/TicketContext";
 import { Button } from "../Button";
-import { Input } from "../Input";
 
 export type TicketProps = {
   id: string;
@@ -48,8 +47,6 @@ export function TicketList() {
     (buffer, ticket) => (buffer += ticket.value / 100),
     0
   );
-
-  const inputRef = useRef(null);
 
   const timerRef = useRef<any>(0);
 
@@ -100,7 +97,11 @@ export function TicketList() {
       userId: ticket.userId,
     };
 
-    await (window as any).ticket.editTicket(editedTicket);
+    try {
+      await (window as any).ticket.editTicket(editedTicket);
+    } catch (err) {
+      alert("Não foi possível salvar as alterações, tente novamente");
+    }
   }
 
   useEffect(() => {
