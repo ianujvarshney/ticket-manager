@@ -10,6 +10,7 @@ import { Toast } from "../Toast";
 import { ReactToPrint } from "../ReactToPrint";
 import { useTickets } from "../../hooks/TicketContext";
 import { Button } from "../Button";
+import { Input } from "../Input";
 
 export type TicketProps = {
   id: string;
@@ -48,6 +49,8 @@ export function TicketList() {
     0
   );
 
+  const inputRef = useRef(null);
+
   const timerRef = useRef<any>(0);
 
   function handleEditTicket(ticket: TicketProps) {
@@ -80,6 +83,24 @@ export function TicketList() {
     await (window as any).ticket.editTicket(newTicket);
 
     location.reload();
+  }
+
+  async function handleChangePlace(
+    place: string,
+    ticket: TicketProps & { userId: string }
+  ) {
+    const editedTicket = {
+      id: ticket.id,
+      recipient: ticket.recipient,
+      ticketNumber: ticket.document_number,
+      ticketValue: ticket.value,
+      paymentPlace: place,
+      isPaid: ticket.is_paid,
+      expiryDate: ticket.expiry_date.toISOString().slice(0, 10),
+      userId: ticket.userId,
+    };
+
+    await (window as any).ticket.editTicket(editedTicket);
   }
 
   useEffect(() => {
@@ -191,7 +212,21 @@ export function TicketList() {
                         {priceFormatter.format(ticket.value / 100)}
                       </td>
 
-                      <td className="px-4">{ticket.payment_place}</td>
+                      <td className="px-4">
+                        <input
+                          type="text"
+                          name="payment_place"
+                          id="payment_place"
+                          defaultValue={ticket.payment_place}
+                          className="ring-none border-b border-transparent border-b-purple-500 bg-transparent"
+                          onChange={(e) =>
+                            handleChangePlace(
+                              e.target.value,
+                              ticket as TicketProps & { userId: string }
+                            )
+                          }
+                        />
+                      </td>
 
                       <td className="flex items-center justify-center px-4 py-2">
                         <input
