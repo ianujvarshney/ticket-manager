@@ -1,10 +1,11 @@
+import { FilterProps } from ".";
 import { TicketProps } from "../../components/TicketList";
 import { actions } from "./actions";
 
 export const buildActions = (dispatch: any) => {
   return {
     setFilter: async (payload: {
-      name: string;
+      recipient: string;
       type: "all" | "paid" | "unpaid";
     }) => {
       const dbItems = await getFilteredTickets(payload);
@@ -34,28 +35,34 @@ async function getDBTickets() {
   return resp;
 }
 
-async function getFilteredTickets(filter: {
-  name: string;
-  type: "all" | "paid" | "unpaid";
-}) {
-  if (filter.type === "all" && !filter.name) {
+async function getFilteredTickets(filter: FilterProps) {
+  const resultObj = {} as FilterProps;
+
+  for (let item in filter) {
+    if (filter.hasOwnProperty(item) && item !== "type") {
+      //@ts-ignore
+      resultObj[item as keyof typeof resultObj] =
+        filter[item as keyof typeof filter];
+    }
+  }
+
+  if (filter.type === "all" && !Object.keys(resultObj).length) {
     return await (window as any).ticket.listTicket();
   }
 
-  if (filter.type === "all" && filter.name) {
+  if (filter.type === "all" && Object.keys(resultObj).length) {
     return await (window as any).ticket.filterTicket({
-      recipient: filter.name,
+      ...resultObj,
     });
   }
 
-  if (!filter.name) {
-    return await (window as any).ticket.filterTicket({
-      is_paid: filter.type === "paid",
-    });
-  }
+  console.log({
+    is_paid: filter.type === "paid",
+    ...resultObj,
+  });
 
   return await (window as any).ticket.filterTicket({
     is_paid: filter.type === "paid",
-    recipient: filter.name,
+    ...resultObj,
   });
 }

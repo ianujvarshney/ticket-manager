@@ -7,7 +7,7 @@ type NewType = {
   state: StateProps;
   actions: {
     setFilter: (payload: {
-      name: string;
+      recipient: string;
       type: "all" | "paid" | "unpaid";
     }) => void;
     getTickets: () => void;
@@ -21,9 +21,9 @@ type TicketProviderProps = {
 };
 
 type FilterPaidProps = "all" | "paid" | "unpaid";
-type FilterProps = {
+export type FilterProps = {
   type: FilterPaidProps;
-  name: string;
+  recipient: string;
 };
 
 export type StateProps = typeof globalState;
@@ -32,7 +32,7 @@ const globalState = {
   isLoading: false,
   tickets: [] as TicketProps[],
   filter: {
-    name: "",
+    recipient: "",
     type: "all",
   } as FilterProps,
 };
