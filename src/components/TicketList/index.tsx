@@ -24,10 +24,11 @@ export type TicketProps = {
   };
 };
 
-const dateFormat = new Intl.DateTimeFormat("pt-BR", {
-  day: "numeric",
-  month: "numeric",
+const dateFormat = new Intl.DateTimeFormat(undefined, {
+  day: "2-digit",
+  month: "2-digit",
   year: "numeric",
+  timeZone: "UTC",
 });
 
 const priceFormatter = new Intl.NumberFormat("pt-BR", {
@@ -116,12 +117,7 @@ export function TicketList() {
           <ReactToPrint tickets={state.tickets} />
         </div>
 
-        <Dialog.Root
-          modal
-          onOpenChange={(isOpen) => {
-            if (!isOpen) location.reload();
-          }}
-        >
+        <Dialog.Root modal>
           <div>
             <Dialog.Trigger asChild>
               <Button>
