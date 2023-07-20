@@ -7,6 +7,7 @@ export const buildActions = (dispatch: any) => {
     setFilter: async (payload: {
       recipient: string;
       type: "all" | "paid" | "unpaid";
+      expiryDate: string;
     }) => {
       const dbItems = await getFilteredTickets(payload);
 

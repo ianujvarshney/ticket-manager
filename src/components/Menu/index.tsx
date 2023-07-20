@@ -24,7 +24,9 @@ export function Menu() {
   }
 
   function handleChangeDate(date: string) {
-    const parsedDate = new Date(date);
+    const parsedDate = new Date(new Date(date).toUTCString())
+      .toISOString()
+      .slice(0, 10);
     // actions.setFilter({ type: state.filter.date, date });
     console.log(parsedDate);
   }
