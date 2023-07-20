@@ -2,11 +2,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Home } from "../pages/Home";
 import { SignIn } from "../pages/SignIn";
 import { useUserContext } from "../hooks/UserContext";
+import { DefaultPass } from "../pages/DefaultPass";
 
 export const routes = createBrowserRouter([
   {
-    path: "/",
+    path: "/home",
     element: <Home />,
+  },
+  {
+    path: "/",
+    element: <DefaultPass />,
   },
 ]);
 

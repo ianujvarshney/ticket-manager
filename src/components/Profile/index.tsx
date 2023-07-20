@@ -1,6 +1,7 @@
 import { UserProps } from "../../contexts/UserContext/actions-builder";
 import { SignOut } from "phosphor-react";
 import { useUserContext } from "../../hooks/UserContext";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   user: UserProps;
@@ -8,6 +9,7 @@ type Props = {
 
 export function UserProfile({ user }: Props) {
   const { action } = useUserContext();
+  const navigate = useNavigate();
 
   return (
     <div className="flex select-none items-center gap-4">
@@ -22,7 +24,14 @@ export function UserProfile({ user }: Props) {
         <span className="text-xs">{user.email}</span>
       </div>
 
-      <button className="" title="SignOut" onClick={() => action.signOut()}>
+      <button
+        className=""
+        title="SignOut"
+        onClick={() => {
+          navigate("/");
+          action.signOut();
+        }}
+      >
         <SignOut
           size={22}
           className="text-red-200 transition-colors hover:text-red-500"

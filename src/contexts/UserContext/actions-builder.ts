@@ -14,7 +14,7 @@ export const buildActions = (dispatch: any) => {
     },
 
     signOut: () => {
-      localStorage.removeItem("@ticket_manager_user");
+      sessionStorage.removeItem("@ticket_manager_user");
       dispatch({ type: actions.SIGN_OUT });
     },
   };
@@ -22,6 +22,6 @@ export const buildActions = (dispatch: any) => {
 
 async function handleSignIn(user: UserProps) {
   const dbUser = await (window as any).user.signIn(user);
-  localStorage.setItem("@ticket_manager_user", JSON.stringify(dbUser));
+  sessionStorage.setItem("@ticket_manager_user", JSON.stringify(dbUser));
   return dbUser;
 }

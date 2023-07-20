@@ -32,7 +32,7 @@ export function UserContextProvider({ children }: UserProviderProps) {
   const [state, dispatch] = useReducer(reducer, globalState);
 
   useEffect(() => {
-    const user = localStorage.getItem("@ticket_manager_user");
+    const user = sessionStorage.getItem("@ticket_manager_user");
 
     if (user) {
       dispatch({ type: actions.SET_USER, payload: JSON.parse(user) });
