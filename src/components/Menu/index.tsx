@@ -90,7 +90,12 @@ export function Menu() {
                 id="use-filter-date"
                 type="checkbox"
                 checked={useFilterDate}
-                onChange={(e) => setUseFilterDate(e.target.checked)}
+                onChange={(e) => {
+                  e.target.checked
+                    ? handleChangeDate(date)
+                    : actions.setFilter({ type: state.filter.type, recipient });
+                  setUseFilterDate(e.target.checked);
+                }}
               />
 
               <Input
