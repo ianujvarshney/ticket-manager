@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Plus, Pencil, Trash, CopySimple } from "phosphor-react";
+import { Plus, Pencil, Trash, CopySimple, Repeat } from "phosphor-react";
 import { Modal } from "../Modal";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
@@ -10,6 +10,7 @@ import { Toast } from "../Toast";
 import { ReactToPrint } from "../ReactToPrint";
 import { useTickets } from "../../hooks/TicketContext";
 import { Button } from "../Button";
+import { useUserContext } from "../../hooks/UserContext";
 
 export type TicketProps = {
   id: string;
@@ -24,10 +25,11 @@ export type TicketProps = {
   };
 };
 
-const dateFormat = new Intl.DateTimeFormat("pt-BR", {
-  day: "numeric",
-  month: "numeric",
+const dateFormat = new Intl.DateTimeFormat(undefined, {
+  day: "2-digit",
+  month: "2-digit",
   year: "numeric",
+  timeZone: "utc",
 });
 
 const priceFormatter = new Intl.NumberFormat("pt-BR", {
@@ -37,6 +39,7 @@ const priceFormatter = new Intl.NumberFormat("pt-BR", {
 
 export function TicketList() {
   const { state } = useTickets();
+  const { state: userState } = useUserContext();
 
   const [editModalData, setEditModalData] = useState<TicketProps | null>(null);
   const [deleteModalData, setDeleteModalData] = useState<TicketProps | null>(
@@ -79,6 +82,22 @@ export function TicketList() {
 
     await (window as any).ticket.editTicket(newTicket);
 
+    location.reload();
+  }
+
+  async function handleDuplicateTicket(ticket: TicketProps) {
+    const newTicket = {
+      id: ticket.id,
+      recipient: ticket.recipient,
+      ticketNumber: ticket.document_number,
+      ticketValue: ticket.value,
+      paymentPlace: ticket.payment_place,
+      isPaid: ticket.is_paid,
+      expiryDate: ticket.expiry_date.toISOString().slice(0, 10),
+      userId: userState.user.id,
+    };
+
+    await (window as any).ticket.saveTicket(newTicket);
     location.reload();
   }
 
@@ -143,6 +162,7 @@ export function TicketList() {
               <td className="whitespace-nowrap px-3 font-bold">Editar</td>
 
               <td className="whitespace-nowrap px-3 font-bold">Excluir</td>
+              <td className="whitespace-nowrap px-3 font-bold">Duplicar</td>
 
               <td className="whitespace-nowrap px-4 font-bold">Beneficiário</td>
               <td className="whitespace-nowrap px-4 font-bold">
@@ -182,10 +202,18 @@ export function TicketList() {
                         </AlertDialog.Trigger>
                       </td>
 
-                      <td className="px-4">{ticket.recipient}</td>
+                      <td align="center">
+                        <button onClick={() => handleDuplicateTicket(ticket)}>
+                          <Repeat />
+                        </button>
+                      </td>
+
+                      <td className="max-w-[120px] overflow-hidden whitespace-nowrap px-4">
+                        {ticket.recipient}
+                      </td>
 
                       <td className="px-4">
-                        <div className="flex w-[200px] items-center gap-2 overflow-hidden">
+                        <div className="flex w-[170px] items-center gap-2 overflow-hidden">
                           <button
                             type="button"
                             title="Copiar para o Clipboard"
@@ -218,13 +246,13 @@ export function TicketList() {
                         {priceFormatter.format(ticket.value / 100)}
                       </td>
 
-                      <td className="px-4">
+                      <td className="max-w-[220px] px-4">
                         <input
                           type="text"
                           name="payment_place"
                           id="payment_place"
                           defaultValue={ticket.payment_place}
-                          className="ring-none border-b border-transparent border-b-purple-500 bg-transparent"
+                          className="ring-none w-full border-b border-transparent border-b-purple-500 bg-transparent py-1"
                           onChange={(e) =>
                             handleChangePlace(
                               e.target.value,
@@ -234,7 +262,7 @@ export function TicketList() {
                         />
                       </td>
 
-                      <td className="flex items-center justify-center px-4 py-2">
+                      <td className="flex items-center justify-center px-4 py-4">
                         <input
                           type="checkbox"
                           name="is_paid"
@@ -249,7 +277,9 @@ export function TicketList() {
                         />
                       </td>
 
-                      <td className="px-4">{ticket.user.name}</td>
+                      <td className="max-w-[140px] whitespace-nowrap px-4">
+                        {ticket.user.name}
+                      </td>
                     </tr>
                   );
                 })}

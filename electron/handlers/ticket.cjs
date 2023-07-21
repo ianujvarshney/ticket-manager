@@ -138,6 +138,9 @@ const filterTicketHandler = async (event, data) => {
       recipient: {
         contains: data.recipient,
       },
+      expiry_date: {
+        equals: data.expiry_date,
+      },
     },
 
     include: {

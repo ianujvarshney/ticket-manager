@@ -20,13 +20,20 @@ export function Menu() {
 
   function handleChangeName(recipient: string) {
     setRecipient(recipient);
-    actions.setFilter({ type: state.filter.type, recipient });
+    actions.setFilter({
+      type: state.filter.type,
+      recipient,
+      expiry_date: new Date(date),
+    });
   }
 
   function handleChangeDate(date: string) {
-    const parsedDate = new Date(date);
-    // actions.setFilter({ type: state.filter.date, date });
-    console.log(parsedDate);
+    setDate(date);
+    actions.setFilter({
+      type: state.filter.type,
+      recipient,
+      expiry_date: new Date(date),
+    });
   }
 
   function handleToggleMenu() {
