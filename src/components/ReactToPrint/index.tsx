@@ -33,14 +33,13 @@ export function ReactToPrint({ tickets }: Props) {
         <Modal title="Imprimir Boleto">
           <>
             <div
-              className={`flex flex-col items-center p-4 w-full min-h-[calc(100vh_-_200px)]`}
+              className={`flex min-h-[calc(100vh_-_200px)] w-full flex-col items-center p-4`}
               ref={contentRef}
             >
               <table className="w-[85%] border">
                 <thead>
-                  <tr className="border-b border-zinc-900 mb-1 pb-1">
+                  <tr className="mb-1 border-b border-zinc-900 pb-1">
                     <td className="font-bold">Beneficiário</td>
-                    <td className="font-bold">Local de Pagamento</td>
                     <td className="font-bold">Valor</td>
                   </tr>
                 </thead>
@@ -49,7 +48,6 @@ export function ReactToPrint({ tickets }: Props) {
                   {tickets.map((ticket) => (
                     <tr key={ticket.id}>
                       <td>{ticket.recipient}</td>
-                      <td>{ticket.payment_place}</td>
                       <td>{priceFormatter.format(ticket.value / 100)}</td>
                     </tr>
                   ))}
@@ -57,11 +55,11 @@ export function ReactToPrint({ tickets }: Props) {
               </table>
             </div>
 
-            <footer className="px-4 flex justify-end items-center">
+            <footer className="flex items-center justify-end px-4">
               <button
                 onClick={handlePrint}
-                className="flex gap-2 border border-purple-400 text-purple-500 px-4 py-1 items-center rounded-sm 
-                  hover:bg-purple-500 hover:text-white transition-colors"
+                className="flex items-center gap-2 rounded-sm border border-purple-400 px-4 py-1 text-purple-500 
+                  transition-colors hover:bg-purple-500 hover:text-white"
               >
                 Imprimir
               </button>
@@ -69,7 +67,7 @@ export function ReactToPrint({ tickets }: Props) {
           </>
         </Modal>
 
-        <Dialog.Trigger className="flex gap-2 items-center">
+        <Dialog.Trigger className="flex items-center gap-2">
           Imprimir <Printer />
         </Dialog.Trigger>
       </Dialog.Root>

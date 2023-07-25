@@ -14,31 +14,111 @@ export function Menu() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [useFilterDate, setUseFilterDate] = useState(false);
   const [documentNumber, setDocumentNumber] = useState("");
+  const [isOnline, setIsOnline] = useState<"all" | "on-line" | "printed">(
+    "all"
+  );
 
   function handleChangeType(type: "all" | "paid" | "unpaid") {
-    actions.setFilter({ recipient, type });
+    if (isOnline !== "all") {
+      actions.setFilter({
+        recipient,
+        type,
+        document_number: documentNumber,
+        expiry_date: new Date(date),
+      });
+    }
   }
 
   function handleChangeName(recipient: string) {
     setRecipient(recipient);
+    if (isOnline !== "all") {
+      actions.setFilter({
+        type: state.filter.type,
+        recipient,
+        expiry_date: new Date(date),
+        document_number: documentNumber,
+        is_online: isOnline === "on-line",
+      });
+
+      return;
+    }
+
     actions.setFilter({
       type: state.filter.type,
       recipient,
       expiry_date: new Date(date),
+      document_number: documentNumber,
     });
   }
 
   function handleChangeDate(date: string) {
     setDate(date);
+    if (isOnline !== "all") {
+      actions.setFilter({
+        type: state.filter.type,
+        recipient,
+        expiry_date: new Date(date),
+        document_number: documentNumber,
+        is_online: isOnline === "on-line",
+      });
+
+      return;
+    }
+
     actions.setFilter({
       type: state.filter.type,
       recipient,
       expiry_date: new Date(date),
+      document_number: documentNumber,
     });
   }
 
   function handleChangeNumber(number: string) {
+    setDate(date);
+
+    if (isOnline !== "all") {
+      actions.setFilter({
+        type: state.filter.type,
+        recipient,
+        expiry_date: new Date(date),
+        document_number: number,
+        is_online: isOnline === "on-line",
+      });
+
+      return;
+    }
+
+    actions.setFilter({
+      type: state.filter.type,
+      recipient,
+      expiry_date: new Date(date),
+      document_number: number,
+    });
+
     setDocumentNumber(number);
+  }
+
+  function handleChangeIsOnline(isOnline: "all" | "on-line" | "printed") {
+    setIsOnline(isOnline);
+
+    if (isOnline !== "all") {
+      actions.setFilter({
+        type: state.filter.type,
+        recipient,
+        expiry_date: new Date(date),
+        document_number: documentNumber,
+        is_online: isOnline === "on-line",
+      });
+
+      return;
+    }
+
+    actions.setFilter({
+      type: state.filter.type,
+      recipient,
+      expiry_date: new Date(date),
+      document_number: documentNumber,
+    });
   }
 
   function handleToggleMenu() {
@@ -91,6 +171,23 @@ export function Menu() {
           <div className="flex-col">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
+                <select
+                  name="is-online"
+                  id="is-online"
+                  defaultValue="all"
+                  value={isOnline}
+                  onChange={(e) =>
+                    handleChangeIsOnline(
+                      e.target.value as "all" | "on-line" | "printed"
+                    )
+                  }
+                  className="max-h-[34px] flex-1 overflow-hidden rounded-sm py-1 text-zinc-900"
+                >
+                  <option value="all">Todos</option>
+                  <option value="online">On-line</option>
+                  <option value="printed">Impresso</option>
+                </select>
+
                 <Input
                   name="use-filter-date"
                   id="use-filter-date"
@@ -125,6 +222,7 @@ export function Menu() {
                   placeholder="Número do documento"
                   type="number"
                   value={documentNumber}
+                  className="max-w-[145px]"
                   onChange={(e) => handleChangeNumber(e.target.value)}
                 />
               </div>
@@ -135,6 +233,7 @@ export function Menu() {
                   name="beneficent-filter"
                   placeholder="Nome do beneficiário"
                   value={recipient}
+                  className="max-w-[145px]"
                   onChange={(e) => handleChangeName(e.target.value)}
                 />
               </div>
@@ -142,7 +241,7 @@ export function Menu() {
               <select
                 name="type-filter"
                 id="type-filter"
-                className="text-black"
+                className="max-h-[34px] flex-1 overflow-hidden rounded-sm py-1 text-zinc-900"
                 onChange={(e) =>
                   handleChangeType(e.target.value as "all" | "paid" | "unpaid")
                 }
@@ -153,14 +252,7 @@ export function Menu() {
               </select>
             </div>
 
-            <div className="flex">
-              <Input
-                type="checkbox"
-                name="is-online"
-                id="is-online"
-                label="on-line"
-              />
-            </div>
+            <div className="flex"></div>
           </div>
         </div>
       )}

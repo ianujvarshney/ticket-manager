@@ -10,6 +10,8 @@ type NewType = {
       recipient: string;
       type: "all" | "paid" | "unpaid";
       expiry_date?: Date;
+      document_number?: string;
+      is_online?: boolean;
     }) => void;
     getTickets: () => void;
   };
@@ -25,6 +27,8 @@ type FilterPaidProps = "all" | "paid" | "unpaid";
 export type FilterProps = {
   type: FilterPaidProps;
   recipient: string;
+  document_number?: string;
+  is_online?: boolean;
 };
 
 export type StateProps = typeof globalState;

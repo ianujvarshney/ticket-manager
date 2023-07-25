@@ -118,6 +118,9 @@ const listTicketHandler = async () => {
       {
         expiry_date: "asc",
       },
+      {
+        document_number: "asc",
+      },
     ],
     include: {
       user: {
@@ -136,12 +139,18 @@ const filterTicketHandler = async (event, data) => {
       {
         expiry_date: "asc",
       },
+      {
+        document_number: "asc",
+      },
     ],
 
     where: {
       is_paid: data.is_paid,
       recipient: {
         contains: data.recipient,
+      },
+      document_number: {
+        contains: data.document_number,
       },
     },
 

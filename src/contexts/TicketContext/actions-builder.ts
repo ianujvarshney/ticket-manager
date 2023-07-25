@@ -8,6 +8,8 @@ export const buildActions = (dispatch: any) => {
       recipient: string;
       type: "all" | "paid" | "unpaid";
       expiry_date?: Date;
+      document_number?: string;
+      is_online?: boolean;
     }) => {
       const dbItems = await getFilteredTickets(payload);
 

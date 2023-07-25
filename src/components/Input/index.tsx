@@ -13,7 +13,10 @@ export function Input({ label, id, name, error, mask, ...rest }: Props) {
   return (
     <div className="flex flex-1 items-start gap-2 ">
       {label && (
-        <label htmlFor={id} className="inline-flex select-none font-semibold">
+        <label
+          htmlFor={id}
+          className="inline-flex select-none whitespace-nowrap font-semibold"
+        >
           {label}
         </label>
       )}

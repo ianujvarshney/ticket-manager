@@ -151,7 +151,7 @@ export function TicketList() {
   }, []);
 
   return (
-    <div>
+    <div className="max-h-[calc(100vh_-_100px)] overflow-auto pb-10">
       <div className="mb-4 flex items-center justify-between px-4">
         <div className="flex flex-1 justify-between pr-4">
           <h1 className="text-lg font-bold ">TicketList</h1>
@@ -351,7 +351,7 @@ export function TicketList() {
         </div>
       )}
 
-      <footer className="fixed bottom-0 left-0 flex w-full flex-1 justify-end p-4">
+      <footer className="fixed bottom-0 left-0 flex w-full flex-1 justify-end p-4 pr-12">
         <span>Total: {priceFormatter.format(TOTAL_PRICE)}</span>
       </footer>
 

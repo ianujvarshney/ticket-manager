@@ -103,12 +103,7 @@ export function FormEditTicket({ ticket }: Props) {
           name="ticket_number"
           control={control}
           render={({ field }) => (
-            <Input
-              type="text"
-              id="ticket_number"
-              mask="99999.99999 99999.999999 99999.999999 9 99999999999999"
-              {...field}
-            />
+            <Input type="text" id="ticket_number" {...field} />
           )}
         />
 
