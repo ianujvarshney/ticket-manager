@@ -30,4 +30,5 @@ model Ticket {
   userId          String
   created_at      DateTime @default(now())
   updated_at      DateTime @default(now()) @updatedAt
+  is_online       Boolean  @default(false)
 }

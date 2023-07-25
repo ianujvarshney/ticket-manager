@@ -11,6 +11,7 @@ export function FormNewTicket() {
   const [ticketValue, setTicketValue] = useState(0);
   const [paymentPlace, setPaymentPlace] = useState("");
   const [isPaid, setIsPaid] = useState(false);
+  const [isOnline, setIsOnline] = useState(false);
   const [expiryDate, setExpiryDate] = useState(
     new Date().toISOString().slice(0, 10)
   );
@@ -25,6 +26,7 @@ export function FormNewTicket() {
       ticketValue: value,
       paymentPlace,
       isPaid,
+      isOnline,
       expiryDate,
       userId,
     };
@@ -36,6 +38,7 @@ export function FormNewTicket() {
       setTicketValue(0);
       setPaymentPlace("");
       setIsPaid(false);
+      setIsOnline(false);
       setExpiryDate(new Date().toISOString().slice(0, 10));
     } catch (err) {
       alert("Aconteceu algum erro ao salvar, tente novamente!");
@@ -63,12 +66,11 @@ export function FormNewTicket() {
         />
 
         <Input
-          type="text"
+          type="number"
           placeholder="Número do documento"
           name="ticket_number"
           id="ticket_number"
           value={ticketNumber}
-          mask="99999.99999 99999.999999 99999.999999 9 99999999999999"
           onChange={(e) => setTicketNumber(e.target.value)}
         />
 
@@ -90,7 +92,7 @@ export function FormNewTicket() {
           onChange={(e) => setPaymentPlace(e.target.value)}
         />
 
-        <div className="">
+        <div className="flex items-center">
           <Input
             type="checkbox"
             name="is-paid"
@@ -99,6 +101,15 @@ export function FormNewTicket() {
             onChange={(e) => setIsPaid(e.target.checked)}
             label="Pago"
           />
+
+          <Input
+            type="checkbox"
+            name="is-online"
+            id="is-online"
+            checked={isOnline}
+            onChange={(e) => setIsOnline(e.target.checked)}
+            label="On-line"
+          />
         </div>
       </div>
 
@@ -106,7 +117,7 @@ export function FormNewTicket() {
         <button
           type="submit"
           className="flex items-center gap-2 rounded-sm border border-purple-400 px-4 py-1 
-              transition-colors hover:bg-purple-500"
+              transition-colors hover:bg-purple-500 hover:text-white"
         >
           Salvar Boleto
         </button>

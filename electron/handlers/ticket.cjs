@@ -8,6 +8,7 @@ const saveTicketHandler = async (event, data) => {
     ticketValue,
     paymentPlace,
     isPaid,
+    isOnline,
     expiryDate,
     userId,
   } = data;
@@ -21,6 +22,7 @@ const saveTicketHandler = async (event, data) => {
         recipient,
         value: ticketValue,
         is_paid: isPaid,
+        is_online: isOnline,
         userId,
       },
     });
@@ -39,6 +41,7 @@ const editTicketHandler = async (event, data) => {
     ticketValue: z.number(),
     paymentPlace: z.string(),
     isPaid: z.boolean(),
+    isOnline: z.boolean(),
     expiryDate: z.string(),
     userId: z.string(),
   });
@@ -51,6 +54,7 @@ const editTicketHandler = async (event, data) => {
     ticketNumber,
     ticketValue,
     userId,
+    isOnline,
   } = dataSchema.parse(data);
 
   try {
@@ -68,6 +72,7 @@ const editTicketHandler = async (event, data) => {
         document_number: ticketNumber,
         expiry_date: new Date(expiryDate),
         is_paid: isPaid,
+        is_online: isOnline,
         payment_place: paymentPlace,
         recipient,
         value: ticketValue,

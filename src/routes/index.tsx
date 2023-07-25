@@ -6,18 +6,19 @@ import { DefaultPass } from "../pages/DefaultPass";
 
 export const routes = createBrowserRouter([
   {
-    path: "/home",
-    element: <Home />,
-  },
-  {
     path: "/",
-    element: <DefaultPass />,
+    element: <Home />,
   },
 ]);
 
 const signInRoutes = createBrowserRouter([
   {
     path: "/",
+    element: <DefaultPass />,
+  },
+
+  {
+    path: "/sign-in",
     element: <SignIn />,
   },
 ]);

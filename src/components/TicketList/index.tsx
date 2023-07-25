@@ -19,6 +19,7 @@ export type TicketProps = {
   payment_place: string;
   recipient: string;
   value: number;
+  is_online: boolean;
   user: {
     name: string;
   };
@@ -74,6 +75,27 @@ export function TicketList() {
       ticketValue: ticket.value,
       paymentPlace: ticket.payment_place,
       isPaid,
+      is_online: ticket.is_online,
+      expiryDate: ticket.expiry_date.toISOString().slice(0, 10),
+      userId: ticket.userId,
+    };
+
+    await (window as any).ticket.editTicket(newTicket);
+
+    location.reload();
+  }
+
+  async function handleToggleOnline(ticket: TicketProps & { userId: string }) {
+    const isOnline = !ticket.is_online;
+
+    const newTicket = {
+      id: ticket.id,
+      recipient: ticket.recipient,
+      ticketNumber: ticket.document_number,
+      ticketValue: ticket.value,
+      paymentPlace: ticket.payment_place,
+      isPaid: ticket.is_paid,
+      isOnline,
       expiryDate: ticket.expiry_date.toISOString().slice(0, 10),
       userId: ticket.userId,
     };
@@ -142,13 +164,14 @@ export function TicketList() {
 
               <td className="whitespace-nowrap px-4 font-bold">Beneficiário</td>
               <td className="whitespace-nowrap px-4 font-bold">
-                Número do documento
+                Nº do documento
               </td>
               <td className="whitespace-nowrap px-4 font-bold">Vencimento</td>
               <td className="whitespace-nowrap px-4 font-bold">Valor</td>
               <td className="whitespace-nowrap px-4 font-bold">
                 Local de pagamento
               </td>
+              <td className="whitespace-nowrap px-4 font-bold">Online</td>
               <td className="whitespace-nowrap px-4 font-bold">Pago</td>
               <td className="whitespace-nowrap px-4 font-bold">Autor</td>
             </tr>
@@ -162,7 +185,7 @@ export function TicketList() {
 
                   return (
                     <tr key={ticket.id}>
-                      <td className="flex items-center justify-center">
+                      <td align="center">
                         <Dialog.Trigger
                           onClick={() => handleEditTicket(ticket)}
                         >
@@ -181,7 +204,7 @@ export function TicketList() {
                       <td className="px-4">{ticket.recipient}</td>
 
                       <td className="px-4">
-                        <div className="flex w-[200px] items-center gap-2 overflow-hidden">
+                        <div className="flex w-[120px] items-center gap-2 overflow-hidden">
                           <button
                             type="button"
                             title="Copiar para o Clipboard"
@@ -201,7 +224,6 @@ export function TicketList() {
 
                           <p className="line-clamp-1">
                             {ticket.document_number.slice(0, 20)}
-                            {ticket.document_number.length > 20 && "..."}
                           </p>
                         </div>
                       </td>
@@ -230,22 +252,43 @@ export function TicketList() {
                         />
                       </td>
 
-                      <td className="flex items-center justify-center px-4 py-2">
-                        <input
-                          type="checkbox"
-                          name="is_paid"
-                          id="is_paid"
-                          checked={ticket.is_paid}
-                          onChange={() =>
-                            handleTogglePayment(
-                              ticket as TicketProps & { userId: string }
-                            )
-                          }
-                          className="rounded-sm text-purple-500"
-                        />
+                      <td className="px-4 py-2">
+                        <div className="flex items-center justify-center">
+                          <input
+                            type="checkbox"
+                            name="is_paid"
+                            id="is_paid"
+                            checked={ticket.is_paid}
+                            onChange={() =>
+                              handleTogglePayment(
+                                ticket as TicketProps & { userId: string }
+                              )
+                            }
+                            className="rounded-sm text-purple-500"
+                          />
+                        </div>
                       </td>
 
-                      <td className="px-4">{ticket.user.name}</td>
+                      <td className="px-4 py-2">
+                        <div className="flex items-center justify-center">
+                          <input
+                            type="checkbox"
+                            name="is_online"
+                            id="is_online"
+                            checked={ticket.is_online}
+                            onChange={() =>
+                              handleToggleOnline(
+                                ticket as TicketProps & { userId: string }
+                              )
+                            }
+                            className="rounded-sm text-purple-500"
+                          />
+                        </div>
+                      </td>
+
+                      <td className="max-w-[124px] overflow-hidden text-ellipsis whitespace-nowrap px-4">
+                        {ticket.user.name}
+                      </td>
                     </tr>
                   );
                 })}

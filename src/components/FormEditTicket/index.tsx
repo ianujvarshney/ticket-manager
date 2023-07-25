@@ -16,6 +16,7 @@ type FormData = {
   payment_place: string;
   is_paid: boolean;
   expiry_date: string;
+  is_online: boolean;
 };
 
 const schema = z.object({
@@ -27,12 +28,8 @@ const schema = z.object({
   payment_place: z.string(),
   is_paid: z.boolean(),
   expiry_date: z.string(),
+  is_online: z.boolean(),
 });
-
-// const priceFormatter = new Intl.NumberFormat("pt-BR", {
-//   style: "currency",
-//   currency: "BRL",
-// });
 
 export function FormEditTicket({ ticket }: Props) {
   const { state } = useUserContext();
@@ -49,9 +46,11 @@ export function FormEditTicket({ ticket }: Props) {
       payment_place: ticket.payment_place,
       expiry_date: ticket.expiry_date.toISOString().slice(0, 10),
       is_paid: ticket.is_paid,
+      is_online: ticket.is_online,
       ticket_number: ticket.document_number,
     },
   });
+
   console.log(errors);
 
   async function onSubmit(formValues: FormData) {
@@ -62,12 +61,12 @@ export function FormEditTicket({ ticket }: Props) {
       ticketValue: Number(formValues.ticket_value) * 100,
       paymentPlace: formValues.payment_place,
       isPaid: formValues.is_paid,
+      isOnline: formValues.is_online,
       expiryDate: formValues.expiry_date,
       userId: state.user.id,
     };
 
-    const res = await (window as any).ticket.editTicket(data);
-    console.log(res);
+    await (window as any).ticket.editTicket(data);
 
     document.location.reload();
   }
@@ -142,31 +141,15 @@ export function FormEditTicket({ ticket }: Props) {
             id="is_paid"
             {...register("is_paid")}
           />
-        </div>
 
-        {/* 
-
-
-        
-
-
-        <Input
-          type="text"
-          placeholder="Local do pagamento"
-          id="payment_place"
-          value={paymentPlace}
-          register={() => register("payment_place")}
-        />
-
-        <div className="">
-          <Input
+          <label htmlFor="is_online">Online</label>
+          <input
             type="checkbox"
-            id="isPaid"
-            checked={isPaid}
-            label="Pago"
-            register={() => register("isPaid")}
+            className="rounded-sm checked:text-purple-500"
+            id="is_online"
+            {...register("is_online")}
           />
-        </div> */}
+        </div>
       </div>
 
       <footer className="mt-10 flex items-center justify-center">

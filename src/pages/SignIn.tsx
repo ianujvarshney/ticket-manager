@@ -1,6 +1,7 @@
 import { GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
 import { useUserContext } from "../hooks/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export type GoogleUserProps = {
   email: string;
@@ -10,6 +11,7 @@ export type GoogleUserProps = {
 
 export function SignIn() {
   const { action } = useUserContext();
+  const navigate = useNavigate();
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center p-4">
@@ -29,6 +31,7 @@ export function SignIn() {
               avatarUrl: picture,
             };
 
+            navigate("/");
             action.signIn(user);
           }}
           onError={() => {

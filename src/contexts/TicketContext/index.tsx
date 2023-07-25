@@ -9,6 +9,7 @@ type NewType = {
     setFilter: (payload: {
       recipient: string;
       type: "all" | "paid" | "unpaid";
+      expiry_date?: Date;
     }) => void;
     getTickets: () => void;
   };

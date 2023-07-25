@@ -13,6 +13,7 @@ export function Menu() {
   const [recipient, setRecipient] = useState(state.filter.recipient);
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [useFilterDate, setUseFilterDate] = useState(false);
+  const [documentNumber, setDocumentNumber] = useState("");
 
   function handleChangeType(type: "all" | "paid" | "unpaid") {
     actions.setFilter({ recipient, type });
@@ -20,15 +21,24 @@ export function Menu() {
 
   function handleChangeName(recipient: string) {
     setRecipient(recipient);
-    actions.setFilter({ type: state.filter.type, recipient });
+    actions.setFilter({
+      type: state.filter.type,
+      recipient,
+      expiry_date: new Date(date),
+    });
   }
 
   function handleChangeDate(date: string) {
-    const parsedDate = new Date(new Date(date).toUTCString())
-      .toISOString()
-      .slice(0, 10);
-    // actions.setFilter({ type: state.filter.date, date });
-    console.log(parsedDate);
+    setDate(date);
+    actions.setFilter({
+      type: state.filter.type,
+      recipient,
+      expiry_date: new Date(date),
+    });
+  }
+
+  function handleChangeNumber(number: string) {
+    setDocumentNumber(number);
   }
 
   function handleToggleMenu() {
@@ -78,49 +88,79 @@ export function Menu() {
             </Button>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Input
-                name="use-filter-date"
-                id="use-filter-date"
-                type="checkbox"
-                checked={useFilterDate}
-                onChange={(e) => setUseFilterDate(e.target.checked)}
-              />
+          <div className="flex-col">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Input
+                  name="use-filter-date"
+                  id="use-filter-date"
+                  type="checkbox"
+                  checked={useFilterDate}
+                  onChange={(e) => {
+                    e.target.checked
+                      ? handleChangeDate(date)
+                      : actions.setFilter({
+                          type: state.filter.type,
+                          recipient,
+                        });
+                    setUseFilterDate(e.target.checked);
+                  }}
+                />
 
-              <Input
-                type="date"
-                name="date"
-                id="date-filter"
-                value={date}
-                onChange={(e) => handleChangeDate(e.target.value)}
-                className={!useFilterDate ? "opacity-20" : ""}
-                disabled={!useFilterDate}
-              />
+                <Input
+                  type="date"
+                  name="date"
+                  id="date-filter"
+                  value={date}
+                  onChange={(e) => handleChangeDate(e.target.value)}
+                  className={!useFilterDate ? "opacity-20" : ""}
+                  disabled={!useFilterDate}
+                />
+              </div>
+
+              <div className="flex">
+                <Input
+                  name="document-number-filter"
+                  id="document-number-filter"
+                  placeholder="Número do documento"
+                  type="number"
+                  value={documentNumber}
+                  onChange={(e) => handleChangeNumber(e.target.value)}
+                />
+              </div>
+
+              <div className="flex">
+                <Input
+                  id="beneficent-filter"
+                  name="beneficent-filter"
+                  placeholder="Nome do beneficiário"
+                  value={recipient}
+                  onChange={(e) => handleChangeName(e.target.value)}
+                />
+              </div>
+
+              <select
+                name="type-filter"
+                id="type-filter"
+                className="text-black"
+                onChange={(e) =>
+                  handleChangeType(e.target.value as "all" | "paid" | "unpaid")
+                }
+              >
+                <option value="all">Todos</option>
+                <option value="paid">Pagos</option>
+                <option value="unpaid">Não pagos</option>
+              </select>
             </div>
 
             <div className="flex">
               <Input
-                id="beneficent-filter"
-                name="beneficent-filter"
-                placeholder="Nome do beneficiário"
-                value={recipient}
-                onChange={(e) => handleChangeName(e.target.value)}
+                type="checkbox"
+                name="is-online"
+                id="is-online"
+                label="on-line"
               />
             </div>
-
-            <select
-              name="type-filter"
-              id="type-filter"
-              className="text-black"
-              onChange={(e) =>
-                handleChangeType(e.target.value as "all" | "paid" | "unpaid")
-              }
-            >
-              <option value="all">Todos</option>
-              <option value="paid">Pagos</option>
-              <option value="unpaid">Não pagos</option>
-            </select>
           </div>
         </div>
       )}

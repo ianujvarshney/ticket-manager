@@ -13,7 +13,7 @@ export function DefaultPass() {
 
   function handleSignIn() {
     if (import.meta.env.VITE_DEFAULT_PASS === pass) {
-      navigate("home");
+      navigate("/sign-in");
       return;
     }
 
