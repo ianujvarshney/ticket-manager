@@ -145,12 +145,17 @@ const filterTicketHandler = async (event, data) => {
     ],
 
     where: {
-      is_paid: data.is_paid,
+      is_paid: {
+        equals: data.is_paid,
+      },
       recipient: {
         contains: data.recipient,
       },
       document_number: {
         contains: data.document_number,
+      },
+      is_online: {
+        equals: data.is_online,
       },
     },
 

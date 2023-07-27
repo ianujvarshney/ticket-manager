@@ -14,6 +14,7 @@ type NewType = {
       is_online?: boolean;
     }) => void;
     getTickets: () => void;
+    refreshTickets: () => void;
   };
 };
 

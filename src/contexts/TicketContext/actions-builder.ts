@@ -30,6 +30,11 @@ export const buildActions = (dispatch: any) => {
       const db = await getDBTickets();
       dispatch({ type: actions.SET_TICKETS, payload: db });
     },
+
+    refreshTickets: async () => {
+      const tickets = await (window as any).ticket.listTicket();
+      dispatch({ type: actions.REFRESH_TICKETS, payload: tickets });
+    },
   };
 };
 
@@ -42,7 +47,7 @@ async function getFilteredTickets(filter: FilterProps) {
   const resultObj = {} as FilterProps;
 
   for (let item in filter) {
-    if (filter.hasOwnProperty(item) && item !== "type") {
+    if (filter[item as keyof typeof filter] && item !== "type") {
       //@ts-ignore
       resultObj[item as keyof typeof resultObj] =
         filter[item as keyof typeof filter];
@@ -58,11 +63,6 @@ async function getFilteredTickets(filter: FilterProps) {
       ...resultObj,
     });
   }
-
-  console.log({
-    is_paid: filter.type === "paid",
-    ...resultObj,
-  });
 
   return await (window as any).ticket.filterTicket({
     is_paid: filter.type === "paid",

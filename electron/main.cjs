@@ -28,7 +28,6 @@ const createWindow = async () => {
       nodeIntegration: true,
     },
     backgroundMaterial: "acrylic",
-    opacity: 0.9,
     autoHideMenuBar: true,
   });
 

@@ -19,14 +19,12 @@ export function Menu() {
   );
 
   function handleChangeType(type: "all" | "paid" | "unpaid") {
-    if (isOnline !== "all") {
-      actions.setFilter({
-        recipient,
-        type,
-        document_number: documentNumber,
-        expiry_date: new Date(date),
-      });
-    }
+    actions.setFilter({
+      recipient,
+      type,
+      document_number: documentNumber,
+      expiry_date: new Date(date),
+    });
   }
 
   function handleChangeName(recipient: string) {
@@ -74,7 +72,7 @@ export function Menu() {
   }
 
   function handleChangeNumber(number: string) {
-    setDate(date);
+    setDocumentNumber(number);
 
     if (isOnline !== "all") {
       actions.setFilter({
@@ -94,8 +92,6 @@ export function Menu() {
       expiry_date: new Date(date),
       document_number: number,
     });
-
-    setDocumentNumber(number);
   }
 
   function handleChangeIsOnline(isOnline: "all" | "on-line" | "printed") {
@@ -184,7 +180,7 @@ export function Menu() {
                   className="max-h-[34px] flex-1 overflow-hidden rounded-sm py-1 text-zinc-900"
                 >
                   <option value="all">Todos</option>
-                  <option value="online">On-line</option>
+                  <option value="on-line">On-line</option>
                   <option value="printed">Impresso</option>
                 </select>
 

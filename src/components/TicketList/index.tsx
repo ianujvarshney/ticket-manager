@@ -39,7 +39,7 @@ const priceFormatter = new Intl.NumberFormat("pt-BR", {
 });
 
 export function TicketList() {
-  const { state } = useTickets();
+  const { state, actions } = useTickets();
   const { state: userState } = useUserContext();
 
   const [editModalData, setEditModalData] = useState<TicketProps | null>(null);
@@ -77,14 +77,13 @@ export function TicketList() {
       ticketValue: ticket.value,
       paymentPlace: ticket.payment_place,
       isPaid,
-      is_online: ticket.is_online,
+      isOnline: ticket.is_online,
       expiryDate: ticket.expiry_date.toISOString().slice(0, 10),
       userId: ticket.userId,
     };
 
     await (window as any).ticket.editTicket(newTicket);
-
-    location.reload();
+    actions.refreshTickets();
   }
 
   async function handleToggleOnline(ticket: TicketProps & { userId: string }) {
@@ -104,7 +103,7 @@ export function TicketList() {
 
     await (window as any).ticket.editTicket(newTicket);
 
-    location.reload();
+    actions.refreshTickets();
   }
 
   async function handleChangePlace(
@@ -118,6 +117,7 @@ export function TicketList() {
       ticketValue: ticket.value,
       paymentPlace: place,
       isPaid: ticket.is_paid,
+      isOnline: ticket.is_online,
       expiryDate: ticket.expiry_date.toISOString().slice(0, 10),
       userId: ticket.userId,
     };
@@ -143,7 +143,7 @@ export function TicketList() {
     };
 
     await (window as any).ticket.saveTicket(newTicket);
-    location.reload();
+    actions.refreshTickets();
   }
 
   useEffect(() => {
@@ -192,8 +192,8 @@ export function TicketList() {
               <td className="whitespace-nowrap px-4 font-bold">
                 Local de pagamento
               </td>
-              <td className="whitespace-nowrap px-4 font-bold">Online</td>
               <td className="whitespace-nowrap px-4 font-bold">Pago</td>
+              <td className="whitespace-nowrap px-4 font-bold">Online</td>
               <td className="whitespace-nowrap px-4 font-bold">Autor</td>
             </tr>
           </thead>
