@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { Input } from "../components/Input";
-import { Eye, X, EyeClosed } from "phosphor-react";
-import { useUserContext } from "../hooks/UserContext";
+import { Eye, EyeClosed } from "phosphor-react";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
 export function DefaultPass() {
-  const { action } = useUserContext();
   const [pass, setPass] = useState("");
   const [isPassVisible, setIsPassVisible] = useState(false);
   const navigate = useNavigate();
