@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../components/Input";
 import { Eye, X, EyeClosed } from "phosphor-react";
 import { useUserContext } from "../hooks/UserContext";
@@ -11,6 +11,16 @@ export function DefaultPass() {
   const [isPassVisible, setIsPassVisible] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    function keyVerify(e: KeyboardEvent) {
+      if (e.code.toLowerCase() === "enter") handleSignIn();
+    }
+
+    addEventListener("keydown", keyVerify);
+
+    return () => removeEventListener("keydown", keyVerify);
+  }, [pass]);
+
   function handleSignIn() {
     if (import.meta.env.VITE_DEFAULT_PASS === pass) {
       navigate("/sign-in");
@@ -22,11 +32,6 @@ export function DefaultPass() {
 
   return (
     <div className="relative flex h-screen w-screen flex-col items-center justify-center p-4">
-      <header className="fixed top-0 mb-4 flex w-full justify-end px-4 py-4">
-        <button type="button" onClick={() => action.signOut()}>
-          <X size={24} className="text-red-400" />
-        </button>
-      </header>
       <div className="flex flex-col items-center rounded-md bg-zinc-400 p-10 pb-8 pt-8">
         <h1 className="mb-4 text-lg font-bold text-white">
           Digite a senha padrão
