@@ -34,7 +34,7 @@ export type FilterProps = {
 
 export type StateProps = typeof globalState;
 
-const globalState = {
+export const globalState = {
   isLoading: false,
   tickets: [] as TicketProps[],
   filter: {

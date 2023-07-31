@@ -11,6 +11,7 @@ import { ReactToPrint } from "../ReactToPrint";
 import { useTickets } from "../../hooks/TicketContext";
 import { Button } from "../Button";
 import { useUserContext } from "../../hooks/UserContext";
+import { globalState } from "../../contexts/TicketContext";
 
 export type TicketProps = {
   id: string;
@@ -64,7 +65,7 @@ export function TicketList() {
 
   async function confirmTicketDelete() {
     await (window as any).ticket.deleteTicket(deleteModalData);
-    location.reload();
+    actions.refreshTickets();
   }
 
   async function handleTogglePayment(ticket: TicketProps & { userId: string }) {
@@ -83,6 +84,11 @@ export function TicketList() {
     };
 
     await (window as any).ticket.editTicket(newTicket);
+
+    if (JSON.stringify(state.filter) !== JSON.stringify(globalState.filter)) {
+      return actions.setFilter(state.filter);
+    }
+
     actions.refreshTickets();
   }
 

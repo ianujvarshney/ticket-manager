@@ -7,7 +7,7 @@ export const reducers = (state: StateProps, action: any) => {
       return {
         ...state,
         tickets: action.payload.tickets,
-        filters: action.payload.filters,
+        filter: action.payload.filters,
       };
     }
 
