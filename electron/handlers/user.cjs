@@ -2,7 +2,7 @@ const { prisma } = require("../lib/prisma.cjs");
 const z = require("zod");
 const ElectronGoogleOAuth2 =
   require("@getstation/electron-google-oauth2").default;
-const jwt_decode = require("jwt-decode");
+const isDev = require(`electron-is-dev`);
 
 const signIn = async (event, data) => {
   const myApiOauth = new ElectronGoogleOAuth2(
@@ -14,7 +14,7 @@ const signIn = async (event, data) => {
 
   try {
     const result = myApiOauth.openAuthWindowAndGetTokens();
-    const { access_token, refresh_token } = result;
+    const { access_token, refresh_token } = await result;
 
     const apiResponse = await fetch(
       `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
@@ -35,21 +35,24 @@ const signIn = async (event, data) => {
     const dataSchema = z.object({
       name: z.string(),
       email: z.string().email(),
-      avatarUrl: z.string().url(),
+      picture: z.string().url(),
     });
 
-    const { avatarUrl, email, name } = dataSchema.parse(googleUser);
+    const { picture, email, name } = dataSchema.parse(googleUser);
 
     const newUser = await prisma.user.create({
       data: {
         email,
-        avatarUrl,
+        avatarUrl: picture,
         name,
       },
     });
 
     return newUser;
   } catch (e) {
+    if (isDev) {
+      console.log(e);
+    }
     throw new Error("Failed to sign in with Google account");
   }
 };
