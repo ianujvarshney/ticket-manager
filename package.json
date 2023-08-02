@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "main": "electron/main.cjs",
-  "homepage": "./",
   "author": {
     "name": "Hemerson Oliveira Silva",
     "email": "hemersondev@gmail.com",
@@ -19,7 +18,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "pack:win": "vite build && electron-builder -w -c.extraMetadata.main=dist/electron.cjs"
+    "pack:win": "electron-builder"
   },
   "build": {
     "appId": "com.hemerson.ticket-manager",
@@ -42,17 +41,18 @@
       ".env"
     ],
     "nsis": {
-      "uninstallDisplayName": "Uninstall this app",
+      "uninstallDisplayName": "Ticket Manage",
       "license": "license.txt",
       "oneClick": "false",
       "allowToChangeInstallationDirectory": "true"
     },
     "directories": {
       "output": "releases",
-      "buildResources": "public"
+      "buildResources": "private"
     }
   },
   "dependencies": {
+    "@getstation/electron-google-oauth2": "^14.0.0",
     "@hookform/resolvers": "^3.1.0",
     "@prisma/client": "^4.14.1",
     "@radix-ui/react-alert-dialog": "^1.0.4",

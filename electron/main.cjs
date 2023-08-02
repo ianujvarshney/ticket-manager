@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, webContents } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const isDev = require(`electron-is-dev`);
 
@@ -13,6 +13,17 @@ const {
 const { reloadWindowHandler } = require("./handlers/reload.cjs");
 const { exportDatabase, importDatabase } = require("./handlers/database.cjs");
 const { signIn } = require("./handlers/user.cjs");
+
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    console.log(process.argv);
+    app.setAsDefaultProtocolClient("ticket-manager", process.execPath, [
+      path.resolve(process.argv[1]),
+    ]);
+  } else {
+    app.setAsDefaultProtocolClient("ticket-manager");
+  }
+}
 
 let win;
 
@@ -34,8 +45,6 @@ const createWindow = async () => {
   // win.loadURL("http://localhost:5173");
   // win.webContents.openDevTools();
   // win.loadFile("./dist/index.html");
-  process.env.NODE_ENV = process.env.NODE_ENV || "development";
-
   if (isDev) {
     win.loadURL("http://localhost:5179");
   } else {
@@ -43,9 +52,28 @@ const createWindow = async () => {
   }
 };
 
-app.whenReady().then(() => {
-  createWindow();
-});
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+    }
+    // // the commandLine is array of strings in which last element is deep link url
+    // dialog.showErrorBox(
+    //   "Welcome Back",
+    //   `You arrived from: ${commandLine.pop()}`
+    // );
+  });
+
+  app.whenReady().then(() => {
+    createWindow();
+  });
+}
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
