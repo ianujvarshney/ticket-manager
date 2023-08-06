@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { useUserContext } from "../../hooks/UserContext";
+import { useTickets } from "../../hooks/TicketContext";
 
 type Props = {
   ticket: TicketProps;
@@ -33,6 +34,8 @@ const schema = z.object({
 
 export function FormEditTicket({ ticket }: Props) {
   const { state } = useUserContext();
+  const { actions: ticketActions } = useTickets();
+
   const {
     register,
     handleSubmit,
@@ -51,8 +54,6 @@ export function FormEditTicket({ ticket }: Props) {
     },
   });
 
-  console.log(errors);
-
   async function onSubmit(formValues: FormData) {
     const data = {
       id: ticket.id,
@@ -68,7 +69,7 @@ export function FormEditTicket({ ticket }: Props) {
 
     await (window as any).ticket.editTicket(data);
 
-    document.location.reload();
+    ticketActions.refreshTickets();
   }
 
   return (

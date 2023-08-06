@@ -11,7 +11,11 @@ export function DefaultPass() {
 
   useEffect(() => {
     function keyVerify(e: KeyboardEvent) {
-      if (e.code.toLowerCase() === "enter") handleSignIn();
+      if (
+        e.code.toLowerCase() === "enter" ||
+        e.code.toLowerCase() === "numpadenter"
+      )
+        handleSignIn();
     }
 
     addEventListener("keydown", keyVerify);

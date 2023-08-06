@@ -36,21 +36,50 @@ export function ReactToPrint({ tickets }: Props) {
               className={`flex min-h-[calc(100vh_-_200px)] w-full flex-col items-center p-4`}
               ref={contentRef}
             >
-              <table className="w-[85%] border">
+              <table className="w-[85%] border border-zinc-900" border={1}>
                 <thead>
                   <tr className="mb-1 border-b border-zinc-900 pb-1">
-                    <td className="font-bold">Beneficiário</td>
-                    <td className="font-bold">Valor</td>
+                    <td className="border border-zinc-900 font-bold">
+                      Beneficiário
+                    </td>
+
+                    <td className="border border-zinc-900 font-bold">Valor</td>
                   </tr>
                 </thead>
 
                 <tbody>
                   {tickets.map((ticket) => (
                     <tr key={ticket.id}>
-                      <td>{ticket.recipient}</td>
-                      <td>{priceFormatter.format(ticket.value / 100)}</td>
+                      <td className="border border-zinc-900">
+                        {ticket.recipient}
+                      </td>
+
+                      <td className="border border-zinc-900">
+                        {priceFormatter.format(ticket.value / 100)}
+                      </td>
                     </tr>
                   ))}
+
+                  <tr className="border border-zinc-900 font-bold">
+                    <td>.</td>
+                  </tr>
+
+                  <tr className="border border-zinc-900">
+                    <td className="border border-zinc-900 font-bold">Total</td>
+                    <td colSpan={2}>
+                      {priceFormatter.format(
+                        tickets.reduce(
+                          (buffer, ticket) => buffer + ticket.value,
+                          0
+                        ) / 100
+                      )}
+                    </td>
+                  </tr>
+
+                  <tr className="border border-zinc-900 font-bold">
+                    <td className="border border-zinc-900">'</td>
+                    <td></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
