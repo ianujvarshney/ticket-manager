@@ -52,4 +52,25 @@ contextBridge.exposeInMainWorld("user", {
     const resp = await ipcRenderer.invoke("signIn", data);
     return resp;
   },
+
+  isFirstUser: async () => {
+    return await ipcRenderer.invoke("isFirstUser");
+  },
+});
+
+contextBridge.exposeInMainWorld("config", {
+  setDefaultPass: async (data) => {
+    const resp = await ipcRenderer.invoke("setDefaultPass", data);
+    return resp;
+  },
+
+  comparePass: async (data) => {
+    const resp = await ipcRenderer.invoke("comparePass", data);
+    return resp;
+  },
+
+  hasDefaultPass: async (data) => {
+    const resp = await ipcRenderer.invoke("hasDefaultPass", data);
+    return resp;
+  },
 });

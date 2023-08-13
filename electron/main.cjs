@@ -12,7 +12,12 @@ const {
 } = require("./handlers/ticket.cjs");
 const { reloadWindowHandler } = require("./handlers/reload.cjs");
 const { exportDatabase, importDatabase } = require("./handlers/database.cjs");
-const { signIn } = require("./handlers/user.cjs");
+const { signIn, isFirstUser } = require("./handlers/user.cjs");
+const {
+  setDefaultPass,
+  comparePass,
+  hasDefaultPass,
+} = require("./handlers/configs.cjs");
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
@@ -108,3 +113,9 @@ ipcMain.handle("importDatabase", importDatabase);
 
 // User
 ipcMain.handle("signIn", (event, data) => signIn(event, data));
+ipcMain.handle("isFirstUser", () => isFirstUser());
+
+// Configs
+ipcMain.handle("setDefaultPass", (event, data) => setDefaultPass(event, data));
+ipcMain.handle("comparePass", (event, data) => comparePass(event, data));
+ipcMain.handle("hasDefaultPass", (event, data) => hasDefaultPass(event, data));

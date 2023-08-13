@@ -57,6 +57,11 @@ const signIn = async (event, data) => {
   }
 };
 
+const isFirstUser = async () => {
+  const totalUsers = await prisma.user.count();
+  return totalUsers > 0;
+};
+
 // const getDatabaseUser = async (event, data) => {
 //   const user = await prisma.user.findFirst({
 //     where: {
@@ -93,4 +98,5 @@ const signIn = async (event, data) => {
 
 module.exports = {
   signIn,
+  isFirstUser,
 };

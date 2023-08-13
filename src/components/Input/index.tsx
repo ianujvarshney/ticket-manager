@@ -50,7 +50,7 @@ export function Input({ label, id, name, error, mask, ...rest }: Props) {
         )}
 
         {error && (
-          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-red-500">
+          <span className="absolute right-0 top-full -translate-y-1/2 text-xs text-red-500">
             {error}!
           </span>
         )}
