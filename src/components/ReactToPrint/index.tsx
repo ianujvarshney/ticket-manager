@@ -27,6 +27,9 @@ export function ReactToPrint({ tickets }: Props) {
     onAfterPrint: () => setIsOpen(false),
   });
 
+  const PRINTABLE_TICKETS = tickets.filter((ticket) => !ticket.is_online);
+  const ONLINE_TICKETS = tickets.filter((ticket) => ticket.is_online);
+
   return (
     <div>
       <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -48,7 +51,7 @@ export function ReactToPrint({ tickets }: Props) {
                 </thead>
 
                 <tbody>
-                  {tickets.map((ticket) => (
+                  {PRINTABLE_TICKETS.map((ticket) => (
                     <tr key={ticket.id}>
                       <td className="border border-zinc-900">
                         {ticket.recipient}
@@ -68,7 +71,55 @@ export function ReactToPrint({ tickets }: Props) {
                     <td className="border border-zinc-900 font-bold">Total</td>
                     <td colSpan={2}>
                       {priceFormatter.format(
-                        tickets.reduce(
+                        PRINTABLE_TICKETS.reduce(
+                          (buffer, ticket) => buffer + ticket.value,
+                          0
+                        ) / 100
+                      )}
+                    </td>
+                  </tr>
+
+                  <tr className="border border-zinc-900 font-bold">
+                    <td className="border border-zinc-900">'</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3 className="w-[85%] mt-4 mb-2 font-bold">Boletos On-line</h3>
+              <table className="w-[85%] border border-zinc-900" border={1}>
+                <thead>
+                  <tr className="mb-1 border-b border-zinc-900 pb-1">
+                    <td className="border border-zinc-900 font-bold">
+                      Beneficiário
+                    </td>
+
+                    <td className="border border-zinc-900 font-bold">Valor</td>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {ONLINE_TICKETS.map((ticket) => (
+                    <tr key={ticket.id}>
+                      <td className="border border-zinc-900">
+                        {ticket.recipient}
+                      </td>
+
+                      <td className="border border-zinc-900">
+                        {priceFormatter.format(ticket.value / 100)}
+                      </td>
+                    </tr>
+                  ))}
+
+                  <tr className="border border-zinc-900 font-bold">
+                    <td>.</td>
+                  </tr>
+
+                  <tr className="border border-zinc-900">
+                    <td className="border border-zinc-900 font-bold">Total</td>
+                    <td colSpan={2}>
+                      {priceFormatter.format(
+                        ONLINE_TICKETS.reduce(
                           (buffer, ticket) => buffer + ticket.value,
                           0
                         ) / 100

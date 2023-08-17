@@ -52,6 +52,7 @@
     }
   },
   "dependencies": {
+    "@changesets/cli": "^2.26.2",
     "@getstation/electron-google-oauth2": "^14.0.0",
     "@hookform/resolvers": "^3.1.0",
     "@prisma/client": "^4.14.1",

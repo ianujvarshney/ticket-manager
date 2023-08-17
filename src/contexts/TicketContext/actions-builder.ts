@@ -11,6 +11,7 @@ export const buildActions = (dispatch: any) => {
       document_number?: string;
       is_online?: boolean;
     }) => {
+      console.log("Filter: ", payload);
       const dbItems = await getFilteredTickets(payload);
 
       dispatch({

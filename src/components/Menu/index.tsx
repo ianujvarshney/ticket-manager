@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { List, X, DownloadSimple, Export } from "phosphor-react";
+import {
+  List,
+  X,
+  DownloadSimple,
+  Export,
+  ArrowClockwise,
+} from "phosphor-react";
 import { useTickets } from "../../hooks/TicketContext";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import { UserProfile } from "../Profile";
 import { useUserContext } from "../../hooks/UserContext";
+import { Toast } from "../Toast";
 
 export function Menu() {
   const { state, actions } = useTickets();
@@ -14,6 +21,7 @@ export function Menu() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [useFilterDate, setUseFilterDate] = useState(false);
   const [documentNumber, setDocumentNumber] = useState("");
+  const [isToastOpen, setIsToastOpen] = useState(false);
   const [isOnline, setIsOnline] = useState<"all" | "on-line" | "printed">(
     "all"
   );
@@ -49,13 +57,13 @@ export function Menu() {
     });
   }
 
-  function handleChangeDate(date: string) {
-    setDate(date);
+  function handleChangeDate(selectedDate: string) {
+    setDate(selectedDate);
     if (isOnline !== "all") {
       actions.setFilter({
         type: state.filter.type,
         recipient,
-        expiry_date: new Date(date),
+        expiry_date: new Date(selectedDate),
         document_number: documentNumber,
         is_online: isOnline === "on-line",
       });
@@ -66,7 +74,7 @@ export function Menu() {
     actions.setFilter({
       type: state.filter.type,
       recipient,
-      expiry_date: new Date(date),
+      expiry_date: new Date(selectedDate),
       document_number: documentNumber,
     });
   }
@@ -133,15 +141,31 @@ export function Menu() {
     }
   }
 
+  function handleRefreshTickets() {
+    actions.refreshTickets();
+    setIsToastOpen(true);
+  }
+
   return (
     <div className="mb-4 flex h-10 flex-col  px-3">
       <div className="mb-4 flex flex-1 justify-between">
-        <button
-          onClick={handleToggleMenu}
-          className="rounded-sm border border-zinc-400 px-2"
-        >
-          {isOpen ? <X /> : <List />}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleToggleMenu}
+            className="rounded-sm border border-zinc-400 px-2"
+          >
+            {isOpen ? <X /> : <List />}
+          </button>
+
+          <button
+            onClick={handleRefreshTickets}
+            className="rounded-sm border border-zinc-400 px-2"
+            title="Recarregar página"
+            aria-label="Botão de recarregar página"
+          >
+            <ArrowClockwise />
+          </button>
+        </div>
 
         <UserProfile user={userState.user} />
       </div>
@@ -252,6 +276,12 @@ export function Menu() {
           </div>
         </div>
       )}
+
+      <Toast
+        description="Lista Atualizada"
+        isOpen={isToastOpen}
+        onOpenChange={setIsToastOpen}
+      />
     </div>
   );
 }
