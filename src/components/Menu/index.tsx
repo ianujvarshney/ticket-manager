@@ -12,13 +12,16 @@ import { Button } from "../Button";
 import { UserProfile } from "../Profile";
 import { useUserContext } from "../../hooks/UserContext";
 import { Toast } from "../Toast";
+import { getConvertedDateToUTC } from "../../utils/convertDateToUTC";
 
 export function Menu() {
   const { state, actions } = useTickets();
   const { state: userState } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
   const [recipient, setRecipient] = useState(state.filter.recipient);
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(
+    getConvertedDateToUTC(new Date()).toISOString().slice(0, 10)
+  );
   const [useFilterDate, setUseFilterDate] = useState(false);
   const [documentNumber, setDocumentNumber] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
@@ -31,7 +34,9 @@ export function Menu() {
       recipient,
       type,
       document_number: documentNumber,
-      expiry_date: new Date(date),
+      expiry_date: useFilterDate
+        ? getConvertedDateToUTC(new Date(date))
+        : undefined,
     });
   }
 
@@ -41,7 +46,9 @@ export function Menu() {
       actions.setFilter({
         type: state.filter.type,
         recipient,
-        expiry_date: new Date(date),
+        expiry_date: useFilterDate
+          ? getConvertedDateToUTC(new Date(date))
+          : undefined,
         document_number: documentNumber,
         is_online: isOnline === "on-line",
       });
@@ -52,18 +59,24 @@ export function Menu() {
     actions.setFilter({
       type: state.filter.type,
       recipient,
-      expiry_date: new Date(date),
+      expiry_date: useFilterDate
+        ? getConvertedDateToUTC(new Date(date))
+        : undefined,
       document_number: documentNumber,
     });
   }
 
   function handleChangeDate(selectedDate: string) {
-    setDate(selectedDate);
+    const parsedDate = getConvertedDateToUTC(new Date(selectedDate))
+      .toISOString()
+      .slice(0, 10);
+    setDate(parsedDate);
+
     if (isOnline !== "all") {
       actions.setFilter({
         type: state.filter.type,
         recipient,
-        expiry_date: new Date(selectedDate),
+        expiry_date: new Date(parsedDate),
         document_number: documentNumber,
         is_online: isOnline === "on-line",
       });
@@ -74,7 +87,7 @@ export function Menu() {
     actions.setFilter({
       type: state.filter.type,
       recipient,
-      expiry_date: new Date(selectedDate),
+      expiry_date: new Date(parsedDate),
       document_number: documentNumber,
     });
   }
@@ -86,7 +99,9 @@ export function Menu() {
       actions.setFilter({
         type: state.filter.type,
         recipient,
-        expiry_date: new Date(date),
+        expiry_date: useFilterDate
+          ? getConvertedDateToUTC(new Date(date))
+          : undefined,
         document_number: number,
         is_online: isOnline === "on-line",
       });
@@ -97,7 +112,9 @@ export function Menu() {
     actions.setFilter({
       type: state.filter.type,
       recipient,
-      expiry_date: new Date(date),
+      expiry_date: useFilterDate
+        ? getConvertedDateToUTC(new Date(date))
+        : undefined,
       document_number: number,
     });
   }
@@ -109,7 +126,9 @@ export function Menu() {
       actions.setFilter({
         type: state.filter.type,
         recipient,
-        expiry_date: new Date(date),
+        expiry_date: useFilterDate
+          ? getConvertedDateToUTC(new Date(date))
+          : undefined,
         document_number: documentNumber,
         is_online: isOnline === "on-line",
       });
@@ -120,7 +139,9 @@ export function Menu() {
     actions.setFilter({
       type: state.filter.type,
       recipient,
-      expiry_date: new Date(date),
+      expiry_date: useFilterDate
+        ? getConvertedDateToUTC(new Date(date))
+        : undefined,
       document_number: documentNumber,
     });
   }

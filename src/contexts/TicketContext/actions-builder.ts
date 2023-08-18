@@ -11,7 +11,6 @@ export const buildActions = (dispatch: any) => {
       document_number?: string;
       is_online?: boolean;
     }) => {
-      console.log("Filter: ", payload);
       const dbItems = await getFilteredTickets(payload);
 
       dispatch({
@@ -48,10 +47,18 @@ async function getFilteredTickets(filter: FilterProps) {
   const resultObj = {} as FilterProps;
 
   for (let item in filter) {
-    if (filter[item as keyof typeof filter] && item !== "type") {
+    const excludedItemTypes = ["type"];
+
+    if (
+      (filter[item as keyof typeof filter] &&
+        !excludedItemTypes.includes(item)) ||
+      item === "is_online"
+    ) {
       //@ts-ignore
       resultObj[item as keyof typeof resultObj] =
         filter[item as keyof typeof filter];
+
+      console.table(resultObj);
     }
   }
 

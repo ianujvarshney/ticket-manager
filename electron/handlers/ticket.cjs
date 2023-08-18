@@ -134,6 +134,18 @@ const listTicketHandler = async () => {
 };
 
 const filterTicketHandler = async (event, data) => {
+  const dataSchema = z.object({
+    is_paid: z.boolean().nullable(),
+    recipient: z.string(),
+    document_number: z.string(),
+    is_online: z.boolean().nullable(),
+    expiry_date: z.date(),
+  });
+
+  // const {} = z.parse(data);
+
+  console.log(data);
+
   const tickets = await prisma.ticket.findMany({
     orderBy: [
       {
@@ -156,6 +168,9 @@ const filterTicketHandler = async (event, data) => {
       },
       is_online: {
         equals: data.is_online,
+      },
+      expiry_date: {
+        equals: data.expiry_date,
       },
     },
 
