@@ -26,8 +26,14 @@ model Ticket {
   value           Int
   payment_place   String
   is_paid         Boolean  @default(false)
-  user            User     @relation(fields: [userId], references: [id])
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId          String
   created_at      DateTime @default(now())
   updated_at      DateTime @default(now()) @updatedAt
+  is_online       Boolean  @default(false)
+}
+
+model Config {
+  id                String @id @default(uuid())
+  default_pass_hash String
 }

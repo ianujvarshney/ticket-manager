@@ -8,8 +8,8 @@ export type UserProps = {
 
 export const buildActions = (dispatch: any) => {
   return {
-    signIn: async (user: UserProps) => {
-      const dbUser = await handleSignIn(user);
+    signIn: async () => {
+      const dbUser = await handleSignIn();
       dispatch({ type: actions.SIGN_IN, payload: dbUser });
     },
 
@@ -20,8 +20,8 @@ export const buildActions = (dispatch: any) => {
   };
 };
 
-async function handleSignIn(user: UserProps) {
-  const dbUser = await (window as any).user.signIn(user);
+async function handleSignIn() {
+  const dbUser = await (window as any).user.signIn();
   localStorage.setItem("@ticket_manager_user", JSON.stringify(dbUser));
   return dbUser;
 }

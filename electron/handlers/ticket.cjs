@@ -8,6 +8,7 @@ const saveTicketHandler = async (event, data) => {
     ticketValue,
     paymentPlace,
     isPaid,
+    isOnline,
     expiryDate,
     userId,
   } = data;
@@ -21,6 +22,7 @@ const saveTicketHandler = async (event, data) => {
         recipient,
         value: ticketValue,
         is_paid: isPaid,
+        is_online: isOnline,
         userId,
       },
     });
@@ -39,6 +41,7 @@ const editTicketHandler = async (event, data) => {
     ticketValue: z.number(),
     paymentPlace: z.string(),
     isPaid: z.boolean(),
+    isOnline: z.boolean(),
     expiryDate: z.string(),
     userId: z.string(),
   });
@@ -51,6 +54,7 @@ const editTicketHandler = async (event, data) => {
     ticketNumber,
     ticketValue,
     userId,
+    isOnline,
   } = dataSchema.parse(data);
 
   try {
@@ -68,6 +72,7 @@ const editTicketHandler = async (event, data) => {
         document_number: ticketNumber,
         expiry_date: new Date(expiryDate),
         is_paid: isPaid,
+        is_online: isOnline,
         payment_place: paymentPlace,
         recipient,
         value: ticketValue,
@@ -107,36 +112,81 @@ const deleteTicketHandler = async (event, data) => {
   }
 };
 
-const listTicketHandler = async () => {
-  const tickets = await prisma.ticket.findMany({
-    orderBy: [
-      {
-        expiry_date: "asc",
-      },
-    ],
-    include: {
-      user: {
-        select: {
-          name: true,
+const listTicketHandler = async (event, data) => {
+  try {
+    const schema = z.object({
+      page: z.number().positive(),
+      size: z.number().positive().optional(),
+    });
+
+    const { page, size = 20 } = schema.parse(data);
+
+    const tickets = await prisma.ticket.findMany({
+      orderBy: [
+        {
+          expiry_date: "asc",
+        },
+        {
+          document_number: "asc",
+        },
+      ],
+
+      take: size,
+      skip: (page - 1) * size,
+
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-  });
-  return tickets;
+    });
+    return tickets;
+  } catch (e) {
+    console.log(e);
+
+    return {
+      message: "Sorry, something went wrong. Please try again!",
+    };
+  }
 };
 
 const filterTicketHandler = async (event, data) => {
+  const dataSchema = z.object({
+    is_paid: z.boolean().nullable(),
+    recipient: z.string(),
+    document_number: z.string(),
+    is_online: z.boolean().nullable(),
+    expiry_date: z.date(),
+  });
+
+  // const {} = z.parse(data);
+
+  console.log(data);
+
   const tickets = await prisma.ticket.findMany({
     orderBy: [
       {
         expiry_date: "asc",
+      },
+      {
+        document_number: "asc",
       },
     ],
 
     where: {
-      is_paid: data.is_paid,
+      is_paid: {
+        equals: data.is_paid,
+      },
       recipient: {
         contains: data.recipient,
+      },
+      document_number: {
+        contains: data.document_number,
+      },
+      is_online: {
+        equals: data.is_online,
       },
       expiry_date: {
         equals: data.expiry_date,
@@ -155,10 +205,16 @@ const filterTicketHandler = async (event, data) => {
   return tickets;
 };
 
+const getTotalTickets = async () => {
+  const total = await prisma.ticket.count();
+  return total;
+};
+
 module.exports = {
   saveTicketHandler,
   listTicketHandler,
   editTicketHandler,
   deleteTicketHandler,
   filterTicketHandler,
+  getTotalTickets,
 };

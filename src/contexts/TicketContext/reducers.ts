@@ -7,14 +7,27 @@ export const reducers = (state: StateProps, action: any) => {
       return {
         ...state,
         tickets: action.payload.tickets,
-        filters: action.payload.filters,
+        filter: action.payload.filters,
       };
     }
 
     case actions.SET_TICKETS: {
       return { ...state, tickets: action.payload };
     }
-  }
 
-  return { ...state };
+    case actions.REFRESH_TICKETS: {
+      return { ...state, tickets: action.payload };
+    }
+
+    case actions.SET_PAGE: {
+      return { ...state, page: action.payload };
+    }
+
+    case actions.SET_TOTAL_PAGE:
+      {
+        return { ...state, totalPages: action.payload };
+      }
+
+      return { ...state };
+  }
 };

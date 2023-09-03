@@ -1,12 +1,12 @@
 import { ReactNode, createContext, useEffect, useReducer, useRef } from "react";
-import { UserProps, buildActions } from "./actions-builder";
+import { buildActions } from "./actions-builder";
 import { reducer } from "./reducers";
 import { actions } from "./actions";
 
 type UserContextProps = {
   state: StateProps;
   action: {
-    signIn: (user: UserProps) => void;
+    signIn: () => void;
     signOut: () => void;
   };
 };

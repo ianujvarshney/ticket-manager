@@ -7,8 +7,8 @@ contextBridge.exposeInMainWorld("ticket", {
     return res;
   },
 
-  listTicket: async () => {
-    const res = await ipcRenderer.invoke("listTicket");
+  listTicket: async (data) => {
+    const res = await ipcRenderer.invoke("listTicket", data);
     return res;
   },
 
@@ -23,6 +23,11 @@ contextBridge.exposeInMainWorld("ticket", {
 
   filterTicket: async (data) => {
     const res = await ipcRenderer.invoke("filterTicket", data);
+    return res;
+  },
+
+  getTotalTickets: async () => {
+    const res = await ipcRenderer.invoke("getTotalTickets");
     return res;
   },
 });
@@ -50,6 +55,27 @@ contextBridge.exposeInMainWorld("database", {
 contextBridge.exposeInMainWorld("user", {
   signIn: async (data) => {
     const resp = await ipcRenderer.invoke("signIn", data);
+    return resp;
+  },
+
+  isFirstUser: async () => {
+    return await ipcRenderer.invoke("isFirstUser");
+  },
+});
+
+contextBridge.exposeInMainWorld("config", {
+  setDefaultPass: async (data) => {
+    const resp = await ipcRenderer.invoke("setDefaultPass", data);
+    return resp;
+  },
+
+  comparePass: async (data) => {
+    const resp = await ipcRenderer.invoke("comparePass", data);
+    return resp;
+  },
+
+  hasDefaultPass: async (data) => {
+    const resp = await ipcRenderer.invoke("hasDefaultPass", data);
     return resp;
   },
 });

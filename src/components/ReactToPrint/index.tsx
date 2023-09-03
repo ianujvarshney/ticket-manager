@@ -27,41 +27,119 @@ export function ReactToPrint({ tickets }: Props) {
     onAfterPrint: () => setIsOpen(false),
   });
 
+  const PRINTABLE_TICKETS = tickets.filter((ticket) => !ticket.is_online);
+  const ONLINE_TICKETS = tickets.filter((ticket) => ticket.is_online);
+
   return (
     <div>
       <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
         <Modal title="Imprimir Boleto">
           <>
             <div
-              className={`flex flex-col items-center p-4 w-full min-h-[calc(100vh_-_200px)]`}
+              className={`flex min-h-[calc(100vh_-_200px)] w-full flex-col items-center p-4`}
               ref={contentRef}
             >
-              <table className="w-[85%] border">
+              <table className="w-[85%] border border-zinc-900" border={1}>
                 <thead>
-                  <tr className="border-b border-zinc-900 mb-1 pb-1">
-                    <td className="font-bold">Beneficiário</td>
-                    <td className="font-bold">Local de Pagamento</td>
-                    <td className="font-bold">Valor</td>
+                  <tr className="mb-1 border-b border-zinc-900 pb-1">
+                    <td className="border border-zinc-900 font-bold">
+                      Beneficiário
+                    </td>
+
+                    <td className="border border-zinc-900 font-bold">Valor</td>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {tickets.map((ticket) => (
+                  {PRINTABLE_TICKETS.map((ticket) => (
                     <tr key={ticket.id}>
-                      <td>{ticket.recipient}</td>
-                      <td>{ticket.payment_place}</td>
-                      <td>{priceFormatter.format(ticket.value / 100)}</td>
+                      <td className="border border-zinc-900">
+                        {ticket.recipient}
+                      </td>
+
+                      <td className="border border-zinc-900">
+                        {priceFormatter.format(ticket.value / 100)}
+                      </td>
                     </tr>
                   ))}
+
+                  <tr className="border border-zinc-900 font-bold">
+                    <td>.</td>
+                  </tr>
+
+                  <tr className="border border-zinc-900">
+                    <td className="border border-zinc-900 font-bold">Total</td>
+                    <td colSpan={2}>
+                      {priceFormatter.format(
+                        PRINTABLE_TICKETS.reduce(
+                          (buffer, ticket) => buffer + ticket.value,
+                          0
+                        ) / 100
+                      )}
+                    </td>
+                  </tr>
+
+                  <tr className="border border-zinc-900 font-bold">
+                    <td className="border border-zinc-900">'</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3 className="w-[85%] mt-4 mb-2 font-bold">Boletos On-line</h3>
+              <table className="w-[85%] border border-zinc-900" border={1}>
+                <thead>
+                  <tr className="mb-1 border-b border-zinc-900 pb-1">
+                    <td className="border border-zinc-900 font-bold">
+                      Beneficiário
+                    </td>
+
+                    <td className="border border-zinc-900 font-bold">Valor</td>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {ONLINE_TICKETS.map((ticket) => (
+                    <tr key={ticket.id}>
+                      <td className="border border-zinc-900">
+                        {ticket.recipient}
+                      </td>
+
+                      <td className="border border-zinc-900">
+                        {priceFormatter.format(ticket.value / 100)}
+                      </td>
+                    </tr>
+                  ))}
+
+                  <tr className="border border-zinc-900 font-bold">
+                    <td>.</td>
+                  </tr>
+
+                  <tr className="border border-zinc-900">
+                    <td className="border border-zinc-900 font-bold">Total</td>
+                    <td colSpan={2}>
+                      {priceFormatter.format(
+                        ONLINE_TICKETS.reduce(
+                          (buffer, ticket) => buffer + ticket.value,
+                          0
+                        ) / 100
+                      )}
+                    </td>
+                  </tr>
+
+                  <tr className="border border-zinc-900 font-bold">
+                    <td className="border border-zinc-900">'</td>
+                    <td></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
 
-            <footer className="px-4 flex justify-end items-center">
+            <footer className="flex items-center justify-end px-4">
               <button
                 onClick={handlePrint}
-                className="flex gap-2 border border-purple-400 text-purple-500 px-4 py-1 items-center rounded-sm 
-                  hover:bg-purple-500 hover:text-white transition-colors"
+                className="flex items-center gap-2 rounded-sm border border-purple-400 px-4 py-1 text-purple-500 
+                  transition-colors hover:bg-purple-500 hover:text-white"
               >
                 Imprimir
               </button>
@@ -69,7 +147,7 @@ export function ReactToPrint({ tickets }: Props) {
           </>
         </Modal>
 
-        <Dialog.Trigger className="flex gap-2 items-center">
+        <Dialog.Trigger className="flex items-center gap-2">
           Imprimir <Printer />
         </Dialog.Trigger>
       </Dialog.Root>

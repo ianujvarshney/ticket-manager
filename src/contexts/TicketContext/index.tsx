@@ -1,41 +1,35 @@
 import { ReactNode, createContext, useEffect, useReducer, useRef } from "react";
 import { TicketProps } from "../../components/TicketList";
 import { reducers } from "./reducers";
-import { buildActions } from "./actions-builder";
+import { TicketActionProps, buildActions } from "./actions-builder";
 
-type NewType = {
+type TicketContextProps = {
   state: StateProps;
-  actions: {
-    setFilter: (payload: {
-      recipient: string;
-      type: "all" | "paid" | "unpaid";
-      expiry_date?: Date;
-    }) => void;
-    getTickets: () => void;
-  };
+  actions: TicketActionProps;
 };
-
-type TicketContextProps = NewType;
 
 type TicketProviderProps = {
   children: ReactNode;
 };
 
-type FilterPaidProps = "all" | "paid" | "unpaid";
 export type FilterProps = {
-  type: FilterPaidProps;
+  type: "all" | "paid" | "unpaid";
   recipient: string;
+  document_number?: string;
+  is_online?: boolean;
 };
 
 export type StateProps = typeof globalState;
 
-const globalState = {
+export const globalState = {
   isLoading: false,
   tickets: [] as TicketProps[],
   filter: {
     recipient: "",
     type: "all",
   } as FilterProps,
+  page: 1,
+  totalPages: 1,
 };
 
 export const TicketContext = createContext({} as TicketContextProps);
@@ -45,8 +39,9 @@ export function TicketProvider({ children }: TicketProviderProps) {
   const actions = useRef(buildActions(dispatch));
 
   useEffect(() => {
-    actions.current.setTickets();
-  }, []);
+    actions.current.setTickets(state.page);
+    actions.current.setTotalPages();
+  }, [state.page]);
 
   return (
     <TicketContext.Provider value={{ state, actions: actions.current }}>

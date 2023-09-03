@@ -13,7 +13,10 @@ export function Input({ label, id, name, error, mask, ...rest }: Props) {
   return (
     <div className="flex flex-1 items-start gap-2 ">
       {label && (
-        <label htmlFor={id} className="inline-flex select-none font-semibold">
+        <label
+          htmlFor={id}
+          className="inline-flex select-none whitespace-nowrap font-semibold"
+        >
           {label}
         </label>
       )}
@@ -47,7 +50,7 @@ export function Input({ label, id, name, error, mask, ...rest }: Props) {
         )}
 
         {error && (
-          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-red-500">
+          <span className="absolute right-0 top-full -translate-y-1/2 text-xs text-red-500">
             {error}!
           </span>
         )}
