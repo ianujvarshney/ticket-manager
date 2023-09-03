@@ -116,10 +116,10 @@ const listTicketHandler = async (event, data) => {
   try {
     const schema = z.object({
       page: z.number().positive(),
-      size: z.number().positive(),
+      size: z.number().positive().optional(),
     });
 
-    const { page, size } = schema.parse(data);
+    const { page, size = 20 } = schema.parse(data);
 
     const tickets = await prisma.ticket.findMany({
       orderBy: [

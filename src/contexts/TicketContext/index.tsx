@@ -1,33 +1,19 @@
 import { ReactNode, createContext, useEffect, useReducer, useRef } from "react";
 import { TicketProps } from "../../components/TicketList";
 import { reducers } from "./reducers";
-import { buildActions } from "./actions-builder";
+import { TicketActionProps, buildActions } from "./actions-builder";
 
-type NewType = {
+type TicketContextProps = {
   state: StateProps;
-  actions: {
-    setFilter: (payload: {
-      recipient: string;
-      type: "all" | "paid" | "unpaid";
-      expiry_date?: Date;
-      document_number?: string;
-      is_online?: boolean;
-    }) => void;
-    getTickets: () => void;
-    refreshTickets: () => void;
-    setPage: (page: number) => void;
-  };
+  actions: TicketActionProps;
 };
-
-type TicketContextProps = NewType;
 
 type TicketProviderProps = {
   children: ReactNode;
 };
 
-type FilterPaidProps = "all" | "paid" | "unpaid";
 export type FilterProps = {
-  type: FilterPaidProps;
+  type: "all" | "paid" | "unpaid";
   recipient: string;
   document_number?: string;
   is_online?: boolean;

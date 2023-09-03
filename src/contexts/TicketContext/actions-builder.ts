@@ -2,6 +2,8 @@ import { FilterProps } from ".";
 import { TicketProps } from "../../components/TicketList";
 import { actions } from "./actions";
 
+export type TicketActionProps = ReturnType<typeof buildActions>;
+
 export const buildActions = (dispatch: any) => {
   return {
     setFilter: async (payload: {
@@ -31,8 +33,11 @@ export const buildActions = (dispatch: any) => {
       dispatch({ type: actions.SET_TICKETS, payload: db });
     },
 
-    refreshTickets: async () => {
-      const tickets = await (window as any).ticket.listTicket();
+    refreshTickets: async (page = 1) => {
+      const tickets = await (window as any).ticket.listTicket({
+        page: page,
+      });
+      dispatch({ type: actions.SET_PAGE, payload: page });
       dispatch({ type: actions.REFRESH_TICKETS, payload: tickets });
     },
 
@@ -56,7 +61,7 @@ async function getTotalPages() {
 async function getDBTickets(page: number, itemsPerPage?: number) {
   const resp = (await (window as any).ticket.listTicket({
     page,
-    size: itemsPerPage ?? 20,
+    size: itemsPerPage || 20,
   })) as TicketProps[];
   return resp;
 }
