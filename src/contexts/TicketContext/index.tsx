@@ -15,6 +15,7 @@ type NewType = {
     }) => void;
     getTickets: () => void;
     refreshTickets: () => void;
+    setPage: (page: number) => void;
   };
 };
 
@@ -41,6 +42,8 @@ export const globalState = {
     recipient: "",
     type: "all",
   } as FilterProps,
+  page: 1,
+  totalPages: 1,
 };
 
 export const TicketContext = createContext({} as TicketContextProps);
@@ -50,8 +53,9 @@ export function TicketProvider({ children }: TicketProviderProps) {
   const actions = useRef(buildActions(dispatch));
 
   useEffect(() => {
-    actions.current.setTickets();
-  }, []);
+    actions.current.setTickets(state.page);
+    actions.current.setTotalPages();
+  }, [state.page]);
 
   return (
     <TicketContext.Provider value={{ state, actions: actions.current }}>

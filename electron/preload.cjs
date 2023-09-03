@@ -7,8 +7,8 @@ contextBridge.exposeInMainWorld("ticket", {
     return res;
   },
 
-  listTicket: async () => {
-    const res = await ipcRenderer.invoke("listTicket");
+  listTicket: async (data) => {
+    const res = await ipcRenderer.invoke("listTicket", data);
     return res;
   },
 
@@ -23,6 +23,11 @@ contextBridge.exposeInMainWorld("ticket", {
 
   filterTicket: async (data) => {
     const res = await ipcRenderer.invoke("filterTicket", data);
+    return res;
+  },
+
+  getTotalTickets: async () => {
+    const res = await ipcRenderer.invoke("getTotalTickets");
     return res;
   },
 });

@@ -9,6 +9,7 @@ const {
   editTicketHandler,
   deleteTicketHandler,
   filterTicketHandler,
+  getTotalTickets,
 } = require("./handlers/ticket.cjs");
 const { reloadWindowHandler } = require("./handlers/reload.cjs");
 const { exportDatabase, importDatabase } = require("./handlers/database.cjs");
@@ -93,8 +94,9 @@ app.on("activate", () => {
 });
 
 // Ticket
+ipcMain.handle("getTotalTickets", () => getTotalTickets());
 ipcMain.handle("saveTicket", (event, data) => saveTicketHandler(event, data));
-ipcMain.handle("listTicket", listTicketHandler);
+ipcMain.handle("listTicket", (event, data) => listTicketHandler(event, data));
 ipcMain.handle("editTicket", (event, data) => editTicketHandler(event, data));
 ipcMain.handle("filterTicket", (event, data) =>
   filterTicketHandler(event, data)

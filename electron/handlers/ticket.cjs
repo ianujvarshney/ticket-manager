@@ -112,25 +112,44 @@ const deleteTicketHandler = async (event, data) => {
   }
 };
 
-const listTicketHandler = async () => {
-  const tickets = await prisma.ticket.findMany({
-    orderBy: [
-      {
-        expiry_date: "asc",
-      },
-      {
-        document_number: "asc",
-      },
-    ],
-    include: {
-      user: {
-        select: {
-          name: true,
+const listTicketHandler = async (event, data) => {
+  try {
+    const schema = z.object({
+      page: z.number().positive(),
+      size: z.number().positive(),
+    });
+
+    const { page, size } = schema.parse(data);
+
+    const tickets = await prisma.ticket.findMany({
+      orderBy: [
+        {
+          expiry_date: "asc",
+        },
+        {
+          document_number: "asc",
+        },
+      ],
+
+      take: size,
+      skip: (page - 1) * size,
+
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-  });
-  return tickets;
+    });
+    return tickets;
+  } catch (e) {
+    console.log(e);
+
+    return {
+      message: "Sorry, something went wrong. Please try again!",
+    };
+  }
 };
 
 const filterTicketHandler = async (event, data) => {
@@ -186,10 +205,16 @@ const filterTicketHandler = async (event, data) => {
   return tickets;
 };
 
+const getTotalTickets = async () => {
+  const total = await prisma.ticket.count();
+  return total;
+};
+
 module.exports = {
   saveTicketHandler,
   listTicketHandler,
   editTicketHandler,
   deleteTicketHandler,
   filterTicketHandler,
+  getTotalTickets,
 };
