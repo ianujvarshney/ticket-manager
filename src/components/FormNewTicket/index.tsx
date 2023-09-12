@@ -20,7 +20,7 @@ export function FormNewTicket() {
 
   async function handleSaveTicket(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const value = ticketValue * 100;
+    const value = Math.round(ticketValue * 100);
 
     const data = {
       recipient,

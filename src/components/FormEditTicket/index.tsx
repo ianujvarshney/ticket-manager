@@ -59,7 +59,7 @@ export function FormEditTicket({ ticket }: Props) {
       id: ticket.id,
       recipient: formValues.recipient,
       ticketNumber: formValues.ticket_number,
-      ticketValue: Number(formValues.ticket_value) * 100,
+      ticketValue: Math.round(Number(formValues.ticket_value) * 100),
       paymentPlace: formValues.payment_place,
       isPaid: formValues.is_paid,
       isOnline: formValues.is_online,

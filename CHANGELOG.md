@@ -1,5 +1,11 @@
 # ticket-manager
 
+## 1.6.1
+
+### Patch Changes
+
+- fix unexpected float number on save or edit ticket value
+
 ## 1.6.0
 
 ### Minor Changes

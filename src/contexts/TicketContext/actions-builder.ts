@@ -47,7 +47,7 @@ export const buildActions = (dispatch: any) => {
 
     setTotalPages: async () => {
       const resp = await getTotalPages();
-      const totalPages = Math.ceil(resp / 20);
+      const totalPages = Math.ceil(resp / 100);
       dispatch({ type: actions.SET_TOTAL_PAGE, payload: totalPages });
     },
   };
@@ -61,7 +61,7 @@ async function getTotalPages() {
 async function getDBTickets(page: number, itemsPerPage?: number) {
   const resp = (await (window as any).ticket.listTicket({
     page,
-    size: itemsPerPage || 20,
+    size: itemsPerPage || 100,
   })) as TicketProps[];
   return resp;
 }
