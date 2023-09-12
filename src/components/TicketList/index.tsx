@@ -359,17 +359,18 @@ export function TicketList() {
           </table>
 
           <footer className="flex items-center justify-center gap-2 mt-4">
-            {TOTAL_PAGES.map((_, index) => (
-              <button
-                className="
+            {TOTAL_PAGES.length > 1 &&
+              TOTAL_PAGES.map((_, index) => (
+                <button
+                  className="
                 flex items-center justify-center bg-purple-400 border h-8 w-8 rounded-md transition all 
                 hover:bg-transparent hover: border-purple-400 disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-purple-400"
-                disabled={state.page === index + 1}
-                onClick={() => actions.setPage(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
+                  disabled={state.page === index + 1}
+                  onClick={() => actions.setPage(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              ))}
           </footer>
         </>
       ) : (

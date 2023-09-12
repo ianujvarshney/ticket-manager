@@ -1,5 +1,11 @@
 # ticket-manager
 
+## 1.6.2
+
+### Patch Changes
+
+- fix: show page number only if it have at least 2 pages
+
 ## 1.6.1
 
 ### Patch Changes
