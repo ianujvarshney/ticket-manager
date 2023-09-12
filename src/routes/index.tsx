@@ -3,11 +3,17 @@ import { Home } from "../pages/Home";
 import { SignIn } from "../pages/SignIn";
 import { useUserContext } from "../hooks/UserContext";
 import { DefaultPass } from "../pages/DefaultPass";
+import { ChangePass } from "../pages/ChangePass";
 
 export const routes = createHashRouter([
   {
     path: "/",
     element: <Home />,
+  },
+
+  {
+    path: "/change-pass",
+    element: <ChangePass />,
   },
 ]);
 

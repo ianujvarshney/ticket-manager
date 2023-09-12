@@ -12,7 +12,7 @@ import { useTickets } from "../../hooks/TicketContext";
 import { Button } from "../Button";
 import { useUserContext } from "../../hooks/UserContext";
 import { globalState } from "../../contexts/TicketContext";
-import configs from "../../../configs.json";
+// import configs from "../../../configs.json";
 
 export type TicketProps = {
   id: string;

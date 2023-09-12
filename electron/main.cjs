@@ -18,6 +18,7 @@ const {
   setDefaultPass,
   comparePass,
   hasDefaultPass,
+  changePass,
 } = require("./handlers/configs.cjs");
 
 if (process.defaultApp) {
@@ -121,3 +122,4 @@ ipcMain.handle("isFirstUser", () => isFirstUser());
 ipcMain.handle("setDefaultPass", (event, data) => setDefaultPass(event, data));
 ipcMain.handle("comparePass", (event, data) => comparePass(event, data));
 ipcMain.handle("hasDefaultPass", (event, data) => hasDefaultPass(event, data));
+ipcMain.handle("changePass", (event, data) => changePass(event, data));

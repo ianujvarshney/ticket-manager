@@ -30,6 +30,39 @@ const setDefaultPass = async (event, data) => {
   return true;
 };
 
+const changePass = async (event, data) => {
+  const passSchema = z.object({
+    pass: z.string().min(4),
+    newPass: z.string().min(4),
+  });
+
+  const { newPass, pass } = passSchema.parse(data);
+
+  try {
+    const config = await prisma.config.findFirst();
+    const isEquals = bcrypt.compareSync(pass, config.default_pass_hash);
+
+    if (isEquals) {
+      const hash = bcrypt.hashSync(newPass, salt);
+
+      await prisma.config.update({
+        where: {
+          id: config.id,
+        },
+
+        data: {
+          default_pass_hash: hash,
+        },
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    throw new Error("Something went wrong while hashing");
+  }
+
+  return true;
+};
+
 const comparePass = async (event, data) => {
   const passSchema = z.string().min(4);
   const pass = passSchema.parse(data);
@@ -50,4 +83,5 @@ module.exports = {
   setDefaultPass,
   comparePass,
   hasDefaultPass,
+  changePass,
 };

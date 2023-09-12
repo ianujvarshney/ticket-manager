@@ -78,4 +78,9 @@ contextBridge.exposeInMainWorld("config", {
     const resp = await ipcRenderer.invoke("hasDefaultPass", data);
     return resp;
   },
+
+  changePass: async (data) => {
+    const resp = await ipcRenderer.invoke("changePass", data);
+    return resp;
+  },
 });

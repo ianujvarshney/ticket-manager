@@ -14,7 +14,7 @@ export function Button({ children, asChild, ...rest }: Props) {
       {...rest}
       className="
               flex gap-2 border border-purple-400 px-4 py-1 items-center rounded-sm 
-              hover:bg-purple-500 transition-colors"
+              hover:bg-purple-500 hover:text-white transition-colors"
     >
       {children}
     </Component>

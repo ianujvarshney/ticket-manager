@@ -26,7 +26,7 @@ export const globalState = {
   tickets: [] as TicketProps[],
   filter: {
     recipient: "",
-    type: "all",
+    type: "unpaid",
   } as FilterProps,
   page: 1,
   totalPages: 1,
@@ -35,6 +35,7 @@ export const globalState = {
 export const TicketContext = createContext({} as TicketContextProps);
 
 export function TicketProvider({ children }: TicketProviderProps) {
+  //@ts-ignore
   const [state, dispatch] = useReducer(reducers, globalState);
   const actions = useRef(buildActions(dispatch));
 

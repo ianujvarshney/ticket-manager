@@ -5,6 +5,7 @@ import {
   DownloadSimple,
   Export,
   ArrowClockwise,
+  GearSix,
 } from "phosphor-react";
 import { useTickets } from "../../hooks/TicketContext";
 import { Input } from "../Input";
@@ -13,6 +14,9 @@ import { UserProfile } from "../Profile";
 import { useUserContext } from "../../hooks/UserContext";
 import { Toast } from "../Toast";
 import { getConvertedDateToUTC } from "../../utils/convertDateToUTC";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Modal } from "../Modal";
+import { Settings } from "../Settings";
 
 export function Menu() {
   const { state, actions } = useTickets();
@@ -186,6 +190,22 @@ export function Menu() {
           >
             <ArrowClockwise />
           </button>
+
+          {true && (
+            <Dialog.Root>
+              <Modal title="Configurações">
+                <Settings />
+              </Modal>
+
+              <Dialog.Trigger
+                className="rounded-sm border border-zinc-400 px-2"
+                title="Configurações"
+                aria-label="Abrir modal de configurações do aplicativo"
+              >
+                <GearSix />
+              </Dialog.Trigger>
+            </Dialog.Root>
+          )}
         </div>
 
         <UserProfile user={userState.user} />

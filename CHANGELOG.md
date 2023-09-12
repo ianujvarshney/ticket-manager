@@ -1,5 +1,17 @@
 # ticket-manager
 
+## 1.8.0
+
+### Minor Changes
+
+- add close button to change pass page
+
+## 1.7.0
+
+### Minor Changes
+
+- add change password page
+
 ## 1.6.2
 
 ### Patch Changes
