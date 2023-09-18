@@ -124,7 +124,7 @@ const listTicketHandler = async (event, data) => {
     const tickets = await prisma.ticket.findMany({
       orderBy: [
         {
-          expiry_date: "asc",
+          expiry_date: "desc",
         },
         {
           document_number: "asc",
@@ -163,12 +163,10 @@ const filterTicketHandler = async (event, data) => {
 
   // const {} = z.parse(data);
 
-  console.log(data);
-
   const tickets = await prisma.ticket.findMany({
     orderBy: [
       {
-        expiry_date: "asc",
+        expiry_date: "desc",
       },
       {
         document_number: "asc",
