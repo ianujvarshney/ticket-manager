@@ -1,5 +1,17 @@
 # ticket-manager
 
+## 1.9.0
+
+### Minor Changes
+
+- 965e962: create clear filter button
+
+### Patch Changes
+
+- 9961bea: fix: filter
+- c470fc8: fix: desc order the tickets
+- 53bcf37: fix: crash while selecting type all on paid filter
+
 ## 1.8.0
 
 ### Minor Changes
