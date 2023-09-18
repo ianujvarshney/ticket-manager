@@ -70,7 +70,7 @@ export function TicketList() {
 
   async function confirmTicketDelete() {
     await (window as any).ticket.deleteTicket(deleteModalData);
-    actions.refreshTickets();
+    actions.setTickets(state.page);
   }
 
   async function handleTogglePayment(ticket: TicketProps & { userId: string }) {
@@ -154,7 +154,7 @@ export function TicketList() {
     };
 
     await (window as any).ticket.saveTicket(newTicket);
-    actions.refreshTickets();
+    actions.setTickets(state.page);
   }
 
   useEffect(() => {

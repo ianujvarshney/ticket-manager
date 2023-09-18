@@ -34,7 +34,7 @@ const schema = z.object({
 
 export function FormEditTicket({ ticket }: Props) {
   const { state } = useUserContext();
-  const { actions: ticketActions } = useTickets();
+  const { actions: ticketActions, state: ticketState } = useTickets();
 
   const {
     register,
@@ -69,7 +69,7 @@ export function FormEditTicket({ ticket }: Props) {
 
     await (window as any).ticket.editTicket(data);
 
-    ticketActions.refreshTickets();
+    ticketActions.setTickets(ticketState.page);
   }
 
   return (

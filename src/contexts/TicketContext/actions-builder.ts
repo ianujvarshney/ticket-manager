@@ -88,10 +88,10 @@ async function getFilteredTickets(
       //@ts-ignore
       resultObj[item as keyof typeof resultObj] =
         filter[item as keyof typeof filter];
-
-      console.table(resultObj);
     }
   }
+
+  console.table(filter);
 
   if (filter.type === "all" && !Object.keys(resultObj).length) {
     return await (window as any).ticket.listTicket({

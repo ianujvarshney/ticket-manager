@@ -22,18 +22,23 @@ export function Menu() {
   const { state, actions } = useTickets();
   const { state: userState } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
+  const [isToastOpen, setIsToastOpen] = useState(false);
+
+  // FILTER
   const [recipient, setRecipient] = useState(state.filter.recipient);
+  const [useFilterDate, setUseFilterDate] = useState(false);
+  const [documentNumber, setDocumentNumber] = useState("");
+  const [isPaid, setIsPaid] = useState<"paid" | "unpaid" | "all">("all");
   const [date, setDate] = useState(
     getConvertedDateToUTC(new Date()).toISOString().slice(0, 10)
   );
-  const [useFilterDate, setUseFilterDate] = useState(false);
-  const [documentNumber, setDocumentNumber] = useState("");
-  const [isToastOpen, setIsToastOpen] = useState(false);
   const [isOnline, setIsOnline] = useState<"all" | "on-line" | "printed">(
     "all"
   );
 
   function handleChangeType(type: "all" | "paid" | "unpaid") {
+    setIsPaid(type);
+
     actions.setFilter({
       recipient,
       type,
@@ -91,7 +96,7 @@ export function Menu() {
     actions.setFilter({
       type: state.filter.type,
       recipient,
-      expiry_date: new Date(parsedDate),
+      expiry_date: new Date(selectedDate),
       document_number: documentNumber,
     });
   }
@@ -176,6 +181,7 @@ export function Menu() {
     setDocumentNumber("");
     setRecipient("");
     setIsOnline("all");
+    setIsPaid("all");
     setDate(getConvertedDateToUTC(new Date()).toISOString().slice(0, 10));
     actions.clearFilter();
     actions.setTickets(state.page);
@@ -313,6 +319,7 @@ export function Menu() {
                 name="type-filter"
                 id="type-filter"
                 className="max-h-[34px] flex-1 overflow-hidden rounded-sm py-1 text-zinc-900"
+                value={isPaid}
                 onChange={(e) =>
                   handleChangeType(e.target.value as "all" | "paid" | "unpaid")
                 }

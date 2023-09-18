@@ -26,7 +26,7 @@ export const globalState = {
   tickets: [] as TicketProps[],
   filter: {
     recipient: "",
-    type: "unpaid",
+    type: "all",
   } as FilterProps,
   page: 1,
   totalPages: 1,
@@ -43,6 +43,10 @@ export function TicketProvider({ children }: TicketProviderProps) {
     actions.current.setTickets(state.page);
     actions.current.setTotalPages();
   }, [state.page]);
+
+  useEffect(() => {
+    actions.current.setTotalPages();
+  }, [state.tickets]);
 
   return (
     <TicketContext.Provider value={{ state, actions: actions.current }}>
