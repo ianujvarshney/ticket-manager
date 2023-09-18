@@ -28,9 +28,9 @@ export const buildActions = (dispatch: any) => {
       dispatch({ type: actions.CLEAR_FILTER, payload: globalState.filter });
     },
 
-    getTickets: () => {
-      dispatch({ type: actions.GET_TICKETS });
-    },
+    // getTickets: () => {
+    //   dispatch({ type: actions.GET_TICKETS });
+    // },
 
     setTickets: async (page: number) => {
       const db = await getDBTickets(page);
@@ -70,7 +70,11 @@ async function getDBTickets(page: number, itemsPerPage?: number) {
   return resp;
 }
 
-async function getFilteredTickets(filter: FilterProps) {
+async function getFilteredTickets(
+  filter: FilterProps,
+  page = 1,
+  itemsPerPage = 100
+) {
   const resultObj = {} as FilterProps;
 
   for (let item in filter) {
@@ -90,7 +94,10 @@ async function getFilteredTickets(filter: FilterProps) {
   }
 
   if (filter.type === "all" && !Object.keys(resultObj).length) {
-    return await (window as any).ticket.listTicket();
+    return await (window as any).ticket.listTicket({
+      page,
+      size: itemsPerPage,
+    });
   }
 
   if (filter.type === "all" && Object.keys(resultObj).length) {

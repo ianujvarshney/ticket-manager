@@ -27,8 +27,13 @@ export function ReactToPrint({ tickets }: Props) {
     onAfterPrint: () => setIsOpen(false),
   });
 
-  const PRINTABLE_TICKETS = tickets.filter((ticket) => !ticket.is_online);
-  const ONLINE_TICKETS = tickets.filter((ticket) => ticket.is_online);
+  const PRINTABLE_TICKETS = tickets?.length
+    ? tickets.filter((ticket) => !ticket.is_online)
+    : [];
+
+  const ONLINE_TICKETS = tickets?.length
+    ? tickets.filter((ticket) => ticket.is_online)
+    : [];
 
   return (
     <div>

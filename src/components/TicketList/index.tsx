@@ -184,7 +184,7 @@ export function TicketList() {
           </Modal>
         </Dialog.Root>
       </div>
-      {state.tickets.length ? (
+      {state.tickets?.length ? (
         <>
           <table border={1} className="border-gray-50 text-sm">
             <thead>

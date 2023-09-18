@@ -174,9 +174,11 @@ export function Menu() {
   function handleClearFilters() {
     setUseFilterDate(false);
     setDocumentNumber("");
+    setRecipient("");
     setIsOnline("all");
     setDate(getConvertedDateToUTC(new Date()).toISOString().slice(0, 10));
-    actions.refreshTickets();
+    actions.clearFilter();
+    actions.setTickets(state.page);
   }
 
   return (
@@ -320,7 +322,7 @@ export function Menu() {
                 <option value="unpaid">Não pagos</option>
               </select>
 
-              <button onClick={handleClearFilters}>Clear</button>
+              <button onClick={handleClearFilters}>Limpar</button>
             </div>
 
             <div className="flex"></div>
