@@ -1,4 +1,4 @@
-import { FilterProps } from ".";
+import { FilterProps, globalState } from ".";
 import { TicketProps } from "../../components/TicketList";
 import { actions } from "./actions";
 
@@ -22,6 +22,10 @@ export const buildActions = (dispatch: any) => {
           tickets: dbItems,
         },
       });
+    },
+
+    clearFilter: () => {
+      dispatch({ type: actions.CLEAR_FILTER, payload: globalState.filter });
     },
 
     getTickets: () => {

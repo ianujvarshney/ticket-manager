@@ -50,10 +50,13 @@ export function TicketList() {
     null
   );
   const [isToastOpen, setIsToastOpen] = useState(false);
-  const TOTAL_PRICE = state.tickets.reduce(
-    (buffer, ticket) => (buffer += ticket.value / 100),
-    0
-  );
+  const TOTAL_PRICE =
+    state?.tickets?.length > 0
+      ? state.tickets.reduce(
+          (buffer, ticket) => (buffer += ticket.value / 100),
+          0
+        )
+      : 0;
 
   const timerRef = useRef<any>(0);
 

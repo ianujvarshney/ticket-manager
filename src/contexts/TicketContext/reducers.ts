@@ -23,6 +23,10 @@ export const reducers = (state: StateProps, action: any) => {
       return { ...state, page: action.payload };
     }
 
+    case actions.CLEAR_FILTER: {
+      return { ...state, filter: action.payload };
+    }
+
     case actions.SET_TOTAL_PAGE:
       {
         return { ...state, totalPages: action.payload };

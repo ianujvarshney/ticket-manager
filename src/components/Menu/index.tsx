@@ -171,6 +171,14 @@ export function Menu() {
     setIsToastOpen(true);
   }
 
+  function handleClearFilters() {
+    setUseFilterDate(false);
+    setDocumentNumber("");
+    setIsOnline("all");
+    setDate(getConvertedDateToUTC(new Date()).toISOString().slice(0, 10));
+    actions.refreshTickets();
+  }
+
   return (
     <div className="mb-4 flex h-10 flex-col  px-3">
       <div className="mb-4 flex flex-1 justify-between">
@@ -311,6 +319,8 @@ export function Menu() {
                 <option value="paid">Pagos</option>
                 <option value="unpaid">Não pagos</option>
               </select>
+
+              <button onClick={handleClearFilters}>Clear</button>
             </div>
 
             <div className="flex"></div>
