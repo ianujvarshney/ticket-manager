@@ -19,6 +19,7 @@ import { Modal } from "../Modal";
 import { Settings } from "../Settings";
 import { Options } from "./options";
 import { OptionsButton, OptionsButtonIcon } from "./button";
+import { FilterProps } from "../../contexts/TicketContext";
 
 export function Menu() {
   const { state, actions } = useTickets();
@@ -41,6 +42,25 @@ export function Menu() {
   const [isOnline, setIsOnline] = useState<"all" | "on-line" | "printed">(
     "all"
   );
+
+  type FilterOptions<T> = {
+    [K in keyof T]: {
+      key: K;
+      value: T[K];
+    };
+  };
+
+  function handleFilter<T>(
+    options: FilterOptions<T>[keyof T],
+    cb?: () => void
+  ) {
+    actions.setFilter({
+      ...state.filter,
+      [options.key]: options.value,
+    });
+
+    if (cb) cb();
+  }
 
   function handleChangeType(type: "all" | "paid" | "unpaid") {
     setIsPaid(type);
@@ -109,57 +129,36 @@ export function Menu() {
     });
   }
 
-  function handleChangeDate(selectedDate: string) {
+  function handleChangeDate(selectedDate: string, useDate?: boolean) {
     const parsedDate = getConvertedDateToUTC(new Date(selectedDate))
       .toISOString()
       .slice(0, 10);
     setDate(parsedDate);
 
-    if (isOnline !== "all") {
-      actions.setFilter({
-        type: state.filter.type,
-        recipient,
-        expiry_date: new Date(parsedDate),
-        document_number: documentNumber,
-        is_online: isOnline === "on-line",
-      });
+    setUseFilterDate(!!useDate);
+    setUseFilterEndDate(false);
 
-      return;
+    if (useDate) {
+      return handleFilter<FilterProps>(
+        {
+          key: "expiry_date",
+          value: getConvertedDateToUTC(new Date(parsedDate)),
+        },
+        () => setDate(parsedDate)
+      );
     }
 
-    actions.setFilter({
-      type: state.filter.type,
-      recipient,
-      expiry_date: new Date(selectedDate),
-      document_number: documentNumber,
-    });
+    actions.setFilter({ ...state.filter, expiry_date: undefined });
   }
 
   function handleChangeNumber(number: string) {
-    setDocumentNumber(number);
-
-    if (isOnline !== "all") {
-      actions.setFilter({
-        type: state.filter.type,
-        recipient,
-        expiry_date: useFilterDate
-          ? getConvertedDateToUTC(new Date(date))
-          : undefined,
-        document_number: number,
-        is_online: isOnline === "on-line",
-      });
-
-      return;
-    }
-
-    actions.setFilter({
-      type: state.filter.type,
-      recipient,
-      expiry_date: useFilterDate
-        ? getConvertedDateToUTC(new Date(date))
-        : undefined,
-      document_number: number,
-    });
+    handleFilter<FilterProps>(
+      {
+        key: "document_number",
+        value: number,
+      },
+      () => setDocumentNumber(number)
+    );
   }
 
   function handleChangeIsOnline(isOnline: "all" | "on-line" | "printed") {
@@ -284,11 +283,11 @@ export function Menu() {
                   id="is-online"
                   defaultValue="all"
                   value={isOnline}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     handleChangeIsOnline(
                       e.target.value as "all" | "on-line" | "printed"
-                    )
-                  }
+                    );
+                  }}
                   className="max-h-[34px] flex-1 overflow-hidden rounded-sm py-1 text-zinc-900"
                 >
                   <option value="all">Todos</option>
@@ -301,16 +300,7 @@ export function Menu() {
                   id="use-filter-date"
                   type="checkbox"
                   checked={useFilterDate}
-                  onChange={(e) => {
-                    e.target.checked
-                      ? handleChangeDate(date)
-                      : actions.setFilter({
-                          type: state.filter.type,
-                          recipient,
-                        });
-                    setUseFilterDate(e.target.checked);
-                    setUseFilterEndDate(false);
-                  }}
+                  onChange={(e) => handleChangeDate(date, e.target.checked)}
                 />
 
                 <Input
@@ -318,7 +308,7 @@ export function Menu() {
                   name="date"
                   id="date-filter"
                   value={date}
-                  onChange={(e) => handleChangeDate(e.target.value)}
+                  onChange={(e) => handleChangeDate(e.target.value, true)}
                   className={!useFilterDate ? "opacity-20" : ""}
                   disabled={!useFilterDate}
                 />
