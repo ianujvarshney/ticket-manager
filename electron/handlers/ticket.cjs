@@ -159,6 +159,7 @@ const filterTicketHandler = async (event, data) => {
     document_number: z.string(),
     is_online: z.boolean().nullable(),
     expiry_date: z.date(),
+    limite_expire_date: z.date().nullable(),
   });
 
   // const {} = z.parse(data);
@@ -187,7 +188,8 @@ const filterTicketHandler = async (event, data) => {
         equals: data.is_online,
       },
       expiry_date: {
-        equals: data.expiry_date,
+        gte: data.expiry_date,
+        lte: data.limite_expire_date ?? data.expiry_date,
       },
     },
 

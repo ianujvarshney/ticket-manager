@@ -17,6 +17,8 @@ import { getConvertedDateToUTC } from "../../utils/convertDateToUTC";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Modal } from "../Modal";
 import { Settings } from "../Settings";
+import { Options } from "./options";
+import { OptionsButton, OptionsButtonIcon } from "./button";
 
 export function Menu() {
   const { state, actions } = useTickets();
@@ -27,9 +29,13 @@ export function Menu() {
   // FILTER
   const [recipient, setRecipient] = useState(state.filter.recipient);
   const [useFilterDate, setUseFilterDate] = useState(false);
+  const [useFilterEndDate, setUseFilterEndDate] = useState(false);
   const [documentNumber, setDocumentNumber] = useState("");
   const [isPaid, setIsPaid] = useState<"paid" | "unpaid" | "all">("all");
   const [date, setDate] = useState(
+    getConvertedDateToUTC(new Date()).toISOString().slice(0, 10)
+  );
+  const [endDate, setEndDate] = useState(
     getConvertedDateToUTC(new Date()).toISOString().slice(0, 10)
   );
   const [isOnline, setIsOnline] = useState<"all" | "on-line" | "printed">(
@@ -72,6 +78,34 @@ export function Menu() {
         ? getConvertedDateToUTC(new Date(date))
         : undefined,
       document_number: documentNumber,
+    });
+  }
+
+  function handleChangeFinalDate(selectedDate: string) {
+    const parsedDate = getConvertedDateToUTC(new Date(selectedDate))
+      .toISOString()
+      .slice(0, 10);
+    setEndDate(parsedDate);
+
+    if (isOnline !== "all") {
+      actions.setFilter({
+        type: state.filter.type,
+        recipient,
+        expiry_date: getConvertedDateToUTC(new Date(date)),
+        document_number: documentNumber,
+        is_online: isOnline === "on-line",
+        limite_expire_date: new Date(parsedDate),
+      });
+
+      return;
+    }
+
+    actions.setFilter({
+      type: state.filter.type,
+      recipient,
+      expiry_date: getConvertedDateToUTC(new Date(date)),
+      document_number: documentNumber,
+      limite_expire_date: new Date(parsedDate),
     });
   }
 
@@ -189,49 +223,46 @@ export function Menu() {
 
   return (
     <div className="mb-4 flex h-10 flex-col  px-3">
-      <div className="mb-4 flex flex-1 justify-between">
+      <Options>
         <div className="flex gap-2">
-          <button
-            onClick={handleToggleMenu}
-            className="rounded-sm border border-zinc-400 px-2"
-          >
-            {isOpen ? <X /> : <List />}
-          </button>
+          <OptionsButton onClick={handleToggleMenu}>
+            {isOpen ? (
+              <OptionsButtonIcon icon={X} />
+            ) : (
+              <OptionsButtonIcon icon={List} />
+            )}
+          </OptionsButton>
 
-          <button
+          <OptionsButton
             onClick={handleRefreshTickets}
-            className="rounded-sm border border-zinc-400 px-2"
             title="Recarregar página"
-            aria-label="Botão de recarregar página"
           >
-            <ArrowClockwise />
-          </button>
+            <OptionsButtonIcon icon={ArrowClockwise} />
+          </OptionsButton>
 
-          {true && (
-            <Dialog.Root>
-              <Modal title="Configurações">
-                <Settings />
-              </Modal>
+          <Dialog.Root>
+            <Modal title="Configurações">
+              <Settings />
+            </Modal>
 
-              <Dialog.Trigger
-                className="rounded-sm border border-zinc-400 px-2"
-                title="Configurações"
-                aria-label="Abrir modal de configurações do aplicativo"
-              >
-                <GearSix />
-              </Dialog.Trigger>
-            </Dialog.Root>
-          )}
+            <Dialog.Trigger
+              className="rounded-sm border border-zinc-400 px-2"
+              title="Configurações"
+              aria-label="Abrir modal de configurações do aplicativo"
+            >
+              <GearSix />
+            </Dialog.Trigger>
+          </Dialog.Root>
         </div>
 
         <UserProfile user={userState.user} />
-      </div>
+      </Options>
 
       {isOpen && (
         <div
           className="
-            absolute -left-8 top-14 ml-10 flex w-[calc(100%_-_20px)] flex-1 
-            items-center justify-between gap-3 rounded-md bg-zinc-700 px-4 py-2"
+            absolute -left-8 top-14 ml-10 flex flex-col w-[calc(100%_-_20px)] flex-1 
+            justify-between gap-3 rounded-md bg-zinc-700 px-4 py-2"
         >
           <div className="flex items-center gap-4">
             <Button onClick={handleExportDatabase}>
@@ -245,7 +276,7 @@ export function Menu() {
             </Button>
           </div>
 
-          <div className="flex-col">
+          <div className="flex justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <select
@@ -278,6 +309,7 @@ export function Menu() {
                           recipient,
                         });
                     setUseFilterDate(e.target.checked);
+                    setUseFilterEndDate(false);
                   }}
                 />
 
@@ -289,6 +321,33 @@ export function Menu() {
                   onChange={(e) => handleChangeDate(e.target.value)}
                   className={!useFilterDate ? "opacity-20" : ""}
                   disabled={!useFilterDate}
+                />
+
+                <Input
+                  name="use-limit-filter-date"
+                  id="use-limit-filter-date"
+                  type="checkbox"
+                  checked={useFilterEndDate}
+                  onChange={(e) => {
+                    e.target.checked
+                      ? handleChangeFinalDate(date)
+                      : actions.setFilter({
+                          type: state.filter.type,
+                          recipient,
+                          expiry_date: getConvertedDateToUTC(new Date(date)),
+                        });
+                    setUseFilterEndDate(e.target.checked);
+                  }}
+                />
+
+                <Input
+                  type="date"
+                  name="limit-date"
+                  id="date-limit-filter"
+                  value={endDate}
+                  onChange={(e) => handleChangeFinalDate(e.target.value)}
+                  className={!useFilterEndDate ? "opacity-20" : ""}
+                  disabled={!useFilterEndDate}
                 />
               </div>
 
@@ -318,7 +377,7 @@ export function Menu() {
               <select
                 name="type-filter"
                 id="type-filter"
-                className="max-h-[34px] flex-1 overflow-hidden rounded-sm py-1 text-zinc-900"
+                className="max-h-[34px] overflow-hidden rounded-sm py-1 text-zinc-900"
                 value={isPaid}
                 onChange={(e) =>
                   handleChangeType(e.target.value as "all" | "paid" | "unpaid")
@@ -328,11 +387,11 @@ export function Menu() {
                 <option value="paid">Pagos</option>
                 <option value="unpaid">Não pagos</option>
               </select>
-
-              <button onClick={handleClearFilters}>Limpar</button>
             </div>
 
-            <div className="flex"></div>
+            <div className="flex">
+              <button onClick={handleClearFilters}>Limpar</button>
+            </div>
           </div>
         </div>
       )}

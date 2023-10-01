@@ -6,13 +6,7 @@ export type TicketActionProps = ReturnType<typeof buildActions>;
 
 export const buildActions = (dispatch: any) => {
   return {
-    setFilter: async (payload: {
-      recipient: string;
-      type: "all" | "paid" | "unpaid";
-      expiry_date?: Date;
-      document_number?: string;
-      is_online?: boolean;
-    }) => {
+    setFilter: async (payload: FilterProps) => {
       const dbItems = await getFilteredTickets(payload);
 
       dispatch({
@@ -90,8 +84,6 @@ async function getFilteredTickets(
         filter[item as keyof typeof filter];
     }
   }
-
-  console.table(filter);
 
   if (filter.type === "all" && !Object.keys(resultObj).length) {
     return await (window as any).ticket.listTicket({

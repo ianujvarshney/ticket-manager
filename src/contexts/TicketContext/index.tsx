@@ -13,8 +13,10 @@ type TicketProviderProps = {
 };
 
 export type FilterProps = {
-  type: "all" | "paid" | "unpaid";
   recipient: string;
+  type: "all" | "paid" | "unpaid";
+  expiry_date?: Date;
+  limite_expire_date?: Date;
   document_number?: string;
   is_online?: boolean;
 };
@@ -27,6 +29,8 @@ export const globalState = {
   filter: {
     recipient: "",
     type: "all",
+    document_number: "",
+    is_online: false,
   } as FilterProps,
   page: 1,
   totalPages: 1,
