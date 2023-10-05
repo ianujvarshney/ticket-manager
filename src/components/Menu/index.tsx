@@ -76,57 +76,39 @@ export function Menu() {
   }
 
   function handleChangeName(recipient: string) {
-    setRecipient(recipient);
-    if (isOnline !== "all") {
-      actions.setFilter({
-        type: state.filter.type,
-        recipient,
-        expiry_date: useFilterDate
-          ? getConvertedDateToUTC(new Date(date))
-          : undefined,
-        document_number: documentNumber,
-        is_online: isOnline === "on-line",
-      });
-
-      return;
+    if (recipient) {
+      return handleFilter<FilterProps>(
+        {
+          key: "recipient",
+          value: recipient,
+        },
+        () => setRecipient(recipient)
+      );
     }
 
-    actions.setFilter({
-      type: state.filter.type,
-      recipient,
-      expiry_date: useFilterDate
-        ? getConvertedDateToUTC(new Date(date))
-        : undefined,
-      document_number: documentNumber,
-    });
+    setRecipient("");
+    actions.setFilter({ ...state.filter, recipient: "" });
   }
 
-  function handleChangeFinalDate(selectedDate: string) {
+  function handleChangeFinalDate(selectedDate: string, useLimitDate?: boolean) {
     const parsedDate = getConvertedDateToUTC(new Date(selectedDate))
       .toISOString()
       .slice(0, 10);
     setEndDate(parsedDate);
 
-    if (isOnline !== "all") {
-      actions.setFilter({
-        type: state.filter.type,
-        recipient,
-        expiry_date: getConvertedDateToUTC(new Date(date)),
-        document_number: documentNumber,
-        is_online: isOnline === "on-line",
-        limite_expire_date: new Date(parsedDate),
-      });
+    setUseFilterEndDate(!!useLimitDate);
 
-      return;
+    if (useLimitDate) {
+      return handleFilter<FilterProps>(
+        {
+          key: "limite_expire_date",
+          value: getConvertedDateToUTC(new Date(parsedDate)),
+        },
+        () => setEndDate(parsedDate)
+      );
     }
 
-    actions.setFilter({
-      type: state.filter.type,
-      recipient,
-      expiry_date: getConvertedDateToUTC(new Date(date)),
-      document_number: documentNumber,
-      limite_expire_date: new Date(parsedDate),
-    });
+    actions.setFilter({ ...state.filter, limite_expire_date: undefined });
   }
 
   function handleChangeDate(selectedDate: string, useDate?: boolean) {
@@ -318,16 +300,9 @@ export function Menu() {
                   id="use-limit-filter-date"
                   type="checkbox"
                   checked={useFilterEndDate}
-                  onChange={(e) => {
-                    e.target.checked
-                      ? handleChangeFinalDate(date)
-                      : actions.setFilter({
-                          type: state.filter.type,
-                          recipient,
-                          expiry_date: getConvertedDateToUTC(new Date(date)),
-                        });
-                    setUseFilterEndDate(e.target.checked);
-                  }}
+                  onChange={(e) =>
+                    handleChangeFinalDate(endDate, e.target.checked)
+                  }
                 />
 
                 <Input
@@ -335,7 +310,7 @@ export function Menu() {
                   name="limit-date"
                   id="date-limit-filter"
                   value={endDate}
-                  onChange={(e) => handleChangeFinalDate(e.target.value)}
+                  onChange={(e) => handleChangeFinalDate(e.target.value, true)}
                   className={!useFilterEndDate ? "opacity-20" : ""}
                   disabled={!useFilterEndDate}
                 />
