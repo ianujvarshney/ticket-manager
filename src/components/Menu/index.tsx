@@ -76,18 +76,13 @@ export function Menu() {
   }
 
   function handleChangeName(recipient: string) {
-    if (recipient) {
-      return handleFilter<FilterProps>(
-        {
-          key: "recipient",
-          value: recipient,
-        },
-        () => setRecipient(recipient)
-      );
-    }
-
-    setRecipient("");
-    actions.setFilter({ ...state.filter, recipient: "" });
+    return handleFilter<FilterProps>(
+      {
+        key: "recipient",
+        value: recipient,
+      },
+      () => setRecipient(recipient)
+    );
   }
 
   function handleChangeFinalDate(selectedDate: string, useLimitDate?: boolean) {
