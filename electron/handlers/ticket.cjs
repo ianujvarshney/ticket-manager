@@ -160,6 +160,8 @@ const filterTicketHandler = async (event, data) => {
     is_online: z.boolean().nullable(),
     expiry_date: z.date(),
     limite_expire_date: z.date().nullable(),
+    page: z.number().positive().optional(),
+    size: z.number().positive().optional(),
   });
 
   // const {} = z.parse(data);
@@ -173,6 +175,9 @@ const filterTicketHandler = async (event, data) => {
         document_number: "asc",
       },
     ],
+
+    take: size ?? 100,
+    skip: (page ?? 1) * size ?? 100,
 
     where: {
       is_paid: {

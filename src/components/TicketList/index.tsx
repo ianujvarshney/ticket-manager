@@ -162,7 +162,7 @@ export function TicketList() {
   }, []);
 
   return (
-    <div className="max-h-[calc(100vh_-_100px)] overflow-auto pb-10">
+    <div className="max-h-[calc(100vh_-_140px)] overflow-auto pb-10">
       <div className="mb-4 flex items-center justify-between px-4">
         <div className="flex flex-1 justify-between pr-4">
           <h1 className="text-lg font-bold ">TicketList</h1>

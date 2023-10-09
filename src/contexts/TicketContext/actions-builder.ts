@@ -94,11 +94,15 @@ async function getFilteredTickets(
 
   if (filter.type === "all" && Object.keys(resultObj).length) {
     return await (window as any).ticket.filterTicket({
+      page,
+      size: itemsPerPage,
       ...resultObj,
     });
   }
 
   return await (window as any).ticket.filterTicket({
+    page,
+    size: itemsPerPage,
     is_paid: filter.type === "paid",
     ...resultObj,
   });
