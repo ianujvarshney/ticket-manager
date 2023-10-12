@@ -6,15 +6,27 @@ export type TicketActionProps = ReturnType<typeof buildActions>;
 
 export const buildActions = (dispatch: any) => {
   return {
-    setFilter: async (payload: FilterProps) => {
-      const dbItems = await getFilteredTickets(payload);
+    setFilter: async (payload: FilterProps, page = 1) => {
+      const dbItems = await getFilteredTickets(payload, page);
+
+      console.log(dbItems);
+
+      dispatch({
+        type: actions.SET_TOTAL_PAGE,
+        payload: dbItems.pages,
+      });
 
       dispatch({
         type: actions.SET_FILTER,
         payload: {
           filters: payload,
-          tickets: dbItems,
+          tickets: dbItems.tickets,
         },
+      });
+
+      dispatch({
+        type: actions.SET_PAGE,
+        payload: page,
       });
     },
 
@@ -27,16 +39,19 @@ export const buildActions = (dispatch: any) => {
     // },
 
     setTickets: async (page: number) => {
-      const db = await getDBTickets(page);
-      dispatch({ type: actions.SET_TICKETS, payload: db });
+      const { tickets, pages } = await getDBTickets(page);
+
+      dispatch({ type: actions.SET_TICKETS, payload: tickets });
+      dispatch({ type: actions.SET_TOTAL_PAGE, payload: pages });
     },
 
     refreshTickets: async (page = 1) => {
-      const tickets = await (window as any).ticket.listTicket({
+      const { tickets, pages } = await (window as any).ticket.listTicket({
         page: page,
       });
       dispatch({ type: actions.SET_PAGE, payload: page });
       dispatch({ type: actions.REFRESH_TICKETS, payload: tickets });
+      dispatch({ type: actions.SET_TOTAL_PAGE, payload: pages });
     },
 
     setPage: (page: number) => {
@@ -60,7 +75,8 @@ async function getDBTickets(page: number, itemsPerPage?: number) {
   const resp = (await (window as any).ticket.listTicket({
     page,
     size: itemsPerPage || 100,
-  })) as TicketProps[];
+  })) as { tickets: TicketProps[]; pages: number };
+
   return resp;
 }
 
@@ -86,24 +102,29 @@ async function getFilteredTickets(
   }
 
   if (filter.type === "all" && !Object.keys(resultObj).length) {
-    return await (window as any).ticket.listTicket({
+    const res = await (window as any).ticket.listTicket({
       page,
       size: itemsPerPage,
     });
+
+    return res;
   }
 
   if (filter.type === "all" && Object.keys(resultObj).length) {
-    return await (window as any).ticket.filterTicket({
-      page,
+    const res = await (window as any).ticket.filterTicket({
       size: itemsPerPage,
       ...resultObj,
     });
+
+    return res;
   }
 
-  return await (window as any).ticket.filterTicket({
+  const res = await (window as any).ticket.filterTicket({
     page,
     size: itemsPerPage,
     is_paid: filter.type === "paid",
     ...resultObj,
   });
+
+  return res;
 }

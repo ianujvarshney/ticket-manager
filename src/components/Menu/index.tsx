@@ -54,10 +54,13 @@ export function Menu() {
     options: FilterOptions<T>[keyof T],
     cb?: () => void
   ) {
-    actions.setFilter({
-      ...state.filter,
-      [options.key]: options.value,
-    });
+    actions.setFilter(
+      {
+        ...state.filter,
+        [options.key]: options.value,
+      },
+      1
+    );
 
     if (cb) cb();
   }

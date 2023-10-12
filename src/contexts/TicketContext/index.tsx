@@ -45,12 +45,12 @@ export function TicketProvider({ children }: TicketProviderProps) {
 
   useEffect(() => {
     actions.current.setTickets(state.page);
-    actions.current.setTotalPages();
+    // actions.current.setTotalPages();
   }, [state.page]);
 
-  useEffect(() => {
-    actions.current.setTotalPages();
-  }, [state.tickets]);
+  // useEffect(() => {
+  //   actions.current.setTotalPages();
+  // }, [state.tickets]);
 
   return (
     <TicketContext.Provider value={{ state, actions: actions.current }}>

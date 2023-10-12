@@ -43,7 +43,9 @@ const priceFormatter = new Intl.NumberFormat("pt-BR", {
 export function TicketList() {
   const { state, actions } = useTickets();
   const { state: userState } = useUserContext();
-  const TOTAL_PAGES = Array(state.totalPages).fill("");
+  const TOTAL_PAGES = Array(state.totalPages ?? 1).fill("");
+
+  console.log("TOTAL_PAGES: " + state.totalPages);
 
   const [editModalData, setEditModalData] = useState<TicketProps | null>(null);
   const [deleteModalData, setDeleteModalData] = useState<TicketProps | null>(
@@ -365,9 +367,11 @@ export function TicketList() {
             {TOTAL_PAGES.length > 1 &&
               TOTAL_PAGES.map((_, index) => (
                 <button
+                  key={crypto.randomUUID()}
                   className="
-                flex items-center justify-center bg-purple-400 border h-8 w-8 rounded-md transition all 
-                hover:bg-transparent hover: border-purple-400 disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-purple-400"
+                    flex items-center justify-center bg-purple-400 border h-8 w-8 rounded-md transition all 
+                    hover:bg-transparent hover: border-purple-400 disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-purple-400
+                  "
                   disabled={state.page === index + 1}
                   onClick={() => actions.setPage(index + 1)}
                 >

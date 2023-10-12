@@ -142,7 +142,12 @@ const listTicketHandler = async (event, data) => {
         },
       },
     });
-    return tickets;
+
+    const totalTickets = await prisma.ticket.count();
+
+    const totalPages = Math.ceil(totalTickets / size ?? 100);
+
+    return { tickets, pages: totalPages };
   } catch (e) {
     console.log(e);
 
@@ -166,48 +171,78 @@ const filterTicketHandler = async (event, data) => {
 
   // const {} = z.parse(data);
 
-  const tickets = await prisma.ticket.findMany({
-    orderBy: [
-      {
-        expiry_date: "desc",
-      },
-      {
-        document_number: "asc",
-      },
-    ],
+  try {
+    const tickets = await prisma.ticket.findMany({
+      orderBy: [
+        {
+          expiry_date: "desc",
+        },
+        {
+          document_number: "asc",
+        },
+      ],
 
-    take: size ?? 100,
-    skip: (page ?? 1) * size ?? 100,
+      take: data.size || 100,
+      skip: (data.page ?? 0) * (data.size || 100),
 
-    where: {
-      is_paid: {
-        equals: data.is_paid,
-      },
-      recipient: {
-        contains: data.recipient,
-      },
-      document_number: {
-        contains: data.document_number,
-      },
-      is_online: {
-        equals: data.is_online,
-      },
-      expiry_date: {
-        gte: data.expiry_date,
-        lte: data.limite_expire_date ?? data.expiry_date,
-      },
-    },
-
-    include: {
-      user: {
-        select: {
-          name: true,
+      where: {
+        is_paid: {
+          equals: data.is_paid,
+        },
+        recipient: {
+          contains: data.recipient,
+        },
+        document_number: {
+          contains: data.document_number,
+        },
+        is_online: {
+          equals: data.is_online,
+        },
+        expiry_date: {
+          gte: data.expiry_date,
+          lte: data.limite_expire_date ?? data.expiry_date,
         },
       },
-    },
-  });
 
-  return tickets;
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    const totalTickets = await prisma.ticket.count({
+      where: {
+        is_paid: {
+          equals: data.is_paid,
+        },
+        recipient: {
+          contains: data.recipient,
+        },
+        document_number: {
+          contains: data.document_number,
+        },
+        is_online: {
+          equals: data.is_online,
+        },
+        expiry_date: {
+          gte: data.expiry_date,
+          lte: data.limite_expire_date ?? data.expiry_date,
+        },
+      },
+    });
+
+    const totalPages = Math.ceil(totalTickets / data.size ?? 100);
+
+    return { tickets, pages: totalPages };
+  } catch (e) {
+    console.log(e);
+    return {
+      message: "Sorry, something went wrong. Please try again!",
+    };
+  }
 };
 
 const getTotalTickets = async () => {
