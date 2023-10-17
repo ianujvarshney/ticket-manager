@@ -1,5 +1,16 @@
 # ticket-manager
 
+## 1.10.0
+
+### Minor Changes
+
+- 972345d: create range filter
+
+### Patch Changes
+
+- fb52479: fix filter returning empty results
+- 58bd4d9: minor fixes on filter
+
 ## 1.9.0
 
 ### Minor Changes
