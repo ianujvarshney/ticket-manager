@@ -3,6 +3,9 @@
 Um aplicação que está sendo construída para organização de boletos
 🚨🚨 Ainda em fase inicial 🚨🚨
 
+An application to organize and manage tickets/bills.
+🚨🚨 Still in the initial phase 🚨🚨
+
 ## Preview 🎨
 
 <img src='./.github/preview.gif' width="75%">
