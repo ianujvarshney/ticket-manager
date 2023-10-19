@@ -9,7 +9,7 @@ const signIn = async (event, data) => {
     process.env.GOOGLE_ID_CLIENT,
     process.env.GOOGLE_KEY,
     ["email", "profile"],
-    { successRedirectURL: "ticket-manager://google?token" }
+    { successRedirectURL: "http://localhost:5179/return-to-app" }
   );
 
   try {

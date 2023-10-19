@@ -1,5 +1,11 @@
 # ticket-manager
 
+## 1.10.1
+
+### Patch Changes
+
+- fix: not scrolling on print modal
+
 ## 1.10.0
 
 ### Minor Changes

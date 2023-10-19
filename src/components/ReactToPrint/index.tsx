@@ -38,10 +38,10 @@ export function ReactToPrint({ tickets }: Props) {
   return (
     <div>
       <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-        <Modal title="Imprimir Boleto">
+        <Modal title="Imprimir Boleto" className="overflow-y-auto">
           <>
             <div
-              className={`flex min-h-[calc(100vh_-_200px)] w-full flex-col items-center p-4`}
+              className={`flex min-h-[calc(100vh_-_200px)] w-full flex-col items-center p-4 scroll-auto`}
               ref={contentRef}
             >
               <table className="w-[85%] border border-zinc-900" border={1}>

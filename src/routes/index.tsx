@@ -4,6 +4,7 @@ import { SignIn } from "../pages/SignIn";
 import { useUserContext } from "../hooks/UserContext";
 import { DefaultPass } from "../pages/DefaultPass";
 import { ChangePass } from "../pages/ChangePass";
+import { ReturnToApp } from "../pages/ReturnToApp";
 
 export const routes = createHashRouter([
   {
@@ -26,6 +27,11 @@ const signInRoutes = createHashRouter([
   {
     path: "/sign-in",
     element: <SignIn />,
+  },
+
+  {
+    path: "/return-to-app",
+    element: <ReturnToApp />,
   },
 ]);
 
